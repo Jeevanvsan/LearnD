@@ -1,7 +1,7 @@
 airflow_operators:
   - PythonOperator
   - BashOperator
-  - DummyOperator (EmptyOperator)
+  - DummyOperator
   - EmailOperator
   - SimpleHttpOperator
   - ExternalTaskSensor

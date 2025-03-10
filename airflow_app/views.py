@@ -5,6 +5,8 @@ import json
 import io
 import contextlib
 
+from airflow_app.airflow_utils.airflow_code_extractor import DagExtract
+
 
 
 def index(request):
@@ -17,17 +19,11 @@ def run_code(request):
             data = json.loads(request.body)
             
             code = data.get('code', '')
-            print(code)
-            # Capture the output of the code execution
-            output = io.StringIO()
-            with contextlib.redirect_stdout(output):
-                exec(code, {'__name__': '__main__'})
-            result = output.getvalue()
-
-            print(output.getvalue())
-
+            ob = DagExtract()
+            result = ob.run(code)
             return JsonResponse({'output': result})
         except Exception as e:
+            print(e)
             return JsonResponse({'output': str(e)})
 
     return JsonResponse({'output': 'Invalid request'})

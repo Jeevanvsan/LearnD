@@ -1,0 +1,133 @@
+{
+    "imports": [
+        "from airflow import DAG",
+        "from airflow.operators.python import PythonOperator",
+        "from airflow.operators.python import BranchPythonOperator",
+        "from airflow.operators.dummy import DummyOperator",
+        "from airflow.utils.dates import days_ago",
+        "from airflow.utils.task_group import TaskGroup",
+        "from datetime import timedelta",
+        "import random"
+    ],
+    "dag_id": "complex_dag",
+    "tags": null,
+    "description": "A complex DAG example",
+    "schedule": "timedelta(days=1)",
+    "start_date": "days_ago()",
+    "catchup": false,
+    "max_active_runs": null,
+    "render_template_as_native_obj": null,
+    "default_args": "{'owner': 'user', 'depends_on_past': False, 'email_on_failure': False, 'email_on_retry': False, 'retries': 1, 'retry_delay': timedelta(minutes=5)}",
+    "tasks": [
+        {
+            "task_id": "start_task"
+        },
+        {
+            "task_id": "branching_task"
+        },
+        {
+            "task_id": "join_task"
+        },
+        {
+            "task_id": "end_task"
+        },
+        {
+            "task_id": "task_a1"
+        },
+        {
+            "task_id": "task_a2"
+        },
+        {
+            "task_id": "task_b1"
+        },
+        {
+            "task_id": "task_b2"
+        }
+    ],
+    "dependencies": [
+        {
+            "from": "task_a1",
+            "to": "task_a2"
+        },
+        {
+            "from": "task_b1",
+            "to": "task_b2"
+        },
+        {
+            "from": "start_task",
+            "to": "branching_task"
+        },
+        {
+            "from": "join_task",
+            "to": "end_task"
+        },
+        {
+            "from": "task_a2",
+            "to": "join_task"
+        },
+        {
+            "from": "branching_task",
+            "to": "task_a1"
+        },
+        {
+            "from": "task_b2",
+            "to": "join_task"
+        },
+        {
+            "from": "branching_task",
+            "to": "task_b1"
+        }
+    ],
+    "variables": {
+        "default_args": "{'owner': 'user', 'depends_on_past': False, 'email_on_failure': False, 'email_on_retry': False, 'retries': 1, 'retry_delay': timedelta(minutes=5)}",
+        "start_task": "DummyOperator(task_id='start_task')",
+        "branching_task": "BranchPythonOperator(task_id='branching_task', python_callable=choose_branch)",
+        "join_task": "DummyOperator(task_id='join_task', trigger_rule='none_failed_min_one_success')",
+        "end_task": "DummyOperator(task_id='end_task')",
+        "branches": [
+            "path_a",
+            "path_b"
+        ],
+        "chosen_branch": "random.choice(branches)",
+        "task_a1": "PythonOperator(task_id='task_a1', python_callable=lambda: print('Task A1 executed.'))",
+        "task_a2": "PythonOperator(task_id='task_a2', python_callable=lambda: print('Task A2 executed.'))",
+        "task_b1": "PythonOperator(task_id='task_b1', python_callable=lambda: print('Task B1 executed.'))",
+        "task_b2": "PythonOperator(task_id='task_b2', python_callable=lambda: print('Task B2 executed.'))"
+    },
+    "task_group": [
+        {
+            "task_id": "path_a_tasks",
+            "details": {
+                "name": "path_a_tasks",
+                "tooltip": "Tasks for Path A",
+                "tasks": [
+                    {
+                        "task_id": "task_a1",
+                        "python_callable": "lambda: print('Task A1 executed.')"
+                    },
+                    {
+                        "task_id": "task_a2",
+                        "python_callable": "lambda: print('Task A2 executed.')"
+                    }
+                ]
+            }
+        },
+        {
+            "task_id": "path_b_tasks",
+            "details": {
+                "name": "path_b_tasks",
+                "tooltip": "Tasks for Path B",
+                "tasks": [
+                    {
+                        "task_id": "task_b1",
+                        "python_callable": "lambda: print('Task B1 executed.')"
+                    },
+                    {
+                        "task_id": "task_b2",
+                        "python_callable": "lambda: print('Task B2 executed.')"
+                    }
+                ]
+            }
+        }
+    ]
+}
