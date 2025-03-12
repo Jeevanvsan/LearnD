@@ -5,7 +5,7 @@ window.require = { paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco
 function loadEditor() {
     require(['vs/editor/editor.main'], function () {
         editor = monaco.editor.create(document.getElementById('code-editor'), {
-            value: "# Write your Python code here\n\ndef sum_of_evens(numbers):\n    return sum(x for x in numbers if x % 2 == 0)",
+            value: "# Write your DAG code here\n",
             language: 'python',
             theme: 'vs-dark',
             automaticLayout: true,

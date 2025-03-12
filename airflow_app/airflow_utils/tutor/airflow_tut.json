@@ -1,0 +1,1148 @@
+const tutorials = [
+    {
+      "title": "Introduction to Airflow",
+      "content": `
+        <h3>What is Apache Airflow?</h3>
+        <p>Apache Airflow is an open-source platform for programmatically authoring, scheduling, and monitoring workflows. It allows you to define workflows as Directed Acyclic Graphs (DAGs) using Python.</p>
+  
+        <h3>Why Use Airflow?</h3>
+        <ul>
+          <li><strong>Scalability:</strong> Supports distributed execution with executors like Celery, Kubernetes, and Local.</li>
+          <li><strong>Dynamic Pipelines:</strong> DAGs are defined as Python code, enabling dynamic task generation.</li>
+          <li><strong>Extensibility:</strong> Integrates with external systems via Hooks, Sensors, and Operators.</li>
+          <li><strong>Monitoring:</strong> Provides a Web UI for tracking progress, logs, and debugging.</li>
+        </ul>
+  
+        <h3>References:</h3>
+        <ul>
+          <li><a href="https://airflow.apache.org/docs/">Official Airflow Documentation</a></li>
+          <li><a href="https://github.com/apache/airflow">Airflow GitHub Repository</a></li>
+        </ul>
+      `
+    },
+    {
+      "title": "Installation and Setup",
+      "content": `
+        <h3>Installing Airflow</h3>
+        <p>To install Airflow, use pip:</p>
+        <pre>
+  pip install apache-airflow
+        </pre>
+  
+        <h3>Initializing Airflow</h3>
+        <p>After installation, initialize the database and start the web server:</p>
+        <pre>
+  airflow db init
+  airflow users create --username admin --password admin --firstname Admin --lastname User --role Admin --email admin@example.com
+  airflow webserver --port 8080
+  airflow scheduler
+        </pre>
+  
+        <h3>Verify Installation</h3>
+        <p>Access the Airflow Web UI at <code>http://localhost:8080</code> and log in with the credentials created above.</p>
+  
+        <h3>References:</h3>
+        <ul>
+          <li><a href="https://airflow.apache.org/docs/apache-airflow/stable/start.html">Airflow Quick Start Guide</a></li>
+        </ul>
+      `
+    },
+    {
+      "title": "Airflow Basics (Components - DAGs, Operators, Tasks)",
+      "content": `
+        <h3>DAGs (Directed Acyclic Graphs)</h3>
+        <p>A DAG defines the workflow structure with tasks and dependencies. Example:</p>
+        <pre>
+  from airflow import DAG
+  from airflow.operators.dummy import DummyOperator
+  from datetime import datetime
+  
+  with DAG('example_dag', start_date=datetime(2025, 3, 1)) as dag:
+      start = DummyOperator(task_id='start')
+      end = DummyOperator(task_id='end')
+      start >> end
+        </pre>
+  
+        <h3>Operators</h3>
+        <p>Operators define individual tasks. Common operators include:</p>
+        <ul>
+          <li><strong>BashOperator:</strong> Executes bash commands.</li>
+          <li><strong>PythonOperator:</strong> Runs Python functions.</li>
+          <li><strong>EmailOperator:</strong> Sends emails.</li>
+        </ul>
+  
+        <h3>Tasks</h3>
+        <p>Tasks are instances of operators. They are executed by the Airflow scheduler based on the DAG's schedule.</p>
+  
+        <h3>References:</h3>
+        <ul>
+          <li><a href="https://airflow.apache.org/docs/apache-airflow/stable/concepts/dags.html">DAG Concepts</a></li>
+          <li><a href="https://airflow.apache.org/docs/apache-airflow/stable/concepts/operators.html">Operator Concepts</a></li>
+        </ul>
+      `
+    },
+    {
+        "title": "Default Imports in Airflow",
+        "content": `
+          <h3>Commonly Used Imports</h3>
+          <p>These are the most frequently used imports when working with Apache Airflow:</p>
+          <pre>
+    from airflow import DAG
+    from airflow.operators.python import PythonOperator
+    from airflow.operators.bash import BashOperator
+    from airflow.operators.dummy import DummyOperator
+    from airflow.sensors.filesystem import FileSensor
+    from airflow.providers.postgres.operators.postgres import PostgresOperator
+    from airflow.utils.dates import days_ago
+    from datetime import datetime, timedelta
+          </pre>
+    
+          <h3>Explanation of Imports</h3>
+          <ul>
+            <li><strong>DAG:</strong> The core class for defining workflows.</li>
+            <li><strong>PythonOperator:</strong> Executes Python functions as tasks.</li>
+            <li><strong>BashOperator:</strong> Executes bash commands as tasks.</li>
+            <li><strong>DummyOperator:</strong> Placeholder task with no action.</li>
+            <li><strong>FileSensor:</strong> Waits for a file to appear in a directory.</li>
+            <li><strong>PostgresOperator:</strong> Executes SQL queries on PostgreSQL databases.</li>
+            <li><strong>days_ago:</strong> Utility function for setting start dates relative to the current date.</li>
+          </ul>
+    
+          <h3>References:</h3>
+          <ul>
+            <li><a href="https://airflow.apache.org/docs/apache-airflow/stable/concepts/operators.html">Airflow Operators Documentation</a></li>
+          </ul>
+        `
+      },
+      {
+        "title": "Standard DAG Syntax",
+        "content": `
+          <h3>Basic DAG Definition</h3>
+          <p>A DAG is defined using the <code>DAG</code> context manager. Here's an example:</p>
+          <pre>
+    from airflow import DAG
+    from airflow.operators.bash import BashOperator
+    from airflow.operators.python import PythonOperator
+    from datetime import datetime
+    
+    # Default arguments for tasks
+    default_args = {
+        'owner': 'airflow',
+        'retries': 1,
+        'retry_delay': timedelta(minutes=5)
+    }
+    
+    # Define the DAG
+    with DAG(
+        dag_id='example_dag',
+        default_args=default_args,
+        description='A simple example DAG',
+        schedule_interval='@daily',
+        start_date=datetime(2025, 3, 1),
+        catchup=False
+    ) as dag:
+        # Define tasks
+        task1 = BashOperator(
+            task_id='bash_task',
+            bash_command='echo Hello World!'
+        )
+    
+        def print_hello():
+            print("Hello from Python!")
+    
+        task2 = PythonOperator(
+            task_id='python_task',
+            python_callable=print_hello
+        )
+    
+        # Define dependencies
+        task1 >> task2
+          </pre>
+    
+          <h3>Key Components</h3>
+          <ul>
+            <li><strong>dag_id:</strong> Unique identifier for the DAG.</li>
+            <li><strong>default_args:</strong> Default parameters for tasks (e.g., retries, retry delay).</li>
+            <li><strong>description:</strong> A brief description of the DAG's purpose.</li>
+            <li><strong>schedule_interval:</strong> Defines how often the DAG runs (e.g., CRON expression or preset like <code>@daily</code>).</li>
+            <li><strong>start_date:</strong> The date from which the DAG starts running.</li>
+            <li><strong>catchup:</strong> If <code>False</code>, skips backfilling past runs.</li>
+          </ul>
+    
+          <h3>Task Dependencies</h3>
+          <p>Dependencies between tasks can be defined using bitwise operators:</p>
+          <pre>
+    task1 >> task2  # task1 runs before task2
+    task2 << task3  # task3 runs before task2
+    [task1, task2] >> task3  # task3 runs after both task1 and task2
+          </pre>
+    
+          <h3>References:</h3>
+          <ul>
+            <li><a href="https://airflow.apache.org/docs/apache-airflow/stable/tutorial.html">Airflow Tutorial</a></li>
+          </ul>
+        `
+      },
+      {
+        "title": "Understanding Default Arguments",
+        "content": `
+          <h3>What Are Default Arguments?</h3>
+          <p>Default arguments apply to all tasks in a DAG unless overridden. Example:</p>
+          <pre>
+    default_args = {
+        'owner': 'airflow',
+        'depends_on_past': False,
+        'email': ['admin@example.com'],
+        'email_on_failure': False,
+        'email_on_retry': False,
+        'retries': 3,
+        'retry_delay': timedelta(minutes=5)
+    }
+          </pre>
+    
+          <h3>Common Parameters</h3>
+          <ul>
+            <li><strong>owner:</strong> The owner of the DAG (usually a username).</li>
+            <li><strong>depends_on_past:</strong> If <code>True</code>, a task depends on the success of its previous run.</li>
+            <li><strong>email:</strong> Email addresses to notify on failure or retry.</li>
+            <li><strong>retries:</strong> Number of times to retry a failed task.</li>
+            <li><strong>retry_delay:</strong> Time to wait before retrying a failed task.</li>
+          </ul>
+    
+          <h3>Overriding Defaults</h3>
+          <p>Individual tasks can override default arguments:</p>
+          <pre>
+    task1 = BashOperator(
+        task_id='bash_task',
+        bash_command='echo Hello World!',
+        retries=5  # Overrides the default retries value
+    )
+          </pre>
+    
+          <h3>References:</h3>
+          <ul>
+            <li><a href="https://airflow.apache.org/docs/apache-airflow/stable/tutorial.html#default-arguments">Default Arguments Documentation</a></li>
+          </ul>
+        `
+      },
+      {
+        "title": "Scheduling with CRON Expressions",
+        "content": `
+          <h3>CRON Expression Basics</h3>
+          <p>Airflow uses CRON expressions to define schedules. Format:</p>
+          <pre>
+    * * * * *
+    | | | | |
+    | | | | +--- Day of the week (0 - 6) (Sunday=0)
+    | | | +----- Month (1 - 12)
+    | | +------- Day of the month (1 - 31)
+    | +--------- Hour (0 - 23)
+    +----------- Minute (0 - 59)
+          </pre>
+    
+          <h3>Examples</h3>
+          <ul>
+            <li><code>0 0 * * *</code>: Daily at midnight.</li>
+            <li><code>0 12 * * 1-5</code>: Weekdays at noon.</li>
+            <li><code>*/15 * * * *</code>: Every 15 minutes.</li>
+          </ul>
+    
+          <h3>Using Presets</h3>
+          <p>Airflow provides preset schedules:</p>
+          <ul>
+            <li><code>@hourly</code>: Runs once per hour.</li>
+            <li><code>@daily</code>: Runs once per day.</li>
+            <li><code>@weekly</code>: Runs once per week.</li>
+          </ul>
+    
+          <h3>References:</h3>
+          <ul>
+            <li><a href="https://crontab.guru/">Cron Expression Generator</a></li>
+            <li><a href="https://airflow.apache.org/docs/apache-airflow/stable/scheduler.html">Scheduler Documentation</a></li>
+          </ul>
+        `
+      },
+      {
+        "title": "Catchup and Backfilling",
+        "content": `
+          <h3>What is Catchup?</h3>
+          <p>Catchup determines whether Airflow backfills missed runs between the <code>start_date</code> and the current date.</p>
+    
+          <h3>Disabling Catchup</h3>
+          <p>To prevent backfilling, set <code>catchup=False</code> in the DAG definition:</p>
+          <pre>
+    with DAG(
+        dag_id='example_dag',
+        start_date=datetime(2025, 3, 1),
+        schedule_interval='@daily',
+        catchup=False
+    ) as dag:
+        pass
+          </pre>
+    
+          <h3>Enabling Catchup</h3>
+          <p>If <code>catchup=True</code>, Airflow will execute all missed runs. Use this for historical data processing.</p>
+    
+          <h3>References:</h3>
+          <ul>
+            <li><a href="https://airflow.apache.org/docs/apache-airflow/stable/dag-run.html#catchup">Catchup Documentation</a></li>
+          </ul>
+        `
+      },
+      {
+        "title": "TaskFlow API: Simplifying DAGs",
+        "content": `
+          <h3>What is the TaskFlow API?</h3>
+          <p>The TaskFlow API simplifies DAG definitions by reducing boilerplate code. Example:</p>
+          <pre>
+    from airflow.decorators import dag, task
+    from datetime import datetime
+    
+    @dag(
+        dag_id='taskflow_api_example',
+        start_date=datetime(2025, 3, 1),
+        schedule_interval='@daily'
+    )
+    def example_dag():
+        @task
+        def extract():
+            return {'data': [1, 2, 3]}
+    
+        @task
+        def transform(data):
+            return {'transformed_data': [x * 2 for x in data['data']]}
+    
+        @task
+        def load(transformed_data):
+            print(f"Loaded: {transformed_data}")
+    
+        data = extract()
+        transformed_data = transform(data)
+        load(transformed_data)
+    
+    example_dag_instance = example_dag()
+          </pre>
+    
+          <h3>Advantages of TaskFlow API</h3>
+          <ul>
+            <li>Less boilerplate code.</li>
+            <li>Automatic dependency inference.</li>
+            <li>Improved readability.</li>
+          </ul>
+    
+          <h3>References:</h3>
+          <ul>
+            <li><a href="https://airflow.apache.org/docs/apache-airflow/stable/tutorial_taskflow_api.html">TaskFlow API Documentation</a></li>
+          </ul>
+        `
+      },
+    {
+      "title": "Writing Your First DAG (Simple DAG Creation)",
+      "content": `
+        <h3>Creating a Simple DAG</h3>
+        <p>Define a DAG with two tasks:</p>
+        <pre>
+  from airflow import DAG
+  from airflow.operators.bash import BashOperator
+  from airflow.operators.python import PythonOperator
+  from datetime import datetime
+  
+  def print_hello():
+      print("Hello from Python!")
+  
+  with DAG('first_dag', start_date=datetime(2025, 3, 1), schedule_interval='@daily') as dag:
+      bash_task = BashOperator(task_id='bash_task', bash_command='echo Hello World!')
+      python_task = PythonOperator(task_id='python_task', python_callable=print_hello)
+      bash_task >> python_task
+        </pre>
+  
+        <h3>Explanation:</h3>
+        <ul>
+          <li><strong>DAG Context:</strong> Defined using the <code>with DAG()</code> context manager.</li>
+          <li><strong>Tasks:</strong> <code>BashOperator</code> and <code>PythonOperator</code>.</li>
+          <li><strong>Dependencies:</strong> Defined using <code>task1 >> task2</code>.</li>
+        </ul>
+      `
+    },
+    {
+      "title": "Scheduling DAGs (CRON Expressions, Timetables)",
+      "content": `
+        <h3>Scheduling with CRON</h3>
+        <p>Use CRON expressions to define schedules. Example:</p>
+        <pre>
+  schedule_interval='0 0 * * *'  # Daily at midnight
+        </pre>
+  
+        <h3>Timetables</h3>
+        <p>Custom timetables allow more complex scheduling logic. Example:</p>
+        <pre>
+  from airflow.timetables.base import Timetable
+  
+  class CustomTimetable(Timetable):
+      def next_dagrun_info(self, last_automated_data_interval, restriction):
+          # Define custom logic here
+          pass
+        </pre>
+  
+        <h3>References:</h3>
+        <ul>
+          <li><a href="https://crontab.guru/">Cron Expression Generator</a></li>
+          <li><a href="https://airflow.apache.org/docs/apache-airflow/stable/concepts/timetable.html">Timetables Documentation</a></li>
+        </ul>
+      `
+    },
+    {
+      "title": "Task Dependencies (Upstream, Downstream, etc.)",
+      "content": `
+        <h3>Defining Task Dependencies</h3>
+        <p>Tasks can be linked using bitwise operators or methods:</p>
+        <pre>
+  task1 >> task2  # task1 runs before task2
+  task2 << task3  # task3 runs before task2
+  task1.set_downstream(task2)  # Equivalent to task1 >> task2
+  task2.set_upstream(task1)    # Equivalent to task1 >> task2
+        </pre>
+  
+        <h3>Complex Dependencies</h3>
+        <p>Use lists for parallel tasks:</p>
+        <pre>
+  [task1, task2] >> task3
+        </pre>
+  
+        <h3>References:</h3>
+        <ul>
+          <li><a href="https://airflow.apache.org/docs/apache-airflow/stable/concepts/dags.html#dependencies">Dependency Documentation</a></li>
+        </ul>
+      `
+    },
+    {
+      "title": "Dynamic DAG Generation",
+      "content": `
+        <h3>Dynamic DAGs</h3>
+        <p>Create DAGs dynamically based on external data:</p>
+        <pre>
+  from airflow import DAG
+  from airflow.operators.dummy import DummyOperator
+  from datetime import datetime
+  
+  dag_ids = ['dynamic_dag_1', 'dynamic_dag_2']
+  
+  for dag_id in dag_ids:
+      with DAG(dag_id, start_date=datetime(2025, 3, 1)) as dag:
+          start = DummyOperator(task_id='start')
+          end = DummyOperator(task_id='end')
+          start >> end
+        </pre>
+  
+        <h3>References:</h3>
+        <ul>
+          <li><a href="https://airflow.apache.org/docs/apache-airflow/stable/tutorial/fundamentals.html#dynamic-dags">Dynamic DAGs Tutorial</a></li>
+        </ul>
+      `
+    },
+    {
+      "title": "Airflow CLI (Basic Commands)",
+      "content": `
+        <h3>Common CLI Commands</h3>
+        <ul>
+          <li><code>airflow db init</code>: Initialize the metadata database.</li>
+          <li><code>airflow dags list</code>: List all DAGs.</li>
+          <li><code>airflow tasks test <dag_id> <task_id> <execution_date></code>: Test a specific task.</li>
+          <li><code>airflow webserver</code>: Start the Airflow Web UI.</li>
+          <li><code>airflow scheduler</code>: Start the Airflow scheduler.</li>
+        </ul>
+  
+        <h3>References:</h3>
+        <ul>
+          <li><a href="https://airflow.apache.org/docs/apache-airflow/stable/cli-and-env-variables-ref.html">CLI Reference</a></li>
+        </ul>
+      `
+    },
+    {
+      "title": "Airflow Web UI (Monitoring, Triggering, Debugging)",
+      "content": `
+        <h3>Using the Web UI</h3>
+        <p>The Airflow Web UI provides tools for:</p>
+        <ul>
+          <li>Monitoring DAG runs and task statuses.</li>
+          <li>Triggering DAGs manually.</li>
+          <li>Viewing logs and debugging failed tasks.</li>
+        </ul>
+  
+        <h3>Key Features</h3>
+        <ul>
+          <li><strong>Graph View:</strong> Visualize task dependencies.</li>
+          <li><strong>Tree View:</strong> Track task status over time.</li>
+          <li><strong>Gantt Chart:</strong> Analyze task durations.</li>
+        </ul>
+  
+        <h3>References:</h3>
+        <ul>
+          <li><a href="https://airflow.apache.org/docs/apache-airflow/stable/ui.html">Web UI Documentation</a></li>
+        </ul>
+      `
+    },
+    {
+      "title": "Configurations and Best Practices",
+      "content": `
+        <h3>Configuration File</h3>
+        <p>Airflow configurations are stored in <code>airflow.cfg</code>. Key settings include:</p>
+        <ul>
+          <li><code>core.sql_alchemy_conn</code>: Database connection string.</li>
+          <li><code>webserver.web_server_port</code>: Port for the Web UI.</li>
+          <li><code>scheduler.max_threads</code>: Number of threads for the scheduler.</li>
+        </ul>
+  
+        <h3>Best Practices</h3>
+        <ul>
+          <li>Use <code>catchup=False</code> to prevent backfilling unless needed.</li>
+          <li>Keep DAGs idempotent for safe re-runs.</li>
+          <li>Use environment variables for sensitive data.</li>
+        </ul>
+  
+        <h3>References:</h3>
+        <ul>
+          <li><a href="https://airflow.apache.org/docs/apache-airflow/stable/configurations-ref.html">Configuration Reference</a></li>
+        </ul>
+      `
+    },
+    {
+      "title": "Sensors and Hooks (External Systems Interaction)",
+      "content": `
+        <h3>Sensors</h3>
+        <p>Sensors wait for a condition to be met. Example:</p>
+        <pre>
+  from airflow.sensors.filesystem import FileSensor
+  
+  file_sensor = FileSensor(
+      task_id='file_sensor',
+      filepath='/path/to/file',
+      timeout=600
+  )
+        </pre>
+  
+        <h3>Hooks</h3>
+        <p>Hooks interact with external systems. Example:</p>
+        <pre>
+  from airflow.providers.postgres.hooks.postgres import PostgresHook
+  
+  hook = PostgresHook(postgres_conn_id='my_postgres_conn')
+  result = hook.get_records('SELECT * FROM my_table')
+        </pre>
+  
+        <h3>References:</h3>
+        <ul>
+          <li><a href="https://airflow.apache.org/docs/apache-airflow/stable/concepts/sensors.html">Sensors Documentation</a></li>
+          <li><a href="https://airflow.apache.org/docs/apache-airflow-providers/packages-ref.html">Providers Documentation</a></li>
+        </ul>
+      `
+    },
+    {
+      "title": "Custom Operators (Creating Your Own Operators)",
+      "content": `
+        <h3>Creating a Custom Operator</h3>
+        <p>Define a custom operator by subclassing <code>BaseOperator</code>:</p>
+        <pre>
+  from airflow.models import BaseOperator
+  from airflow.utils.decorators import apply_defaults
+  
+  class MyCustomOperator(BaseOperator):
+      @apply_defaults
+      def __init__(self, my_param, *args, **kwargs):
+          super().__init__(*args, **kwargs)
+          self.my_param = my_param
+  
+      def execute(self, context):
+          print(f"Running with param: {self.my_param}")
+        </pre>
+  
+        <h3>References:</h3>
+        <ul>
+          <li><a href="https://airflow.apache.org/docs/apache-airflow/stable/howto/custom-operator.html">Custom Operator Documentation</a></li>
+        </ul>
+      `
+    },
+    {
+      "title": "XComs (Inter-task Communication)",
+      "content": `
+        <h3>Using XComs</h3>
+        <p>XComs allow tasks to exchange small amounts of data:</p>
+        <pre>
+  from airflow import DAG
+  from airflow.operators.python import PythonOperator
+  from datetime import datetime
+  
+  def push_function(**kwargs):
+      kwargs['ti'].xcom_push(key='my_key', value='Hello, XCom!')
+  
+  def pull_function(**kwargs):
+      value = kwargs['ti'].xcom_pull(key='my_key')
+      print(f"Pulled value: {value}")
+  
+  with DAG('xcom_example', start_date=datetime(2025, 3, 1)) as dag:
+      push_task = PythonOperator(task_id='push_task', python_callable=push_function)
+      pull_task = PythonOperator(task_id='pull_task', python_callable=pull_function)
+      push_task >> pull_task
+        </pre>
+  
+        <h3>References:</h3>
+        <ul>
+          <li><a href="https://airflow.apache.org/docs/apache-airflow/stable/concepts/xcoms.html">XComs Documentation</a></li>
+        </ul>
+      `
+    },
+    {
+      "title": "Branching and SubDAGs (Conditional Execution)",
+      "content": `
+        <h3>Branching</h3>
+        <p>Use the <code>BranchPythonOperator</code> to implement conditional logic:</p>
+        <pre>
+  from airflow import DAG
+  from airflow.operators.python import BranchPythonOperator
+  from airflow.operators.dummy import DummyOperator
+  from datetime import datetime
+  
+  def decide_branch():
+      return 'branch_a'
+  
+  with DAG('branching_example', start_date=datetime(2025, 3, 1)) as dag:
+      branch_task = BranchPythonOperator(task_id='branch_task', python_callable=decide_branch)
+      branch_a = DummyOperator(task_id='branch_a')
+      branch_b = DummyOperator(task_id='branch_b')
+      branch_task >> [branch_a, branch_b]
+        </pre>
+  
+        <h3>SubDAGs</h3>
+        <p>SubDAGs group tasks into reusable components:</p>
+        <pre>
+  from airflow import DAG
+  from airflow.operators.subdag import SubDagOperator
+  from datetime import datetime
+  
+  def subdag(parent_dag_name, child_dag_name, args):
+      with DAG(f"{parent_dag_name}.{child_dag_name}", default_args=args) as dag:
+          DummyOperator(task_id='subdag_task')
+      return dag
+  
+  with DAG('subdag_example', start_date=datetime(2025, 3, 1)) as dag:
+      subdag_task = SubDagOperator(task_id='subdag_task', subdag=subdag('subdag_example', 'child_dag', {}))
+        </pre>
+  
+        <h3>References:</h3>
+        <ul>
+          <li><a href="https://airflow.apache.org/docs/apache-airflow/stable/concepts/branch.html">Branching Documentation</a></li>
+          <li><a href="https://airflow.apache.org/docs/apache-airflow/stable/concepts/subdags.html">SubDAGs Documentation</a></li>
+        </ul>
+      `
+    },
+    {
+      "title": "Integrating with AWS (S3, Glue, Redshift, etc.)",
+      "content": `
+        <h3>AWS Integration</h3>
+        <p>Use Airflow's AWS provider package for integration:</p>
+        <pre>
+  from airflow.providers.amazon.aws.operators.s3 import S3ListOperator
+  from airflow.providers.amazon.aws.sensors.s3 import S3KeySensor
+  
+  list_files = S3ListOperator(
+      task_id='list_files',
+      bucket='my_bucket',
+      prefix='my_prefix'
+  )
+  
+  wait_for_file = S3KeySensor(
+      task_id='wait_for_file',
+      bucket_key='s3://my_bucket/my_file.txt',
+      timeout=600
+  )
+        </pre>
+  
+        <h3>References:</h3>
+        <ul>
+          <li><a href="https://airflow.apache.org/docs/apache-airflow-providers-amazon/stable/index.html">AWS Provider Documentation</a></li>
+        </ul>
+      `
+    },
+    {
+      "title": "Integrating with Databases (PostgreSQL, MySQL)",
+      "content": `
+        <h3>Database Integration</h3>
+        <p>Use database-specific operators and hooks:</p>
+        <pre>
+  from airflow.providers.postgres.operators.postgres import PostgresOperator
+  
+  create_table = PostgresOperator(
+      task_id='create_table',
+      postgres_conn_id='my_postgres_conn',
+      sql='''
+          CREATE TABLE IF NOT EXISTS my_table (
+              id SERIAL PRIMARY KEY,
+              name VARCHAR(255)
+          );
+      '''
+  )
+        </pre>
+  
+        <h3>References:</h3>
+        <ul>
+          <li><a href="https://airflow.apache.org/docs/apache-airflow-providers-postgres/stable/index.html">PostgreSQL Provider Documentation</a></li>
+        </ul>
+      `
+    },
+    {
+      "title": "API Integrations (REST, GraphQL)",
+      "content": `
+        <h3>REST API Integration</h3>
+        <p>Use the <code>SimpleHttpOperator</code> to call REST APIs:</p>
+        <pre>
+  from airflow.providers.http.operators.http import SimpleHttpOperator
+  
+  call_api = SimpleHttpOperator(
+      task_id='call_api',
+      http_conn_id='my_http_conn',
+      endpoint='/api/resource',
+      method='GET'
+  )
+        </pre>
+  
+        <h3>References:</h3>
+        <ul>
+          <li><a href="https://airflow.apache.org/docs/apache-airflow-providers-http/stable/index.html">HTTP Provider Documentation</a></li>
+        </ul>
+      `
+    },
+    {
+      "title": "Local Executor vs. Celery Executor",
+      "content": `
+        <h3>Local Executor</h3>
+        <p>Runs tasks locally on a single machine. Suitable for development and testing.</p>
+  
+        <h3>Celery Executor</h3>
+        <p>Distributes tasks across multiple worker nodes. Requires Redis or RabbitMQ as a message broker.</p>
+  
+        <h3>Choosing an Executor</h3>
+        <ul>
+          <li><strong>LocalExecutor:</strong> For small-scale workflows.</li>
+          <li><strong>CeleryExecutor:</strong> For large-scale, distributed workflows.</li>
+        </ul>
+  
+        <h3>References:</h3>
+        <ul>
+          <li><a href="https://airflow.apache.org/docs/apache-airflow/stable/executor/local.html">Local Executor Documentation</a></li>
+          <li><a href="https://airflow.apache.org/docs/apache-airflow/stable/executor/celery.html">Celery Executor Documentation</a></li>
+        </ul>
+      `
+    },
+    {
+      "title": "Deployment Strategies (Docker, Kubernetes)",
+      "content": `
+        <h3>Docker Deployment</h3>
+        <p>Use Docker Compose to deploy Airflow:</p>
+        <pre>
+  version: '3'
+  services:
+    postgres:
+      image: postgres:13
+      environment:
+        POSTGRES_USER: airflow
+        POSTGRES_PASSWORD: airflow
+        POSTGRES_DB: airflow
+    webserver:
+      image: apache/airflow:2.6.0
+      depends_on:
+        - postgres
+      environment:
+        AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+      ports:
+        - "8080:8080"
+      command: webserver
+        </pre>
+  
+        <h3>Kubernetes Deployment</h3>
+        <p>Deploy Airflow on Kubernetes using Helm:</p>
+        <pre>
+  helm repo add apache-airflow https://airflow.apache.org
+  helm install airflow apache-airflow/airflow
+        </pre>
+  
+        <h3>References:</h3>
+        <ul>
+          <li><a href="https://airflow.apache.org/docs/helm-chart/stable/index.html">Helm Chart Documentation</a></li>
+        </ul>
+      `
+    },
+    {
+      "title": "Scaling Airflow (Worker Nodes, Scheduler Optimization)",
+      "content": `
+        <h3>Scaling Workers</h3>
+        <p>Add more worker nodes to handle increased task loads.</p>
+  
+        <h3>Optimizing the Scheduler</h3>
+        <p>Increase the number of scheduler threads:</p>
+        <pre>
+  [scheduler]
+  max_threads = 4
+        </pre>
+  
+        <h3>References:</h3>
+        <ul>
+          <li><a href="https://airflow.apache.org/docs/apache-airflow/stable/production-deployment.html">Production Deployment Guide</a></li>
+        </ul>
+      `
+    },
+    {
+      "title": "Writing Unit Tests for DAGs",
+      "content": `
+        <h3>Testing DAGs</h3>
+        <p>Write unit tests to validate DAG definitions:</p>
+        <pre>
+  import unittest
+  from airflow.models import DagBag
+  
+  class TestDagIntegrity(unittest.TestCase):
+      def setUp(self):
+          self.dagbag = DagBag()
+  
+      def test_dag_loaded(self):
+          dag = self.dagbag.get_dag(dag_id='example_dag')
+          self.assertDictEqual({}, self.dagbag.import_errors)
+          self.assertIsNotNone(dag)
+  
+  if __name__ == '__main__':
+      unittest.main()
+        </pre>
+  
+        <h3>References:</h3>
+        <ul>
+          <li><a href="https://airflow.apache.org/docs/apache-airflow/stable/testing.html">Testing Documentation</a></li>
+        </ul>
+      `
+    },
+    {
+      "title": "Debugging DAGs and Tasks",
+      "content": `
+        <h3>Debugging Tips</h3>
+        <ul>
+          <li>Check task logs in the Web UI for errors.</li>
+          <li>Use <code>airflow tasks test</code> to run tasks locally.</li>
+          <li>Enable verbose logging in <code>airflow.cfg</code>.</li>
+        </ul>
+  
+        <h3>References:</h3>
+        <ul>
+          <li><a href="https://airflow.apache.org/docs/apache-airflow/stable/logging-monitoring/logging-tasks.html">Logging Documentation</a></li>
+        </ul>
+      `
+    },
+    {
+      "title": "Logging and Monitoring Best Practices",
+      "content": `
+        <h3>Best Practices</h3>
+        <ul>
+          <li>Centralize logs using tools like ELK Stack or CloudWatch.</li>
+          <li>Monitor DAG health with metrics like task success rate.</li>
+          <li>Set up alerts for failed tasks.</li>
+        </ul>
+  
+        <h3>References:</h3>
+        <ul>
+          <li><a href="https://airflow.apache.org/docs/apache-airflow/stable/logging-monitoring/index.html">Monitoring Documentation</a></li>
+        </ul>
+      `
+    },
+    {
+      "title": "Role-Based Access Control (RBAC)",
+      "content": `
+        <h3>RBAC Configuration</h3>
+        <p>Enable RBAC in <code>airflow.cfg</code>:</p>
+        <pre>
+  [webserver]
+  rbac = True
+        </pre>
+  
+        <h3>Managing Roles</h3>
+        <p>Create roles and assign permissions via the Web UI.</p>
+  
+        <h3>References:</h3>
+        <ul>
+          <li><a href="https://airflow.apache.org/docs/apache-airflow/stable/security/access-control.html">RBAC Documentation</a></li>
+        </ul>
+      `
+    },
+    {
+      "title": "API Authentication",
+      "content": `
+        <h3>Securing the API</h3>
+        <p>Enable API authentication in <code>airflow.cfg</code>:</p>
+        <pre>
+  [api]
+  auth_backend = airflow.api.auth.backend.basic_auth
+        </pre>
+  
+        <h3>References:</h3>
+        <ul>
+          <li><a href="https://airflow.apache.org/docs/apache-airflow/stable/security/api.html">API Authentication Documentation</a></li>
+        </ul>
+      `
+    },
+    {
+      "title": "DAG Optimization Techniques",
+      "content": `
+        <h3>Optimization Tips</h3>
+        <ul>
+          <li>Minimize the number of tasks in a DAG.</li>
+          <li>Use parallelism to reduce execution time.</li>
+          <li>Avoid long-running tasks by breaking them into smaller tasks.</li>
+        </ul>
+  
+        <h3>References:</h3>
+        <ul>
+          <li><a href="https://airflow.apache.org/docs/apache-airflow/stable/best-practices.html">Best Practices Documentation</a></li>
+        </ul>
+      `
+    },
+    {
+      "title": "Parallelism and Concurrency Settings",
+      "content": `
+        <h3>Settings</h3>
+        <p>Configure parallelism and concurrency in <code>airflow.cfg</code>:</p>
+        <pre>
+  [core]
+  parallelism = 32
+  dag_concurrency = 16
+        </pre>
+  
+        <h3>References:</h3>
+        <ul>
+          <li><a href="https://airflow.apache.org/docs/apache-airflow/stable/configurations-ref.html">Configuration Reference</a></li>
+        </ul>
+      `
+    },
+    {
+      "title": "Improving Task Performance",
+      "content": `
+        <h3>Tips for Performance</h3>
+        <ul>
+          <li>Use lightweight containers for tasks.</li>
+          <li>Cache intermediate results when possible.</li>
+          <li>Profile tasks to identify bottlenecks.</li>
+        </ul>
+  
+        <h3>References:</h3>
+        <ul>
+          <li><a href="https://airflow.apache.org/docs/apache-airflow/stable/performance-profiling.html">Performance Profiling</a></li>
+        </ul>
+      `
+    },
+    {
+      "title": "End-to-End Pipeline Example",
+      "content": `
+        <h3>Example Pipeline</h3>
+        <p>An ETL pipeline that extracts data from a CSV, transforms it, and loads it into a database:</p>
+        <pre>
+  from airflow import DAG
+  from airflow.operators.python import PythonOperator
+  from airflow.providers.postgres.operators.postgres import PostgresOperator
+  from datetime import datetime
+  
+  def extract_data():
+      # Simulate extracting data
+      return [{'id': 1, 'name': 'Alice'}, {'id': 2, 'name': 'Bob'}]
+  
+  def transform_data(data):
+      # Transform data
+      return [{**row, 'name': row['name'].upper()} for row in data]
+  
+  with DAG('etl_pipeline', start_date=datetime(2025, 3, 1)) as dag:
+      create_table = PostgresOperator(
+          task_id='create_table',
+          postgres_conn_id='my_postgres_conn',
+          sql='''
+              CREATE TABLE IF NOT EXISTS users (
+                  id INT PRIMARY KEY,
+                  name VARCHAR(255)
+              );
+          '''
+      )
+  
+      extract = PythonOperator(task_id='extract', python_callable=extract_data)
+      transform = PythonOperator(task_id='transform', python_callable=lambda ti: transform_data(ti.xcom_pull(task_ids='extract')))
+      load = PostgresOperator(
+          task_id='load',
+          postgres_conn_id='my_postgres_conn',
+          sql="INSERT INTO users (id, name) VALUES (%s, %s);",
+          parameters=[(row['id'], row['name']) for row in transform.output]
+      )
+  
+      create_table >> extract >> transform >> load
+        </pre>
+  
+        <h3>References:</h3>
+        <ul>
+          <li><a href="https://airflow.apache.org/docs/apache-airflow/stable/tutorial_etl.html">ETL Tutorial</a></li>
+        </ul>
+      `
+    },
+    {
+      "title": "Real-World Use Cases (ETL Pipelines, Data Lakes, etc.)",
+      "content": `
+        <h3>ETL Pipelines</h3>
+        <p>Use Airflow to automate ETL workflows for data warehousing.</p>
+  
+        <h3>Data Lakes</h3>
+        <p>Orchestrate data ingestion, transformation, and storage in data lakes.</p>
+  
+        <h3>References:</h3>
+        <ul>
+          <li><a href="https://airflow.apache.org/docs/apache-airflow/stable/use-cases.html">Use Cases Documentation</a></li>
+        </ul>
+      `
+    },
+    {
+      "title": "Common Issues and Troubleshooting",
+      "content": `
+        <h3>Common Issues</h3>
+        <ul>
+          <li><strong>Backfilling:</strong> Disable with <code>catchup=False</code>.</li>
+          <li><strong>Task Failures:</strong> Check logs and retry logic.</li>
+          <li><strong>Deadlocks:</strong> Ensure proper resource allocation.</li>
+        </ul>
+  
+        <h3>References:</h3>
+        <ul>
+          <li><a href="https://airflow.apache.org/docs/apache-airflow/stable/troubleshooting.html">Troubleshooting Guide</a></li>
+        </ul>
+      `
+    },
+    {
+      "title": "Best Practices Summary",
+      "content": `
+        <h3>Summary</h3>
+        <ul>
+          <li>Use modular DAGs for better readability.</li>
+          <li>Test DAGs thoroughly before deployment.</li>
+          <li>Monitor performance and optimize as needed.</li>
+        </ul>
+  
+        <h3>References:</h3>
+        <ul>
+          <li><a href="https://airflow.apache.org/docs/apache-airflow/stable/best-practices.html">Best Practices Documentation</a></li>
+        </ul>
+      `
+    },
+    {
+      "title": "Further Learning Resources",
+      "content": `
+        <h3>Resources</h3>
+        <ul>
+          <li><a href="https://airflow.apache.org/docs/">Official Airflow Documentation</a></li>
+          <li><a href="https://www.astronomer.io/guides/">Astronomer Guides</a></li>
+          <li><a href="https://www.udemy.com/course/apache-airflow-course/">Udemy Course on Airflow</a></li>
+        </ul>
+      `
+    }
+  ]
+
+
+  const quizQuestions = [
+  {
+    question: "What does DAG stand for?",
+    options: ["Directed Acyclic Graph", "Dynamic Automation Gateway", "Data Aggregation Grid"],
+    answer: "Directed Acyclic Graph"
+  },
+  {
+    question: "Which command initializes Airflow's database?",
+    options: ["airflow db start", "airflow db init", "airflow init"],
+    answer: "airflow db init"
+  },
+  {
+    question: "Which operator executes Python functions?",
+    options: ["BashOperator", "PythonOperator", "SQLOperator"],
+    answer: "PythonOperator"
+  },
+  {
+    question: "Which Airflow component defines workflows using Python code?",
+    options: ["DAG", "Task", "Sensor"],
+    answer: "DAG"
+  },
+  {
+    question: "What does the BashOperator do?",
+    options: ["Executes Python functions", "Sends emails", "Executes bash commands"],
+    answer: "Executes bash commands"
+  },
+  {
+    question: "What is the purpose of the FileSensor?",
+    options: ["Check for files in a directory", "Monitor API responses", "Check database status"],
+    answer: "Check for files in a directory"
+  },
+  {
+    question: "What does catchup=False do?",
+    options: ["Enables backfilling", "Disables backfilling", "Increases retry count"],
+    answer: "Disables backfilling"
+  },
+  {
+    question: "Which Airflow configuration file holds settings like parallelism and scheduler threads?",
+    options: ["airflow.cfg", "settings.yaml", "config.ini"],
+    answer: "airflow.cfg"
+  },
+  {
+    question: "What is the default port for the Airflow webserver?",
+    options: ["8000", "8080", "5000"],
+    answer: "8080"
+  },
+  {
+    question: "Which executor is best suited for distributed execution across multiple workers?",
+    options: ["LocalExecutor", "CeleryExecutor", "SequentialExecutor"],
+    answer: "CeleryExecutor"
+  },
+  {
+    question: "What is the purpose of the retry_delay argument in task configuration?",
+    options: ["Sets retry interval", "Defines the task owner", "Configures task dependencies"],
+    answer: "Sets retry interval"
+  },
+  {
+    question: "What is the primary purpose of the TaskFlow API?",
+    options: ["Creating tasks", "Simplifying DAG creation", "Scheduling tasks"],
+    answer: "Simplifying DAG creation"
+  },
+  {
+    question: "What command lists all available DAGs in Airflow?",
+    options: ["airflow list dags", "airflow dags list", "airflow show dags"],
+    answer: "airflow dags list"
+  },
+  {
+    question: "Which of the following operators is used for transferring data between tasks via XComs?",
+    options: ["PythonOperator", "BashOperator", "EmailOperator"],
+    answer: "PythonOperator"
+  },
+  {
+    question: "What command starts the Airflow scheduler?",
+    options: ["airflow webserver", "airflow scheduler", "airflow worker"],
+    answer: "airflow scheduler"
+  },
+  {
+    question: "Which package is used for interacting with AWS S3 in Airflow?",
+    options: ["airflow.providers.amazon", "airflow.providers.gcp", "airflow.providers.azure"],
+    answer: "airflow.providers.amazon"
+  },
+  {
+    question: "What is a SubDAG used for?",
+    options: ["Grouping tasks", "Running a single task", "Initializing a database"],
+    answer: "Grouping tasks"
+  },
+  {
+    question: "What is the purpose of the airflow.cfg file?",
+    options: ["Setting task retries", "Configuring Airflow settings", "Creating DAGs"],
+    answer: "Configuring Airflow settings"
+  },
+  {
+    question: "What is the difference between LocalExecutor and CeleryExecutor?",
+    options: ["Parallelism", "Task scheduling", "Database integration"],
+    answer: "Parallelism"
+  },
+  {
+    question: "What is the purpose of 'catchup' in a DAG configuration?",
+    options: ["Enable/Disable backfilling", "Set retry intervals", "Define task dependencies"],
+    answer: "Enable/Disable backfilling"
+  }
+];

@@ -1,12 +1,16 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HackerRank-Like Interface</title>
-    <link rel="stylesheet" href="static/airflow_app/index.css">
-    <script src="static/airflow_app/index.js"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'airflow_app/aifrow-do.css' %}">
+    <script src="{% static 'airflow_app/aifrow-do.js' %}"></script>
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.33.0/min/vs/editor/editor.main.css">
+    <!-- Add monaco-editor-python -->
+    
     <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
  
 </head>
@@ -33,7 +37,15 @@
         <div id="task-flow"></div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.33.0/min/vs/loader.js"></script>
+    <!-- Add Monaco Editor -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.34.0/min/vs/loader.js"></script>
+
+    <!-- Add monaco-editor-python -->
+    <script src="https://cdn.jsdelivr.net/npm/monaco-editor-python@latest/dist/monaco-editor-python.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.23.0/full/pyodide.js"></script>
+
+
     
 </body>
 </html>

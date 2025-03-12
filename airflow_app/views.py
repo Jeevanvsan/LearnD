@@ -10,7 +10,13 @@ from airflow_app.airflow_utils.airflow_code_extractor import DagExtract
 
 
 def index(request):
-    return render(request, 'airflow_app/index.html')
+    return render(request, 'airflow_app/airflow-main.html')
+
+def airflow_study(request):
+    return render(request, 'airflow_app/airflow-study.html')
+
+def airflow_do(request):
+    return render(request, 'airflow_app/airflow-do.html')
 
 @csrf_exempt
 def run_code(request):

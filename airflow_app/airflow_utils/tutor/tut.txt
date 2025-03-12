@@ -1,0 +1,1694 @@
+[0:00 - 2:00] Hello everybody, this is Coder2j. Welcome
+to the Airflow Tutorial for Beginner Full
+Course. In this 2 hour course, we combine
+theory explanation and practical demos to
+help you get started quickly as an absolute
+beginner. You don’t need any prerequisite
+to start this course, but basic python knowledge
+is recommended. To make the most out of it,
+it is highly encouraged to follow and try
+out the hands-on examples. In the description,
+you will find the link to the course GitHub
+repo which contains the source code of all
+exmaples. All the hands-on demos are based
+on the latest Airflow version 2.0.
+Throughout the course, you will be given an
+introduction to Apache Airflow and how to
+run it locally in the python environment and
+docker container by practical examples. Then
+you will also learn about the Airflow core
+concepts, task lifecycle, and basic architecture.
+After that, we will show you how to build
+airflow dag with different operators like
+bash, and python operators and how to share
+data between tasks using xcoms via demos.
+Also, the new feature introduced since airflow
+2.0 TaskFlow API will be covered with an example.
+Then you will learn airflow dag catch up,
+backfill, and how to schedule dag with the
+cron expression. After that, we will teach
+you how to connect to external services like
+Postgres DB and AWS S3 via airflow connection
+using demos. Then we share the tips on how
+
+[2:00 - 4:49] to install python packages in the airflow
+docker container. In the end, we will cover
+how to use airflow hooks with examples of
+Postgres and S3.
+Make sure you subscribe and smash the like
+button. If we hit 1000 likes, I will do a
+video about how to debug airflow dag. If we
+hit 5000 likes, I will do a video about airflow
+docker operator.
+Sounds exciting? Let’s get started!
+First of all, let’s create a Python project
+and install airflow. I am going to open vs
+code, to create a project folder and open
+it. And I will name it airflow_tutorial on
+the Desktop directory. Let’s open a terminal
+and check whether I am in the right directory
+or not by command pwd.
+Since airflow 2.0 requires a Python version
+above 3.6. Let’s check my python3 version
+by command “Python3 --version”. As we
+can see, my local python3 version is 3.6.7,
+it meets the requirements. That’s great
+Let’s create a Python environment with command
+“python3 -m venv” with the environment
+folder name py_env. Once created successfully,
+we can see the py_env folder in the explore
+section.
+
+[4:49 - 7:48] Now let’s activate the python environment
+using command “source py_env/bin/activate”.
+When activated, we can see py_env on the very
+left of the terminal prompt.
+Next step, I am going to install airflow locally.
+Let’s open browser and search apache airflow
+official github repository, and navigate to
+the install section, I will copy the install
+command and paste in the terminal, before
+executing, I have to change the dependency
+to match my local python version. Instead
+of 3.7, we change to 3.6.
+Oops, there is an error of missing gcc. To
+solve this problem, I have to run command
+xcode-select install to install mac os command
+line tools. The installation takes a couple
+of minutes, after that we execute the pip
+install command again, this time there is
+no error, therefore, airflow is installed
+successfully.
+Okay, next step I am going to initialise the
+database for airflow. Before that, we have
+to indicate the airflow home directory, by
+default, it will create a folder airflow in
+home directory. However, I would like to have
+everything in my project directory, so I export
+the airflow_home environment variable to the
+current directory.
+Then I will initialise the database with command
+airflow db init. This command will create
+a sqlite database, a log folder and some configuration
+files. Next, I will start airflow webserver
+
+[7:48 - 10:42] by command airflow webserver -p 8080, by default
+8080 is used.
+Then I open the link in the browser, it requires
+me username and password. Okay, let’s go
+back to the terminal, stop the airflow webserver
+and create one by command airflow users create
+and give value to parameters as shown in the
+help output. By setting the password, we start
+the airflow webserver again and are ready
+to sign in.
+It looks great, I can see all the example
+dags, but over that, it says there is no scheduler
+running. Okay, in order to execute the dags,
+we have to start the airflow scheduler. Let’s
+go back to vscode, open another Terminal.
+First we have to export the airflow_home environment
+variable as we did in the first Terminal,
+then we execute the command airflow Scheduler.
+Let’s go back to the browser and refresh
+the page, we can see boom the message is gone.
+Let’s turn on one example dag, from the
+tree view we can see this dag has multiple
+tasks, when we refresh, we can see the tasks
+have been scheduled and executed. And it has
+been marked as dark green. That’s it, we
+have installed and got airflow running successfully.
+Docker is a platform that uses OS-level virtualization
+to deliver software in a package which is
+isolated from its environment. With docker,
+we can solve the problem of “it works on
+my machine but not on yours‘. In a nutshell,
+using docker we can make sure when the coding
+
+[10:42 - 12:28] project works in my development environment,
+it also works in the deployment environment
+no matter what kinds of os or hardware differences
+of the two environments, as long as docker
+is running on both of them. Doesn’t it sound
+great?! Let’s get started!
+Let’s open vs code, create a project name
+on my desktop directory and open it, I am
+going to name it airflow_docker. Let’s open
+a terminal and check whether we are in the
+right directory or not by command pwd. As
+we can see, we are inside of our project directory.
+That’s great.
+Then, I am going to open apache airflow's
+official website and look for the documentation.
+We click the quick start section, instead
+of running airflow locally, we are going to
+install it with docker, so we click running
+airflow in docker. Before we actually do the
+installation, we have to install docker and
+docker-compose in our laptop. No worries,
+it’s just as simple as you install any other
+software. If you are running with a mac or
+a windows laptop, what you need to install
+is just the docker desktop application. You
+can find the download link in the description
+for both windows and mac os. Once you download
+the file, just double click and follow the
+installation steps.
+Okay, as I already have it installed, I am
+going to launch the docker desktop application.
+
+[12:28 - 14:42] It might take less than a minute or more,
+depending on how powerful your laptop is.
+Once started, we can see the docker icon on
+the menu bar, when clicked it indicates the
+status of docker. When you see the green text
+which says docker desktop is running, we can
+go back to vscode to check docker and docker-compose
+versions by command docker --version and docker-compose
+--version. If you see the version output,
+it means you have a running docker and docker-compose.
+Now we should have all the preparation work
+done. Let’s go back to the airflow documentation
+and download the official docker-compose yml
+file by copying the curl command and paste
+in the terminal, and then enter to execute
+it. Once successfully, we can see the docker-compose
+yml file has been downloaded in our project
+directory. Let’s open the yml file. We can
+see it defines many services and composes
+them in a proper way. By default, the yaml
+file defines airflow with CeleryExecutor.
+To make it simple, we are going to use LocalExecutor.
+Therefore, I am going to change the core executor
+from celeryexecutor to local executor. And
+we don’t need Celery result backend, celery
+broker url for local executor, so we delete
+them. Redis is necessary for celery, we don’t
+need it either, so delete its dependency and
+definition. And we also don’t need celery
+worker and flower, we are going to remove
+them. That’s it. We save the yaml file and
+are ready to go. I suggest you pay attention
+
+[14:42 - 16:53] to these steps and watch back and forth to
+avoid missing any of them. You can find a
+github repo link in the description below,
+by which you can get the final version of
+the yaml file.
+Okay, next step. We need to create folders
+for dags, logs and plugins which are quite
+self-explanatory, saving airflow dags, logs
+and customised plugins. Just copy the command,
+paste in the terminal and execute it. We can
+see all the folders have been created successfully
+under our project directory. Echo the airflow
+user id and group id to env file is only necessary
+when you are using linux os. I am using mac
+os, so i just skip this step. Next, we are
+going to initialise the database by the command
+docker-compose up airflow-init.
+We can see that it is going to download all
+the necessary docker images and set up an
+admin user with airflow as the username and
+password. Once you see the airflow-init is
+exited with code 0, It means the database
+initialisation is complete.
+Next, which is the most exciting step! We
+are going to run the airflow with command
+docker-compose up -d which means in detached
+mode, running containers in background. Let’s
+check what containers are running by command
+docker ps, we can see from the output that
+there is an airflow webserver, airflow scheduler,
+and a postgres database. Let’s open the
+
+[16:53 - 18:57] browser and input 0.0.0.0:8080 to check our
+airflow webserver.
+In the meantime, we can also open docker dashboard,
+here we can also see all the running containers
+in our airflow project.
+We type username and password airflow to login.
+boom! We can see that airflow is running properly
+in docker. We can see all the example dags,
+let's pick the first one and start it. When
+we click the refresh button, we can see the
+tasks have been scheduled and executed. In
+the end the successful dag and task run have
+been marked in dark green! That’s awesome!
+Congratulations! You have got airflow running
+successfully in docker.
+To better understand the core concepts. Let’s
+recap what airflow is. Where and how does
+it come from? Airflow starts as Airbnb's internal
+tool to manage increasingly complex workflows
+in 2014. From the beginning, the project was
+made open source, becoming an Apache Incubator
+project in March 2016 and a Top-Level Apache
+Software Foundation project in January 2019.
+Airflow is one of the most popular workflow
+management platforms and it is written in
+Python.
+Since its goal is to manage workflow. But
+what is workflow? Workflow is a sequence of
+tasks. In airflow, workflow is defined as
+DAG, namely directed acyclic graph. For instance,
+
+[18:57 - 20:51] we have a workflow which starts with task
+A, when A finishes, followed by task B and
+C, when B and C finish, executing the final
+task D and E. However, when Task D finishes,
+it’s not allowed to run Task A again, since
+it creates a cycle. Likewise Task C can't
+be followed back by Task A. Therefore, dag
+is a collection of all the tasks you want
+to run, organized in a way that reflects their
+relationships and dependencies.
+But what is the task, operator?
+A Task defines a unit of work within a DAG;
+as shown in the example dag, it is represented
+as a node in the DAG graph, and it is written
+in Python. And there is a dependency between
+tasks. For example, task C is the downstream
+of task A, Task C is the upstream of task
+E.
+The goal of the task is to achieve a specific
+thing, the method it uses is called operator.
+While DAGs describe how to run a workflow,
+Operators determine what actually gets done
+by a task. In Airflow, there are many kinds
+of operators, like BashOperator, PythonOperator
+and you can also write your own customized
+operator. Each task is an implementation of
+an operator, for example a PythonOperator
+to execute some Python code, or a BashOperator
+to run a Bash command.
+To sum up, the operator determines what is
+going to be done. The task implements an operator
+
+[20:51 - 22:45] by defining specific values for that operator.
+And dag is a collection of all the tasks you
+want to run, organized in a way that reflects
+their relationships and dependencies.
+What is the execution date, dag run and task
+instance?
+The execution_date is the logical date and
+time which the DAG Run, and its task instances,
+are running for.
+For example, we might currently have three
+DAG runs that are in progress for 2021-01-01,
+2021-01-02 and 2021-01-03.
+A task instance is a run of a task at a specific
+point of time (excution_date).
+A DAG run is an instantiation of a DAG, containing
+task instances that run for a specific execution_date.
+When a DAG run is triggered. Its tasks are
+going to be executed one after another according
+to their dependencies. Each task will go through
+different stages from start to completion.
+Every stage indicates a specific status of
+the task instance. For example, when the task
+is in progress, its status is running; when
+the task has been finished flawlessly, it
+has a success status and so on.
+There are in total 11 different kinds of stages.
+In the Airflow UI (graph and tree views),
+these stages are displayed by a color representing
+each stage.
+
+[22:45 - 24:51] In the early phase, a task might go through
+from no_status to queued; after that a task
+will be at the execution phase, from running
+to success; if the task fails, it will be
+directed into up_for_retry, upstream_failed,
+or up_for_reschedule. And during the task
+lifecycle, if we manually abort or skip it.
+The task will be in the status of shutdown
+or skipped accordingly.
+Let’s have a closer look and explain each
+of them in the task life cycle diagram.
+As I just said, a task is usually starting
+with No status, which means the scheduler
+created an empty task instance; After that
+there are 4 different stages that the task
+can be moved to; they are scheduled, removed,
+upstream failed or skipped. Scheduled means
+that the scheduler determined task instance
+needs to be run; Upsteam_failed once the task’s
+upstream task failed; skipped if the task
+is skipped; or removed when the task has been
+removed. If the task is lucky enough to be
+scheduled, then the executor kicks in, which
+puts the task into the task queue. And the
+task’s status changes to “queued”. After
+that, the worker will execute the task once
+it is free (Free means the worker’s computation
+resources are not fully occupied). At this
+stage, the task’s status is running. Based
+on the execution results, there will be 3
+possible stages: success, failed or shutdown,
+
+[24:51 - 26:41] which is very straightforward. Success means
+that the task completed flawlessly; Failed
+means the task fails; and shutdown if the
+task run has been aborted. In the case of
+the task in stages failed or shutdown, if
+the maximum retry is not exceeded, the task
+will be forwarding to up for retry stage,
+which means the task will be scheduled and
+rerun after a certain waiting time. In some
+specific cases, a task in the running stage
+can also be directed into the “up for reschedule”
+stage. Which means the task will be rescheduled
+every certain time interval. A simple example
+for this use case would be that you will never
+move forward the task unless a file has been
+saved in a s3 bucket. So you want to check
+the file’s existence every 10 seconds for
+instance using a sensor task.
+To sum up, a happy workflow execution process
+would be starting with no status, then the
+scheduler scheduled the task, after which
+the executor put the task into the task queue;
+once the worker picks up the task and executes
+it flawlessly, we will receive a happy task
+process.
+Okay, we now understand the complete life
+cycle of the task of airflow. Let’s dive
+into the basic architecture of the airflow.
+We have mentioned lots of components in the
+previous videos when we talk about airflow
+and you can also find such a diagram on the
+
+[26:41 - 29:01] airflow official documentation site. On the
+diagram you can see things like the data engineer,
+web server, scheduler, worker, dag, and etc.
+What is the responsibility of each one and
+how do they actually work together?
+First of all, we need someone called “data
+engineer“ like you to start building and
+monitoring all the ETL processes. Data engineers
+have to configure the airflow setup, like
+the type of executor, which database to use,
+and etc. Data Engineers create and manage
+the dags they authored through the airflow
+user interface which is supported by the web
+server. In addition to that, the dags are
+also visible to the scheduler and workers,
+which change the task's status during the
+whole task lifecycle. Apart from that, there
+is a component called executor. In order to
+persist the update and retrieve the info of
+the dags, those four components are connected
+to the database closely. There are a variety
+of database engines you can choose, like mysql,
+postgres.
+First, let’s open our project folder in
+vscode and launch the airflow by command “docker-compose
+up -d”. Then we open the link localhost:8080
+in the browser, it might take some seconds
+but in the end we can see the airflow admin
+login page. After we put the username and
+password airflow that we created, we can see
+all the example dags.
+
+[29:01 - 31:42] Since we are going to create our own dag,
+let’s remove all the example dags. We go
+back to the vs code terminal, type “docker-compose
+down -v”, -v means we are not only shutting
+down the airflow containers, but also removing
+the volumes we defined in our docker-compose
+yml file. Then we change the value of “AIRFLOW__CORE__LOAD_EXAMPLES”
+in the yaml file from ‘true’ to ‘false’.
+Then we init the airflow by command “docker-compose
+up airflow-init”, after that, we launch
+airflow again using ‘docker-compose up -d’.
+After we refresh the page and login, we now
+see no example dag is loaded.That’s great,
+next we are going to create our first dag.
+Now let’s go back to vscode. In airflow,
+airflow dag is defined as a python file under
+the dags folder. Therefore, let’s create
+one called our_first_dag.py and open it. A
+dag implementation is an instantiation of
+the class DAG, therefore, we have to firstly
+import the DAG from airflow. Then we create
+an instance of DAG using the with statement.
+In this case, all the following code will
+be under the scrope of our dag instance. We
+have to give values to a couple of parameters.
+Let’s type ‘our_first_dag’ as the unique
+dag id, and describe our dag as “This is
+our first airflow dag that we write”. After
+that, we have to decide when we want to start
+our dag and how often we want to execute it.
+Let’s first import datetime from the datetime
+package. Let’s say we want to start our
+
+[31:42 - 34:15] dag from the 1st of June and run it every
+day at 2 am. We basically set the parameter
+start date = datetime(2021, 7, 30, 2) and
+schedule_interval=’@daily’. Apart from
+that, we would also like to define the common
+parameters which will be used to initialise
+the operator in default_args. For example,
+we want to set the owner of the dag as “coder2j”,
+the maximum time of retries is 5 and retry
+delay will be 5 minutes. For retry delay we
+need to import the timedelta from the datetime
+package, and set the 2 minutes as the wait
+time for every retry.
+Then we set the dag’s default args equals
+to our defined default args dictionary variable.
+Next, let’s create a simple task for our
+dag. We will use BashOperator to execute some
+bash commands. Therefore, we have to import
+the BashOperator first. A task is an implementation
+of an operator. So let’s create a very simple
+task: print out a message “hello word, this
+is the first task!”. Let’s type task1
+equals BashOperator, we first have to set
+the task id equals “first_task”, then
+we set the bash_command equals “echo hello
+world, this is the first task” Let’s go
+back to our browser and refresh. Oops, we
+found errors in our code.
+Let’s click it and see the details. It says
+that there is no module named airflow.operator.
+
+[34:15 - 36:27] Let’s go back to vs code and change operator
+to operators. Refresh again, the error message
+is not the same, which means we fixed the
+bash operator import error. The new error
+message says that minute is the invalid argument
+for timedelta, I think it should be minutes
+not minute, let’s try and refresh. Now the
+timedelta error is fixed, but we got another
+error with an unexpected keyword argument
+“scheduler_interval”. Let's fix this by
+changing the argument to “schedule_interval”
+and refresh. Boom, we have no errors and finally
+see our first dag show up.
+We can see there is only one task named “first_task”
+in the graph view. Let’s turn on our first
+dag. We can see that our first dag will be
+executed from the start date July 30th midnight
+all the way to yesterday midnight. If we select
+one of the successful task runs, and open
+the execution log, we can see the “hello
+world! This is the first task!” message
+has been printed out.
+In general, an ETL process consists of multiple
+tasks. Let’s create our second task, which
+will be executed after the success of task1.
+After the definition code of task1, we type
+task2 equals to BashOperator, we put “second_task”
+as the task id and a simple bash command says,
+“I am the second task, and I will be running
+after the task1”
+
+[36:27 - 38:58] Now that we have defined task2, let’s build
+the task dependency. To achieve this, we can
+set task2 as the downstream of task1. In order
+to not mess up the version of dag, let’s
+change the dag id to “‘our_first_dag_v2”.
+Let’s go back to the browser and refresh,
+you can see there are two dags, “‘our_first_dag”
+and “‘our_first_dag_v2”. From the graph
+view, we can see task2 is after task1, which
+is exactly what we wanted. Let’s start the
+dag. Once it is complete, we can see task2
+will be run only after the success of task1.
+Let’s check the execution log, the log shows
+that the execution date time of task2 is later
+than that of task1.
+What if we want to have three tasks and task2
+and 3 will be run once task1 finishes. Let’s
+go back to vscode and add task3 and build
+the dependencies. We will create our third
+task with bash command “echo hey, I am task3
+and will be running after task1 at the same
+time as task2!” There are many ways we can
+build the task dependency. Let’s try our
+first method, basically add the task3 as the
+downstream of task1. We change the dag version,
+refresh the page and see that task1 is followed
+by task2 and 3 in the graph view.
+Let’s check the execution log of task3,
+the message has been successfully printed
+out. And the execution date time of task3
+and 2 is later than that of task1.
+
+[38:58 - 41:19] Let’s go back vs code and try the second
+method with the bit shift operator. task1
+right shift task2 and task1 right shift task3
+which means task 2 and task3 are the downstream
+tasks of task1. Change the dag id version
+and refresh the page again, we can confirm
+the correct task dependencies in the graph
+view. Let’s go back one more time and introduce
+the third method, which is an adjusted version
+of the second method. We can convert the two-line
+bit shift operation into one, with task1 right
+shift square bracket, with task2 comma task3
+inside. Go back to the browser and refresh,
+we can confirm the task dependencies are correctly
+configured.
+First, let’s open our project folder in
+vscode and check if airflow is running by
+docker ps. We can see the Airflow components
+are already up. If not you can launch airflow
+by command “docker-compose up -d” and
+login in. Okay, we have a running airflow.
+Now let’s go back to vscode and create a
+python file under the dag folder called
+create_dag_with_python_operator.py and open
+it.
+We have to first import the DAG package and
+create an instance of DAG using the with statement
+of course.
+Let’s create a default args dict variable,
+set coder2j as the owner, retries equals 5
+
+[41:19 - 43:26] and 5 minutes for each retry. Of course, we
+have to import datetime and timedelta packages.
+We then set the DAG’s default args equals
+to our defined default args.
+Let’s give ‘our_dag_with_python_operator_v01’
+as the dag id, and describe it as “Our first
+DAG using python operator”. Then we set
+the start date of the dag to yesterday 2021
+Oct 6th, and schedule it daily.
+Let’s define a simple python function that
+we want to run as a task. Let’s name it
+as greet, which will print out a “hello
+world” string when it is executed.
+Okay, what’s next? Let’s create a task
+using PythonOperator to run our greet function.
+We have to import the PythonOperator module
+in the first place. Then we set the task id
+to “greet” and basically pass our greet
+function name to the python_callable parameter.
+We are good to go.
+Let’s go back to the browser and refresh
+our airflow webserver. We can see there is
+no error message and “our_dag_with_python_opeartor_v01"
+dag shows up. In the graph view, we can of
+course see that it has only one task named
+greet. Let’s trigger the dag and check the
+log of the task run. From the log we can see
+that “Hello world” has been printed out,
+which means our python function indeed has
+been executed.
+
+[43:26 - 45:27] In practice, we will use more complex python
+functions with some parameters for example.
+How do we pass the python function’s parameters
+using the PythonOperator?
+Let’s go back to vscode and update our greet
+function to take some parameters. We add name
+and age as the parameters and print out “hello
+world! My name is {name} and I am {age} years
+old!”. In PythonOperator, there is a parameter
+called op_kwargs, which is a dictionary of
+keyword arguments that will get unpacked in
+the python function. Let’s set the name
+to ‘Tom’ and set the age equals to 20.
+Update the version of our dag and go back
+to the browser to refresh the airflow webserver.
+Let’s trigger it and check its log. We found
+“Hello world! My name is Tom and I am 20
+years old!” has been printed out. That’s
+great, our parameter values are passed successfully
+to our greet function. Using op_kwargs, you
+can basically pass all kinds of parameters
+that you defined in your python function.
+We now know how to use PythonOperator to run
+our python function and how to pass parameters
+to it. But can we share information between
+different tasks? Yes, we can achieve this
+using airflow xcoms. Basically we can push
+information to xcoms in one task and pull
+information in other tasks. By default, every
+function’s return value will be automatically
+
+[45:27 - 48:13] pushed into xcom.
+Let’s go back to vscode and create a new
+python function called get_name, and we simply
+return “Jerry” as the name. Then we build
+a new task using PythonOperator to run it.
+Let’s set its task id equals to get_name,
+python_callable is get_name. We comment out
+task1 and update the version of our dag of
+course. Let’s refresh the airflow webserver,
+select the newest dag and trigger it. In the
+log, we can see a line called “Done Returned
+value was: Jerry”. Then we go to admins
+and Xcoms, the return value of our function
+get_name has been pushed to Xcoms.
+Let’s go back to vscode to pull the name
+“Jerry” in our greet function using xcom_pull.
+Let’s delete the name parameter and add
+ti, which is the task instance since xcom_pull
+can only be called by ti. Let’s pull the
+name by typing
+name = ti.xcoms_pull(task_ids=”get_name”)
+basically to pull the return value of task
+with id “get_name”. We have to also uncomment
+the task1, remove the name parameter in the
+op_kwargs and build the dependency, namely
+task1 is the task2’s down stream, since
+we should push first and then pull the name.
+Update the dag version and refresh the page,
+trigger the dag, and check our log. Oops,
+we faced some issues. Let’s see exactly
+what error is. The log says task instance
+has no attribute xcoms_pull. I think the pull
+
+[48:13 - 50:18] function should be xcom_pull, let’s go back
+to vscode to change it. Refresh again and
+clear the first try of the greet task, wait
+a second since it will run the greet task
+again. This time, it is executed successfully.
+Check the log again, we can see Hello world!
+My name is: Jerry, I am 20 years old! Name
+Jerry has been pulled successfully. Let’s
+check the xcoms. We can also see “Jerry”
+as the value and “return_value” as the
+key.
+What if we want to push multiple values into
+xcoms in one function, can we distinguish
+them? Of course yes. Let’s go back to vscode
+and this time we need to push firstname and
+lastname into xcoms. We have to first add
+ti to our get_name function and remove the
+return statement. Then we call ti.xcom_push
+function by giving a key and value with ‘first_name’
+and ‘Jerry’; then we push our last_name
+by calling it again with ‘last_name’ as
+the key and ‘Fridman’ as the value.
+Now let’s pull those values in our greet
+function. We have to call the xcom_pull function
+of course, apart from giving get_name to the
+task_ids, we have to tell it which key of
+the value to pull. Obviously we pull the first
+name from the key “first_name” and last
+name from “last name”. Let’s modify
+our print message to include firstname and
+
+[50:18 - 52:45] lastname. Update the version of our dag and
+save it. Refresh the browser and trigger it.
+Let’s check the log. Boom! Our pushed name
+Jerry Fridman was included in the printed
+out message. Let’s double check the xcoms,
+we can see that the pushed firstname and lastname
+have been distinguished by their unique key
+value.
+Let’s also quickly update our code to get
+age via xcoms instead of op_kwargs. We create
+another function called get_age with ti parameter,
+in the function body we just push an age value
+19 with ‘age’ as the key. We then create
+a task for our get_age function with PythonOperator,
+with task_id of get_age. Then we remove the
+op_kwargs of task1 since we want to pull the
+age. Let’s update the greet function by
+removing the age parameter and pull the age
+value via xcom_pull with the key of age and
+task_ids equals to ‘get_age’. Update the
+task dependencies by adding the task3 to the
+upstream of task1. Then we update the version
+of our dag and refresh the browser, triggering
+the dag. From the log and xcoms we can see
+all three values have been pushed and pulled
+successfully.
+Although it is very handy to use xcoms to
+share value between tasks, you should be aware
+that the maximum size of xcoms is only 48
+kb. Yes, you heard me right. It’s 48 kb
+not mb or gb. We can confirm this from the
+source code of airflow xcom. So never use
+
+[52:45 - 54:52] xcoms to share large data for example pandas
+dataframe, otherwise it will crash.
+Let’s go back to vscode. We can see that
+the create_dag_with_python_operator dag has
+60 lines of code. Let’s see how much code
+we can reduce by rewriting it using the TaskFlow
+API.
+Let’s create a python file named dag_with_taskflow_api.py
+under the dag folder and open it. Then we
+have to import the dag and task from airflow
+decorators. We also need to create the default
+args variable to define the retries and retry
+delay.
+Next we have to define our dag. Let’s create
+a python function called hello world etl with
+the dag decorator above. In the dag decorator,
+we will assign values to the dag_id, default
+args, start date and schedule_interval. Inside
+this dag function, we will create three tasks:
+get_name, get_age and greet. Each task is
+represented by a python function with the
+task decorator above. Let’s create our first
+function get_name, which returns “Jerry”.
+Then creating the function get_age returns
+19 as the age and of course don’t forget
+to put the task decorator above. And lastly
+our greet function with parameters name and
+age, in the function body, we print hello
+world, my name is name, and I am age years
+old.
+
+[54:52 - 56:48] We have all the tasks defined, but how can
+we build their dependencies?
+Since the TaskFlow API will automatically
+calculate the dependency, what we need to
+do is to call the get_name and get_age function
+to get the returned name and age variables.
+Then we pass them into the greet function
+as parameters.
+And don’t forget the final step to create
+an instance of our dag. Save it and let’s
+go to the browser and refresh the page. Select
+the dag we created and from the graph view,
+we can see the dependency is correctly defined.
+Let’s turn on the dag and wait for its execution.
+Once it finishes, we can check the log of
+the greet task, which has printed out the
+message with the desired name “Jerry”
+and age “19”. Let’s also check the xcoms,
+we can see the returned name and age has been
+pushed into xcoms, and the TaskFlow API takes
+care of the xcoms values push and pull operations.
+What if we want to return firstname and lastname
+instead of name in our get_name task? Let’s
+first change the greet function to take firstname,
+lastname and age parameters, and update the
+greet message. Then we have to first put the
+multiple_outputs parameter equal to True in
+the get_name task decorator, then we return
+a dictionary which includes a firstname “Jerry”and
+lastname “Friedman”. Then we can get the
+name_dict from get_name function, unpack it
+
+[56:48 - 59:04] and pass them to the greet function parameters
+firstname and lastname. Let’s update the
+dag version and refresh the page in the browser.
+Turn on the newest dag and wait for it to
+finish. Once it’s done, open the log, Boom!
+we can see that there are firstname “Jerry”
+and lastname “Friedman” in the message.
+Let’s also check the xcoms, not only the
+name dict has been pushed to xcoms, but also
+the firstname and lastname with its key and
+value exist in the xcoms.
+Now we have a rewrote version of the python
+operator dag with the TaskFlow API. Let’s
+go back to vscode to compare them. We can
+see that the dag version with TaskFlow API
+only needs around 40 lines of code, which
+has reduced nearly a third of the code implementation.
+Let’s go back to vscode to create a new
+dag called “dag_with_catchup_and_backfill.py”
+and open it. We firstly import every package
+we need, then we created a very simple dag
+with a simple task using bashoperator. The
+current time is 2021 Nov 10, we set the start
+date of the dag to the past, which is Nov
+1st and schedule it daily. In airflow dag,
+there is a parameter called catchup, by default
+it is set to True. Let’s set it to True
+manually anyway. Save the file and then go
+to the browser to refresh the page.
+Let’s pick our dag and show it in the tree
+view. Then we start the dag. Click the refresh
+
+[59:04 - 61:08] button, and we can see that many dag runs
+have been executed. Once it finishes, we hover
+the mouse on the dag run from left to the
+right, we can see the dag’s schedule and
+execution date are 11-01, 11-02, … upto
+11-09. Since Nov 10 is not fully past, the
+latest dag run is Nov 09. When the time is
+after Nov 11 12 AM, the Nov 10 dag run will
+be scheduled and executed. Great, the catchup
+feature helped us run the dag since the start
+date Nov 1st 2021.
+But how can we achieve this using the backfill?
+Let’s go back to the vscode to disable the
+catchup. Basically to change the catchup parameter
+to False. Then we update the dag version,
+we are good to go to the browser to refresh
+the page and select our newest dag. Let's
+check the code and verify that we have turned
+off the catchup. Then we start the dag, once
+it finishes we can see that it only executed
+the dag run on Nov 09. That’s correct, since
+we set False to the catchup parameter. But
+we can still run the dag in the past using
+the backfill command.
+Let’s go back to the vscode terminal to
+find the airflow scheduler container by docker
+ps. Then we open its bash interactively in
+the container by command “docker exec -it
+bash”. From the prompt, we can see that
+we logged in as the user “airflow” and
+
+[61:08 - 63:27] the current directory is /opt/airflow. To
+backfill the dag run, we need to execute the
+command “airflow dags backfill with start
+date, end date and the dag id”. Let's backfill
+from 2021-11-01 to the 2021-11-08 with our
+dag id. We click enter to execute the command.
+Once it finishes, we can see the log “Backfill
+is done”. We exit the container by the exit
+command, then go back to the browser and refresh
+the page. We can see dag runs from 2021-11-01
+to 2021-11-09 with backfilled run from Nov
+01 to Nov 08 and scheduled run Nov 09.
+In airflow, creating a dag needs the schedule_interval
+parameter, which receives a cron expression
+as a string, or a datetime.timedelta object.
+So what is Cron Expression? A Cron expression
+is a string comprising five fields separated
+by white space that represents a set of times,
+normally as a schedule to execute some routine.
+Airflow already provides some presets for
+the schedule_interval, like @daily, @hourly,
+which is linked to its cron expression string.
+So if you know how to use cron expressions,
+you can schedule your dag in any way you want.
+Let’s go back to vscode and create a new
+dag file called dag_with_cron_expression.py
+and open it. We firstly import any packages
+needed. Then we define the dag with a simple
+task using the BashOperator. We want to start
+our dag at the Nov 1st, then we schedule it
+
+[63:27 - 65:25] daily with the airflow cron preset “@daily”.
+Save the file, then we go to the browser and
+refresh the page. Let’s select the dag and
+start it. Wait until it finishes, we can see
+that the dag has been executed from Nov 1st
+to yesterday, Nov 16th.
+Let’s go back to vscode to schedule our
+dag daily using the cron expression string.
+We change the schedule_interval parameter
+from the “@daily” to the cron string “0
+0 * * *”. Update the dag version and save
+the file. Let’s refresh the browser and
+select the newest dag then we start it. Once
+it finishes, we can see that the dag execution
+history is exactly the same as the “@daily”
+preset.
+But how to generate customized schedule_interval
+using the cron expression?
+Luckily, there is a website crontab.guru which
+gives us a visual way to generate and verify
+the cron expression. Let’s check it in the
+browser. In the textfield, we can define our
+cron expression. Everytime we give our input,
+it will automatically verify whether the input
+is valid or not. If we input the wrong syntax,
+the textfield will turn red, otherwise, it
+will interpret our input cron expression and
+show its meaning in human language above the
+textfield.
+Now, let’s try to generate a cron expression
+which runs tasks weekly on Tuesday 3 am in
+
+[65:25 - 67:27] the morning. We can see the “at 3:00 on
+Tuesday” above. Let’s go back to vscode
+to change the schedule interval parameter
+to our customized cron expression. Update
+the dag version and save it. Let us refresh
+the airflow webserver ui, we can pick the
+newest dag, then start it. Once it finishes,
+we can see the dag has been executed at 3
+am from the first Tuesday Nov 2nd to the latest
+Tuesday Nov 9th.
+What if we want to run the dag weekly but
+on multiple weekdays? For example, to schedule
+our dag weekly on Tuesday and Friday at 3
+am, we just need to add comma and Friday to
+our previous cron expression. Let’s use
+the crontab.guru to verify it. Yes, we can
+see the interpretation above says at 3 am
+on Tuesday and Friday. What if we want to
+run our dag weekly from Tuesday to Friday?
+We can also just simply add Wednesday and
+Thursday to it with common in between. Or
+we can type Tuesday - Friday. Both ways will
+work. Let’s copy it and go back to vscode
+to change our dag’s schedule interval. Then
+we update the dag version, go back to the
+browser to refresh the airflow webserver.
+Pick the newest dag, start it and wait for
+its execution to be finished. Once it is done,
+we can hover our mouse over the dag runs and
+we can see the dag has been executed every
+Tuesday upto Friday from Nov 2nd.
+
+[67:27 - 69:24] Normally when we build an ETL DAG, we need
+to connect to some external services. For
+example, database servers like mysql, postgresql,
+cloud servers like AWS, Azure etc and many
+other types of servers. To connect those,
+we need the credentials like host, username,
+password, port, etc. You can create and manage
+them easily by Airflow Connection, which can
+be used by corresponding operators.
+In airflow web server ui, if we mouse hover
+the admin, we can see the connections menu.
+Let’s click it. Here you can see all the
+connections that have been created. Let’s
+have a look at the add connection page by
+clicking the plus button. Here you can define
+the name of the connection and create whatever
+type of connection you want. If the connection
+type is missing, you can just install the
+corresponding provider packages or create
+your own customized connection. Just fill
+all the necessary fields, click save, we can
+create a connection which is ready to be used.
+Okay, now you know what a connection is. Let’s
+learn how to use it with PostgresOperator.
+To demonstrate the postgresoperator, we need
+a postgres database. Let’s expose the postgres
+db we used in the airflow project by adding
+ports 5432:5432 to the postgres services in
+the docker-compose.yaml file. Then we recreate
+the postgres container. Let’s connect it
+
+[69:24 - 71:32] using the dbeaver, which is an open-source,
+cross-platform database management tool. If
+you don’t have it, just go to browser search
+dbeaver, click download and pick the one that
+matches with your operating system. I already
+have it. Let’s launch it and create a new
+connection, we select postgresql, then we
+input localhost as host, username and password
+is airflow. Then we click the test connection
+to verify it. It may ask you to install postgresql
+jdbc driver if you don’t have that, just
+install it and try the test connection again.
+Once it says connected, we click finish. Then
+we can right click on the databases, click
+create new database, we name it test. If we
+expand it, we can see it is empty. Great,
+we have a brand new postgresql database. Let’s
+use an airflow dag to create a table and insert
+some values.
+Let’s go back to vscode and create a dag
+file called dag_with_postgres_operator.py
+and open it. First, we are going to import
+any packages we need. Then we define the default_args.
+After that, we initialize a dag by setting
+up its dag_id, start_date and schedule_interval.
+Let’s create our first task using the PostgresOperator,
+it requires mainly three parameters, task_id
+of course, a connection id to tell the operator
+which postgres db to connect to and a sql
+query statement which will be executed.
+
+[71:32 - 73:57] Let’s go to the airflow webserver ui to
+create one. We click the plus button and give
+postgres_localhost as the connection id. We
+have to select the connection type to postgres,
+schema is the database name, in our case it
+is test, username and password are airflow,
+port is 5432 as we did in the docker-compose.yaml
+file. For the host, we can either give the
+postgres services name defined in the docker-compose.ymal
+file which is postgres in our case, or localhost.
+If we are using docker desktop application
+on Mac OS or windows to connect localhost
+from a container, using localhost will not
+work, instead we need to use host.docker.internal,
+which is suggested by docker. Now click save,
+we can see postgres connection in the overview.
+Let’s copy the connection id and go back
+to vscode, set it to the postgre_conn_id parameter.
+Then in the sql statement, we just create
+a table if not exists named dag_runs with
+columns dt as a date and dag_id data type
+character varying, and the primary key is
+the combination of dt and dag_id columns.
+Save the file, and go back to the browser
+to refresh the page. Select the dag and start
+it. Opps, the task failed. Let’s check the
+log and see what’s wrong. It says “can
+not translate the host name host.docker.local”.
+We had a typo, it should be host.docker.internal.
+Let’s fix it. Clear the taskrun and let
+it run again. Opps, it fails again, let’s
+check the log. We had a syntax error in our
+
+[73:57 - 76:21] sql query statement. We missed a t in the
+character varying data type. Let’s go to
+vscode to change it. Let’s clear the taskruns
+and wait for its execution. Now it succeeds.
+We can see from the log that our create table
+sql query statement has been executed. Let’s
+go to dbeaver to verify it. Great, when we
+refresh the tables, we can see it created
+the table dag_runs exactly as we defined it.
+Let’s create another task which inserts
+the dag id and execution date into the dag_runs
+table using the PostgresOperator. We set the
+task id, postgres connection id which will
+be the same and in the sql we type “insert
+into dag_runs(dt, dag_id) values (‘{{ ds
+}}’, ‘{{ dag.dag_id }}’)”. Dt is the
+dag run’s execution date and dag_id is the
+dag_id, which are set by default by airflow
+engine and can be accessed by puting the variable
+name into two curly brackets. Let’s build
+the task dependencies, update the dag version,
+then we go back to the browser to refresh
+the page. Select the newest dag, we then start
+it.
+Opps, it fails. Let’s check the log to see
+what the issue is. It says template ‘dt’
+is undefined. Let’s search the airflow macros
+documentation. The execution date template
+variable is ds not dt. Let’s go back to
+vscode to update it. Then we go back to the
+
+[76:21 - 78:36] browser to clear the current task runs and
+let it run again. Now it works. From the log,
+we can see there is one row inserted into
+the database table dag_runs with the execution
+date 2021-12-19 and dag_id dag_with_postgres_operator_v02.
+Let’s also clear and rerun the latest dag.
+Once finished, we can see It also succeeds
+inserting the correct execution date and dag_id
+as shown in the log.
+Let’s verify it using the dbeaver, we select
+all the rows in table dag_runs, we can see
+the number of rows is the same as the number
+of dag runs.
+In airflow, it’s recommended to delete data
+before insert to avoid data duplication or
+primary key violation. For example, if we
+cleared one of the successful insert tasks,
+it tries to insert data which already exists
+in the table. In the end, it will fail since
+it violates the primary key constraint. Let’s
+fix this by adding a delete task before insert.
+We can copy the insert task and rename its
+task id and change the sql from insert into
+“delete from dag_runs where dt = ‘{{ ds
+}}’ and dag_id = ‘{{ dag.dag_id }}’”.
+Then we rebuild the task dependencies with
+task3 as the upstream of task2 and downstream
+of task1. Save the file, update the dag version,
+and then refresh the page. Opps, we have an
+error, it says task3 is not defined. Let’s
+go back to vscode to change our delete operator
+
+[78:36 - 81:08] task variable name to task3.
+Save the file, then refresh the page and select
+the newest dag to start it. Once it finishes
+successfully, we can check in the dbeaver
+there are two rows for the newest dag with
+date december 19 and 20. Let’s clear the
+december 19 dag run, wait for its execution.
+Boom! We can see it succeeds without violating
+the primary key constraint since we delete
+before inserting data. Let’s double check
+in the dbeaver, we can see have exact two
+records for the newest dag id.
+In general, you can either extend or customize
+the airflow docker image to install your python
+dependencies. Both of them have pros and cons.
+For example, extending the image only requires
+basic knowledge of docker images, it doesn’t
+need the airflow source code and builds really
+fast. However, if you need to build from the
+airflow sources, or want to heavily optimize
+the image size, you definitely need to customize.
+Let’s first try to extend the airflow docker
+image. Let’s go back to vscode, open our
+airflow project folder and create the requirements
+text file, in which we can define the python
+dependencies. Let’s assume we need the scikit-learn
+package to do some machine learning model
+training. So we add a line in the requirements
+file with scikit-learn==0.24.2. Next we are
+
+[81:08 - 83:06] going to install all the dependencies defined
+in the requirement file by extending the airflow
+image.
+To do that, we have to create a Dockerfile
+in our project root folder and open it. Then
+we write FROM apache/airflow:2.0.1 which tells
+docker that we want to extend the official
+airflow docker image with version 2.0.1. Next
+we need to copy the requirements text file
+in our project root folder to the docker image
+using the Copy command. Then we run the pip
+upgrade command to have the latest pip version
+and run the pip install to get all the python
+dependencies installed. Save it and we have
+a perfectly defined Dockerfile which is ready
+to be built.
+Let’s build the extended image by command
+“docker build . --tag extending_airflow:latest”.
+Basically we tell the docker to build an image
+using the Dockerfile existing in the current
+directory and name the image as extending_airflow
+and version it as latest. It may take some
+minutes to finish. In the meanwhile, we can
+see from the log that it builds exactly the
+same steps as we defined in the Dockerfile.
+Once it finishes, we need to open our docker-compose
+yaml file to change the image name from apache/airflow
+to extending_ariflow:latest.
+Let’s create a dag file to verify whether
+the scikit-learn package has been installed.
+
+[83:06 - 86:01] Let’s initialize the dag instance, and then
+create a function called get_sklearn, in which
+we print out the scikit-learn package version.
+Then we build a task using the python operator
+to run this function. Save it and we need
+to rebuild the airflow webserver and scheduler
+services since we modified the airflow image
+name in the docker-compose yaml file. Let’s
+do it by the command “docker-compose up
+-d --no-deps --build airflow-webserver airflow-scheduler”
+Then we go back to the browser, login and
+refresh the page. Trigger our newly created
+dag and check the log. We can see the scikit-learn
+version has been printed out.
+What if we want to add more python dependencies?
+Let's say we need matplotlib. Let’s go back
+to vscode, add matplotlib with version to
+the requirements text file. In the dag, we
+create another python function called get_matplotlib
+to print out the matplotlib version. Update
+the dag version, go to the browser to refresh
+and trigger the newest dag. Opps, our get_matplotlib
+task failed. Let’s open the log. We can
+see an error: no matplotlib package. Why does
+this happen? Because we changed our requirements
+text file locally but not in our docker image.
+So whenever we change our python dependencies
+file, we have to rebuild the image. Let’s
+do it by running the docker build command
+again. Then we have to rebuild the airflow
+webserver and scheduler containers by command
+“docker-compose up -d --no-deps --build
+
+[86:01 - 88:06] airflow-webserver airflow-scheduler”. Clear
+the previous task runs and wait for the retry
+to finish. From the log we can see the matplotlib
+version has been printed out successfully.
+That’s it, we managed to install python
+dependencies via extending airflow image
+How can we achieve this by customizing the
+airflow image?
+Basically we have to build it from airflow
+source code. Let’s open a second terminal
+in vs code, cd to the directory desktop. Then
+we need to clone the airflow source code.
+Let’s google the official airflow github
+repository and clone it. Make sure you have
+set up the ssh key properly. It may take some
+minutes, but we finally have it.
+Let’s open it in a new vscode window. First
+we have to find the folder docker-context-files,
+since every python dependency defined here
+will be installed automatically when building
+the image. Let’s create a requirements text
+file in it and put scikit-learn and matplotlib
+packages with version info. Then we need to
+build the docker image by command “docker
+build . --build-arg AIRFLOW_VERSION="2.0.1"
+--tag customizing_airflow:latest” Basically
+tell docker to build the airflow image with
+version 2.0.1 using the Dockerfile in the
+root directory and name the image as customizing_airflow,
+version latest. It might take 5 minutes or
+more since it builds the image from source
+code. If you pay attention to the step 12
+
+[88:06 - 90:01] of airflow-build-image, you can see it installs
+all the python dependencies defined in the
+requirements text file in the docker-context-files
+folder.
+Next, we need to replace the airflow name
+in the docker-compose yaml file. Let’s go
+back to our airflow project vscode window
+and update that. Save the yaml file and we
+recreate the docker containers for airflow
+webserver and scheduler by command “docker-compose
+up -d --no-deps --build airflow-webserver
+airflow-scheduler”.
+Let’s pick the same dag and clear the previous
+dag run. Wait for it to be rescheduled and
+executed. When we check the log, we can see
+both python packages and their version have
+been printed out, which means they have been
+installed successfully.
+Okay, now you might wonder which way you should
+choose. Well, in my opinion, you can go with
+the first method in 99% of the cases, namely
+extending the image, because it is super fast
+and easy. However, if you want to have more
+things to be customized, and really care about
+optimizing the image size, you need to customize
+the image.
+Sensor is a special type of operator which
+waits for something to occur. It is a perfect
+tool for use cases in which you don’t know
+exactly when the data will be available. For
+example, your client will upload a csv file
+to the AWS S3 bucket daily but can be at any
+
+[90:01 - 92:32] time in the day. You basically need to check
+whether it is uploaded at a certain time interval
+before starting other tasks like downloading
+or cleaning.
+For simplicity, in this tutorial we will use
+a S3 compatible open source solution called
+Minio instead of AWS S3. MinIO is API compatible
+with AWS S3 cloud storage service. If you
+know how to build ETL with MinIO, you can
+easily apply it into AWS S3. Moreover, we
+can easily set up a MinIO service in a docker
+container. Let’s go to the browser search
+for its official website. Then we go to docs,
+click legacy documentation. Here we can find
+the MinIO Docker quickstart guide. Let’s
+click it and we can see the example docker
+command to launch a MinIO docker container.
+Copy it, we then go back to our vscode. Open
+a new terminal, paste the command.
+The docker command basically runs a MinIO
+docker image, exposing two ports 9000 and
+9001. And set up the root username and password.
+Let’s hit enter to execute it. Once it is
+done. We can see the 9000 port is for the
+API, 9001 is for the console. Let’s copy
+the console localhost url and paste it in
+the browser. Then we can see a login page
+which requires us to input the root username
+and password. Let’s copy them from the terminal
+and login. Once logged in, we can see we have
+no s3 bucket. Let’s create one by clicking
+
+[92:32 - 94:54] the create bucket button. Let’s name our
+bucket name airflow, then click create bucket
+and we can see the bucket airflow we created.
+Make sure we have the read and write permission.
+Then we click the browser button, here we
+can either create a path or upload a file.
+Let’s go back to vscode to generate a csv
+file which will be uploaded later to our airflow
+bucket. Let’s first create a folder called
+data in our root project directory, then we
+create a csv file called data.csv with two
+columns product_id, delivery_dt with some
+rows just for demonstration. Okay, save it
+and go back to the browser to drag the file
+from the folder to our airflow bucket. Once
+uploaded successfully, we see the data.csv
+file exists in our airflow bucket.
+Now we have a proper S3 bucket set up, let’s
+start building an airflow dag to connect to
+our S3 bucket and sense the file’s existence.
+We first create a python file called dag_with_minio_s3.py
+and open it. We need to import the necessary
+python package, then we create the default
+args variable, after that we initialize the
+DAG with a proper dag_id, start_date and @daily
+schedule interval. Next we need to create
+a task using the s3 sensor operator.
+Since MinIO is S3 API compatible, to connect
+to our MinIO bucket we can use the AWS S3
+API, which is included in the amazon airflow
+providers packages. Let’s first make sure
+
+[94:54 - 97:20] which version of the amazon airflow provider
+package we installed. Let’s open our docker-compose
+yaml file to change the airflow image back
+to the latest extending_airflow or official
+apache-airflow version 2.0.1. If you don’t
+know how to extend the airflow docker image
+yet? Check out my last video about that. Don’t
+forget to recreate the airflow webserver and
+scheduler by the command: docker-compose up
+-d -no-deps build airflow-webserver and airflow-scheduler.
+Then we find and copy the container id of
+the airflow scheduler by command: docker ps.
+After that we enter into the airflow scheduler
+container by command: docker exec -it container
+id bash. On the left we can see airflow@container
+id, which means we are inside of the container.
+Let’s run command pip list | grep amazon.
+The output shows we have an amazon airflow
+provider package with version 1.1.0 installed.
+That’s great. Let’s go to the browser
+and search for the apache airflow official
+documentation site. Here below the providers
+section, click the amazon. On the top left,
+we change version to 1.1.0 to match our local
+installation. Then we check the python API,
+look for sensor S3. We found airflow.providers.amazon.aws.sensors.s3_key,
+and clicked it. Here we found the S3KeySensor,
+which says “waits for a key (a file-like
+instance on S3) to be present in a S3 bucket”.
+That’s what we need exactly. To use it,
+we need a couple of parameters like bucket_name,
+bucket_key, aws_conn_id, etc.
+
+[97:20 - 100:21] Let’s copy the package directory and go
+back to vscode to paste it. We basically need
+to import the S3KeySensor operator from the
+package directory. Let’s build a task using
+the S3KeySensor, we set the task_id to “sensor_minio_s3”,
+bucket_name is airflow, bucket_key is the
+file we want to sensor which is data.csv.
+Then we need to setup an aws s3 connection
+id. Let’s go to the airflow ui, from the
+admin, connections, click the plus button
+to add one. We set the “minio_conn” as
+the connection id name, for the connection
+type we need to select s3. Then we only need
+to write a dictionary in the extra field,
+which consists of the aws_access_key_id, aws_secret_access_key
+and host. Access key is the minio root username,
+and the secret key is the minio root password.
+Host is “http://host.docker.internal:9000”.
+Host.docker.internal
+is the localhost since we are using mac docker
+desktop, 9000 is the port minio expose for
+the API connection. Save it, we then go back
+to vscode to set our newly created s3 connection
+id name to the aws_conn_id parameter. Save
+the dag file, then we go to the airflow webserver.
+Pick our newly created dag and start it. Oops,
+the task fails. Let’s open the log. It says
+expecting property names enclosed in double
+quotes. Okay, let’s update our connection
+extra field from single quotes into double
+quotes. Clear the task and refresh, we can
+see the dag run succeeded. Let’s check the
+
+[100:21 - 102:35] log, from the log we can see it was checking
+the data.csv file existence in our airflow
+s3 bucket using mode poking. Poke is the default
+mode for sensor operators. Basically, it checks
+the file’s existence at every poke_interval
+as long as it is within the timeout limit.
+Since the data.csv already exists in the airflow
+bucket, it finishes immediately after the
+first poking and is marked as success.
+Let’s go back to vscode, change the poke_interval
+to 5 seconds and timeout to 30 seconds. Update
+the dag version and save it. Then we delete
+the data.csv from our airflow bucket. Let’s
+pick the newest dag and start the sensor task
+again, open the log and refresh a couple of
+times roughly every 5 seconds. We can see
+from the log, every 5 seconds, it will poke
+the file until time out and fails. Because
+it didn’t find the data.csv file within
+the 30 seconds timeout limit in the airflow
+bucket.
+What if the data.csv is uploaded during the
+poking? Let’s clear and re-run the sensor
+task. This time, we will wait for some seconds
+and upload the file to our airflow bucket
+before timeout. We open the log and see it
+is already poking the file. Let’s open the
+MinIO console to upload the csv file. Okay,
+it is uploaded. Let’s check the sensor task
+run. Boom, it poked the file’s existence
+right after we uploaded it, then its task
+
+[102:35 - 104:11] run was marked successful.
+I have a csv file called orders which contains
+artificial sales orders from March to June
+2022. You can download it in the description.
+It has four columns: order_id, date, product_name
+and quantity. We need to first import it into
+our postgres database, then write a DAG to
+query data from it and upload it to the S3
+bucket.
+Let’s open dbeaver, connect to our postgres
+database. If you don’t know how to connect,
+check out this video. We are going to create
+a table called orders in the database test,
+right click test and set as the default db,
+check the toolbar to make sure the db test
+is selected.
+Then create a table called orders using the
+statement:
+“create table if not exists public.orders
+(
+order_id character varying,
+date date,
+product_name character varying,
+quantity integer,
+primary key (order_id)
+)”
+Execute it without error, refresh the test
+db and we can see the table orders have been
+created. Then we right-click table orders,
+select import data, choose import from csv
+
+[104:11 - 106:43] and select our orders.csv file, and match
+the column names. In the final step, we click
+proceed, we can see the import successful
+message. Let’s query the first 100 rows
+for a double check. Great, we have set up
+our orders table properly. Next, let’s write
+a DAG to query data from it.
+Part3 - Query data via postgres operator:
+Let’s go back to vscode, create a python
+file called dag_with_postgres_hook.py and
+open it. Let’s first import the required
+packages, then we create the default args,
+after that we need to initialize the DAG with
+proper start date, schedule interval, and
+etc.
+Let’s create a python function called postgres_to_s3,
+in which we will do two steps. Step 1 is to
+query the order data from postgres db, save
+it as a text file. Step 2 is uploading the
+text file into the S3 bucket. We need Pythonoperator
+to run our python function, so let's import
+the python operator package. To query data
+from postgres db, we need the postgres hook.
+Let’s check the version of the installed
+postgres package. Type command docker ps to
+find the container id of the airflow scheduler,
+then use command docker exec -it container
+id bash to enter the airflow docker container,
+then run the command pip list | grep postgres,
+we can see we have installed postgres package
+version 1.0.1. Let’s go to the airflow documentation
+
+[106:43 - 109:16] site, search and click the postgresql in the
+providers packages section. Select a version
+to match our local installation which is 1.0.1,
+then click the python api. Here we see two
+subpackages, hooks and operators. Let’s
+click hooks. The documentation shows the hook
+is used to interact with Postgres DB and we
+can establish a connection to a postgres database
+via the get_conn function. To initialize the
+postgres hook, we need to provide the postgres_conn_id.
+Let’s copy the whole class name, paste in
+our vscode then update it to from airflow.providers.postgres.hooks.postgres
+import PostgresHook.
+Next, let’s go to our python function to
+initialize the postgre hook with the postgres_conn_id,
+which is postgres_localhost, we can get it
+from the admin, connection page. Then we get
+the connection via the get_conn function from
+the hook. After that, we get the cursor from
+the connection. What we need to do is to ask
+the cursor to execute our sql query statement.
+Let's say, we want to get all the order data
+before May 1st, 2022. We just need to put
+the query “select * from orders where date
+<= ‘20220501’” in to the cursor execute
+function. Then we write all the returned data
+into a text file using the csv module. Let’s
+first import csv. Then we open a text file
+in write mode with name get_orders.txt in
+folder dags. We get the csv writer first,
+then write the column name as the first row,
+
+[109:16 - 111:35] after that we write all the rest data in rows.
+In the end, we need to close the cursor and
+connection. Then we import the logging module
+and write a log of “Save orders in text
+file get_orders.txt”
+We have the step 1 implemented. Let’s create
+a task using the postgres operator to run
+our python function. We call it task1, task
+id is the postgres_to_s3, python callable
+is our function: postgres_to_s3. Let’s go
+to the browser and refresh our airflow webserver.
+Opps, the error says we need to set the task
+id, let’s check it in the vs code. Ah, we
+mistakenly put dag_id instead of task id.
+Let’s fix it and go to the browser to refresh
+again. Pick out newest dag, start it and wait
+for its execution results. Opps, it fails,
+let’s check the log. It says “sql syntax
+near order”. Let’s go back to the vscode,
+we need to correct the table name from order
+to orders. And put the date inside a pair
+of single quota. Let’s re-run the dag again.
+Great, we saw it is successful now. Let’s
+open the log, we see it says the order file
+has been saved in get_orders.txt file. Let’s
+also rerun the latest dag run and check its
+log. Great, let’s check our dags folder
+in vscode. We found only one get_orders.txt
+file, which contains orders upto May 1st,
+2022. The reason is that the second dag run
+overwrites the text file which was generated
+
+[111:35 - 113:48] in the first one. Let’s update our query
+to make sure we only get the orders data during
+the specific dag run’s execution interval
+and save them with a dynamic text file name
+so that they will not be overwritten.
+To achieve this, we have to give the current
+and next execution date to our python function.
+Let’s open the airflow documentation, select
+the installed airflow version which is 2.0.1,
+search for the macro, then click it. Here
+we find all the predefined macros. Let’s
+find the no dash current and next execution
+date, copy them and paste directly as the
+parameters of our python function since airflow
+will render those macros values during execution.
+Next, we need to update the query statement
+to have date conditions large and equal to
+the current execution date and smaller than
+the next execution date. Then we give the
+two maros parameter as the query params. After
+that, we need to make our text file name dynamic
+with execution date as the suffix. And change
+the file name in the log. Let’s save it
+and update our dag version, then go back to
+the browser to refresh the page. Select our
+newest dag, start it and wait for its execution.
+We saw two successful dag runs on April 30th
+and May 1st. Let’s check the latest dag
+run’s log, we saw the orders has been saved
+in text file with 20220501 as suffix. Going
+back to vscode, we saw two text files in our
+
+[113:48 - 116:11] dags folder each with the execution date as
+the suffix. Opening the text file, we saw
+it only contains the order data which is between
+current and next execution date. That’s
+exactly what we want.
+Now, let’s tackle step 2, which is uploading
+the order text file into the S3 bucket. Obviously
+we need the S3 hook library to achieve this.
+Let’s first check which version of the amazon
+providers package is installed. First we make
+sure that we entered into the airflow scheduler
+docker container, then we run command pip
+list | grep amazon. We can see the version
+is 1.1.0. Let’s go to the airflow documentation
+site, select amazon, and change the version
+to 1.1.0 on the top left. Then we click the
+Python API, here we look for hooks for s3
+and click it. The doc says it is to interact
+with AWS S3. To initialize the s3 hook, we
+need to set the aws connection id. Let’s
+copy the class name and go back to vs code
+to import the s3hook module. Then we create
+a s3 hook instance with the s3 connection
+id we created, which can be found easily in
+the airflow webserver connections page. Then
+we need a function which can upload our local
+text file into the S3 bucket. Let’s go back
+to the S3 hook documentation, and search for
+the keyword “load”, then we find the function
+load_file, which does exactly what we need,
+loads a local file to S3. What we need is
+
+[116:11 - 118:30] to indicate which file, which bucket and key
+to upload and whether we replace the file
+once it already exists. Let’s go back to
+vs code to implement it. We need to call the
+load_file function from the s3 hook instance.
+We set the filename as the file we named which
+is dags/get_orders_execution date.txt, bucket_name
+is airflow, key as the orders/execution_date.txt,
+basically we upload all the orders txt files
+in path orders and named by its execution
+date. And we set replace to True to replace
+the file if it already exists. Update the
+dag version, save it and go to the browser
+to refresh, pick the newest dag and start
+it. Once it is executed, we see there are
+4 successful dag runs since the date is already
+May 4th. Let’s check the latest run’s
+log, here we can see the order data has been
+saved as text file. Let’s go back to vscode,
+we can see there are 4 order text files. Let’s
+go to our airflow bucket, we can see there
+are also 4 text files inside the path orders.
+We can download one of them and open it, great
+the file is exactly the same as the one in
+the vscode project folder. It means we have
+achieved the second step successfully.
+This solution works perfect except that I
+don’t like to have a lot of text files saved
+in my dags folder. Is there any way to keep
+my workspace clean? Yes, Python provides the
+tempfile package which enables us to create
+files in the system temporary directory. Let’s
+
+[118:30 - 120:44] first import the Namedtemporaryfile module
+from the tempfile package. Then instead of
+creating the file in our dags folder, we use
+the Namedtemporaryfile to create the file
+object in ‘write’ mode, and we can give
+the execution date as the file suffix. Before
+we uploading the file to S3, we need to flush
+the file object so that the text file is saved
+in disk. Our S3 load file function should
+be inside of the Namedtemporaryfile with statement,
+because the temp file will be deleted once
+existing the context manager. We can output
+the temp file name by calling the name attribute
+of the file object. In the S3 load file function,
+we just need to replace the filename to the
+temporary file name which is f.name. Update
+the dag version, save it we go back to the
+browser. Let’s refresh the page, pick the
+newest dag. Before we start it, let’s delete
+all the text files in our local dags folder
+and S3 bucket first. Then we start the dag
+run and wait for its executions. We have seen
+the successful dag run, let’s check one
+of the log. From the log, we can see the orders
+data was queried from the database and saved
+as a temporary file with the execution date
+as suffix, and then uploaded into our S3.
+Let’s check our S3 bucket, download one
+of them, open in a text editor. Here we can
+see each text file only contains all the order
+records happened in the execution date. Great!
+
+[120:44 - 121:07] Congratulation! You finished the course. I
+hope you enjoy the videos. If so, don’t
+forget to subscribe and turn on the notification
+bell. Smash the like button, I will make new
+Airflow Tutorial video if we achieve 1000
+or 5000 likes. Thanks for watching! I will
+talk to you in the next one.

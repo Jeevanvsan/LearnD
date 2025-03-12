@@ -1,0 +1,51 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Airflow Tutorials & Quiz</title>
+  <link rel="stylesheet" type="text/css" href="{% static 'airflow_app/aifrow-study.css' %}">
+  <script src="{% static 'airflow_app/aifrow-study.js' %}"></script>
+  
+  {% comment %} <script src="https://cdn.tailwindcss.com"></script> {% endcomment %}
+
+  <!-- PrismJS for Syntax Highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+
+
+</head>
+<body>
+  <header class="header">
+    <h1>Airflow Tutorials & Quiz</h1>
+    <p>Master Apache Airflow with step-by-step guides and test your knowledge</p>
+  </header>
+
+  <div class="level-tracker" id="level-tracker"></div>
+  <div class="pagination-top">
+    <button class="btn" id="prev-btn">Previous</button>
+    <button class="btn" id="next-btn">Next</button>
+  </div>
+
+  <main>
+    <div class="content tutorial-content" id="tutorial-container"></div>
+    <div class="content quiz-container" id="quiz-container" style="display: none;"></div>
+  </main>
+
+  <!-- Modal Overlay -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal-content" id="score-modal">
+      <h2>Quiz Completed!</h2>
+      <p id="score-text"></p>
+      <button class="modal-close" onclick="closeModal()">Close</button>
+    </div>
+  </div>
+
+  <script>
+    Prism.highlightAll();
+  </script>
+</body>
+</html>
