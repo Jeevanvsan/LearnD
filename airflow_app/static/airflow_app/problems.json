@@ -1,0 +1,460 @@
+[
+    {
+        "id": 1,
+        "title": "Simple DAG Creation",
+        "question": "Write a basic Airflow DAG that prints 'Hello, World!' using the PythonOperator.",
+        "difficulty": "easy",
+        "max_score": 20,
+        "success_rate": 90,
+        "answers": [
+            {
+                "method": "Standard DAG Definition",
+                "code": "from airflow import DAG\nfrom airflow.operators.python import PythonOperator\nfrom datetime import datetime\n\ndef greet_the_world():\n    print('Hello, World!')\n\ndefault_args = {\n    'start_date': datetime(2023, 1, 1)\n}\n\ndag = DAG('hello_world_dag', default_args=default_args, schedule_interval='@daily')\n\nhello_task = PythonOperator(\n    task_id='greet_the_world_task',\n    python_callable=greet_the_world,\n    dag=dag\n)\n\nhello_task"
+            },
+            {
+                "method": "Using TaskFlow API",
+                "code": "from airflow import DAG\nfrom airflow.decorators import task\nfrom datetime import datetime\n\ndefault_args = {\n    'start_date': datetime(2023, 1, 1)\n}\n\nwith DAG('hello_world_dag', default_args=default_args, schedule_interval='@daily') as dag:\n\n    @task\n    def greet_the_world():\n        print('Hello, World!')\n\n    greet_the_world()"
+            }
+        ],
+        "task_dependency_diagram": "greet_the_world_task"
+    },
+    {
+        "id": 2,
+        "title": "DAG with Two Tasks",
+        "question": "Create a DAG with two tasks: one prints 'Task 1' and the other prints 'Task 2'. Use the PythonOperator.",
+        "difficulty": "easy",
+        "max_score": 20,
+        "success_rate": 85,
+        "answers": [
+            {
+                "method": "Standard DAG Definition",
+                "code": "from airflow import DAG\nfrom airflow.operators.python import PythonOperator\nfrom datetime import datetime\n\ndef first_step():\n    print('I am Task 1')\n\ndef second_step():\n    print('I am Task 2')\n\ndefault_args = {\n    'start_date': datetime(2023, 1, 1)\n}\n\ndag = DAG('two_steps_dag', default_args=default_args, schedule_interval='@daily')\n\nstep_one = PythonOperator(task_id='first_step_task', python_callable=first_step, dag=dag)\nstep_two = PythonOperator(task_id='second_step_task', python_callable=second_step, dag=dag)\n\nstep_one >> step_two"
+            },
+            {
+                "method": "Using TaskFlow API",
+                "code": "from airflow import DAG\nfrom airflow.decorators import task\nfrom datetime import datetime\n\ndefault_args = {\n    'start_date': datetime(2023, 1, 1)\n}\n\nwith DAG('two_steps_dag', default_args=default_args, schedule_interval='@daily') as dag:\n\n    @task\n    def first_step():\n        print('I am Task 1')\n\n    @task\n    def second_step():\n        print('I am Task 2')\n\n    first_step() >> second_step()"
+            }
+        ],
+        "task_dependency_diagram": "first_step_task -> second_step_task"
+    },
+    {
+        "id": 3,
+        "title": "DAG with Dependency Chain",
+        "question": "Create a DAG with three tasks where each task depends on the previous one. Use the TaskFlow API.",
+        "difficulty": "easy",
+        "max_score": 20,
+        "success_rate": 80,
+        "answers": [
+            {
+                "method": "Using TaskFlow API",
+                "code": "from airflow import DAG\nfrom airflow.decorators import task\nfrom datetime import datetime\n\ndefault_args = {\n    'start_date': datetime(2023, 1, 1)\n}\n\nwith DAG('dependency_chain_dag', default_args=default_args, schedule_interval='@daily') as dag:\n\n    @task\n    def start_journey():\n        print('Starting the Journey')\n\n    @task\n    def mid_journey():\n        print('In the Middle of the Journey')\n\n    @task\n    def end_journey():\n        print('Journey Completed')\n\n    start_journey() >> mid_journey() >> end_journey()"
+            }
+        ],
+        "task_dependency_diagram": "start_journey -> mid_journey -> end_journey"
+    },
+    {
+        "id": 4,
+        "title": "DAG with BashOperator",
+        "question": "Write a DAG that uses the BashOperator to run the command `echo 'Hello from Bash!'`.",
+        "difficulty": "easy",
+        "max_score": 20,
+        "success_rate": 88,
+        "answers": [
+            {
+                "method": "Using 'with DAG()' Context Manager",
+                "code": "from airflow import DAG\nfrom airflow.operators.bash import BashOperator\nfrom datetime import datetime\n\ndefault_args = {\n    'start_date': datetime(2023, 1, 1)\n}\n\nwith DAG('bash_operator_dag', default_args=default_args, schedule_interval='@daily') as dag:\n    say_hello_bash = BashOperator(\n        task_id='say_hello_bash_task',\n        bash_command='echo \"Hello from Bash!\"'\n    )\n\nsay_hello_bash"
+            }
+        ],
+        "task_dependency_diagram": "say_hello_bash_task"
+    },
+    {
+        "id": 5,
+        "title": "DAG with Multiple Schedules",
+        "question": "Create a DAG that runs every Monday at 8 AM using the schedule_interval parameter.",
+        "difficulty": "easy",
+        "max_score": 20,
+        "success_rate": 87,
+        "answers": [
+            {
+                "method": "Using 'with DAG()' Context Manager",
+                "code": "from airflow import DAG\nfrom airflow.operators.python import PythonOperator\nfrom datetime import datetime\n\ndef morning_routine():\n    print('Good Morning!')\n\ndefault_args = {\n    'start_date': datetime(2023, 1, 1)\n}\n\nwith DAG('monday_morning_dag', default_args=default_args, schedule_interval='0 8 * * 1') as dag:\n    wake_up_task = PythonOperator(\n        task_id='wake_up_task',\n        python_callable=morning_routine\n    )\n\nwake_up_task"
+            }
+        ],
+        "task_dependency_diagram": "wake_up_task"
+    },
+    {
+        "id": 6,
+        "title": "DAG with Retry Logic",
+        "question": "Write a DAG where a task retries 3 times if it fails.",
+        "difficulty": "easy",
+        "max_score": 20,
+        "success_rate": 82,
+        "answers": [
+            {
+                "method": "Standard DAG Definition",
+                "code": "from airflow import DAG\nfrom airflow.operators.python import PythonOperator\nfrom datetime import datetime\n\ndef risky_business():\n    raise Exception('Something went wrong!')\n\ndefault_args = {\n    'start_date': datetime(2023, 1, 1),\n    'retries': 3\n}\n\ndag = DAG('retry_logic_dag', default_args=default_args, schedule_interval='@daily')\n\nbusiness_task = PythonOperator(\n    task_id='risky_business_task',\n    python_callable=risky_business,\n    dag=dag\n)\n\nbusiness_task"
+            }
+        ],
+        "task_dependency_diagram": "risky_business_task"
+    },
+    {
+        "id": 7,
+        "title": "DAG with Parallel Tasks",
+        "question": "Create a DAG where Task A and Task B run in parallel, and both must complete before Task C runs.",
+        "difficulty": "easy",
+        "max_score": 20,
+        "success_rate": 78,
+        "answers": [
+            {
+                "method": "Using TaskFlow API",
+                "code": "from airflow import DAG\nfrom airflow.decorators import task\nfrom datetime import datetime\n\ndefault_args = {\n    'start_date': datetime(2023, 1, 1)\n}\n\nwith DAG('parallel_tasks_dag', default_args=default_args, schedule_interval='@daily') as dag:\n\n    @task\n    def prepare_tea():\n        print('Preparing Tea')\n\n    @task\n    def prepare_coffee():\n        print('Preparing Coffee')\n\n    @task\n    def serve_drinks():\n        print('Serving Drinks')\n\n    [prepare_tea(), prepare_coffee()] >> serve_drinks()"
+            }
+        ],
+        "task_dependency_diagram": "prepare_tea --> serve_drinks\n         prepare_coffee --> serve_drinks"
+    },
+    {
+        "id": 8,
+        "title": "DAG with Email Notification",
+        "question": "Write a DAG that sends an email notification when a task succeeds.",
+        "difficulty": "easy",
+        "max_score": 20,
+        "success_rate": 83,
+        "answers": [
+            {
+                "method": "Standard DAG Definition",
+                "code": "from airflow import DAG\nfrom airflow.operators.email import EmailOperator\nfrom datetime import datetime\n\ndefault_args = {\n    'start_date': datetime(2023, 1, 1)\n}\n\ndag = DAG('email_notification_dag', default_args=default_args, schedule_interval='@daily')\n\nsend_email_task = EmailOperator(\n    task_id='send_email_task',\n    to='example@example.com',\n    subject='Task Completed Successfully',\n    html_content='<h1>Great News!</h1><p>Your task has been completed.</p>',\n    dag=dag\n)\n\nsend_email_task"
+            }
+        ],
+        "task_dependency_diagram": "send_email_task"
+    },
+    {
+        "id": 9,
+        "title": "DAG with Dynamic Task Generation",
+        "question": "Create a DAG that dynamically generates tasks based on a list of items.",
+        "difficulty": "easy",
+        "max_score": 20,
+        "success_rate": 75,
+        "answers": [
+            {
+                "method": "Using TaskFlow API",
+                "code": "from airflow import DAG\nfrom airflow.decorators import task\nfrom datetime import datetime\n\ndefault_args = {\n    'start_date': datetime(2023, 1, 1)\n}\n\nwith DAG('dynamic_tasks_dag', default_args=default_args, schedule_interval='@daily') as dag:\n\n    @task\n    def process_item(item):\n        print(f'Processing {item}')\n\n    items = ['apple', 'banana', 'cherry']\n    for item in items:\n        process_item(item)"
+            }
+        ],
+        "task_dependency_diagram": "process_item(apple)\nprocess_item(banana)\nprocess_item(cherry)"
+    },
+    {
+        "id": 10,
+        "title": "DAG with Custom Logging",
+        "question": "Write a DAG that logs a custom message using Python's logging module.",
+        "difficulty": "easy",
+        "max_score": 20,
+        "success_rate": 81,
+        "answers": [
+            {
+                "method": "Standard DAG Definition",
+                "code": "from airflow import DAG\nfrom airflow.operators.python import PythonOperator\nfrom datetime import datetime\nimport logging\n\ndef log_custom_message():\n    logging.info('This is a custom log message from Airflow.')\n\ndefault_args = {\n    'start_date': datetime(2023, 1, 1)\n}\n\ndag = DAG('custom_logging_dag', default_args=default_args, schedule_interval='@daily')\n\nlog_task = PythonOperator(\n    task_id='log_custom_message_task',\n    python_callable=log_custom_message,\n    dag=dag\n)\n\nlog_task"
+            }
+        ],
+        "task_dependency_diagram": "log_custom_message_task"
+    },
+    {
+        "id": 11,
+        "title": "DAG with Branching Logic",
+        "question": "Create a DAG that uses the BranchPythonOperator to decide between two tasks based on a condition.",
+        "difficulty": "medium",
+        "max_score": 30,
+        "success_rate": 75,
+        "answers": [
+            {
+                "method": "Standard DAG Definition",
+                "code": "from airflow import DAG\nfrom airflow.operators.python import BranchPythonOperator, PythonOperator\nfrom datetime import datetime\n\ndef decide_path():\n    return 'process_success' if True else 'process_failure'\n\ndef process_success():\n    print('Processing Success Path')\n\ndef process_failure():\n    print('Processing Failure Path')\n\ndefault_args = {\n    'start_date': datetime(2023, 1, 1)\n}\n\ndag = DAG('branching_logic_dag', default_args=default_args, schedule_interval='@daily')\n\nbranch_task = BranchPythonOperator(\n    task_id='branch_task',\n    python_callable=decide_path,\n    dag=dag\n)\n\nsuccess_task = PythonOperator(\n    task_id='process_success',\n    python_callable=process_success,\n    dag=dag\n)\n\nfailure_task = PythonOperator(\n    task_id='process_failure',\n    python_callable=process_failure,\n    dag=dag\n)\n\nbranch_task >> [success_task, failure_task]"
+            }
+        ],
+        "task_dependency_diagram": "branch_task --> process_success\n         branch_task --> process_failure"
+    },
+    {
+        "id": 12,
+        "title": "DAG with Cross-DAG Dependencies",
+        "question": "Write a DAG that triggers another DAG using the TriggerDagRunOperator.",
+        "difficulty": "medium",
+        "max_score": 30,
+        "success_rate": 70,
+        "answers": [
+            {
+                "method": "Standard DAG Definition",
+                "code": "from airflow import DAG\nfrom airflow.operators.trigger_dagrun import TriggerDagRunOperator\nfrom datetime import datetime\n\ndefault_args = {\n    'start_date': datetime(2023, 1, 1)\n}\n\ndag = DAG('trigger_dag_dag', default_args=default_args, schedule_interval='@daily')\n\ntrigger_task = TriggerDagRunOperator(\n    task_id='trigger_task',\n    trigger_dag_id='target_dag',\n    dag=dag\n)\n\ntrigger_task"
+            }
+        ],
+        "task_dependency_diagram": "trigger_task"
+    },
+    {
+        "id": 13,
+        "title": "DAG with XCom for Task Communication",
+        "question": "Create a DAG where one task pushes data to XCom, and another task retrieves and processes it.",
+        "difficulty": "medium",
+        "max_score": 30,
+        "success_rate": 68,
+        "answers": [
+            {
+                "method": "Using TaskFlow API",
+                "code": "from airflow import DAG\nfrom airflow.decorators import task\nfrom datetime import datetime\n\ndefault_args = {\n    'start_date': datetime(2023, 1, 1)\n}\n\nwith DAG('xcom_example_dag', default_args=default_args, schedule_interval='@daily') as dag:\n\n    @task\n    def push_data():\n        return {'message': 'Hello from XCom!'}\n\n    @task\n    def pull_data(data):\n        print(f'Received: {data}')\n\n    data = push_data()\n    pull_data(data)"
+            }
+        ],
+        "task_dependency_diagram": "push_data --> pull_data"
+    },
+    {
+        "id": 14,
+        "title": "DAG with SubDAG",
+        "question": "Write a DAG that includes a SubDAG to handle a subset of tasks.",
+        "difficulty": "medium",
+        "max_score": 30,
+        "success_rate": 65,
+        "answers": [
+            {
+                "method": "Standard DAG Definition",
+                "code": "from airflow import DAG\nfrom airflow.operators.subdag import SubDagOperator\nfrom airflow.utils.task_group import TaskGroup\nfrom datetime import datetime\n\ndef subdag(parent_dag_name, child_dag_name, args):\n    with DAG(f'{parent_dag_name}.{child_dag_name}', default_args=args) as dag:\n        @task\n        def sub_task():\n            print('Running SubDAG Task')\n        sub_task()\n    return dag\n\ndefault_args = {\n    'start_date': datetime(2023, 1, 1)\n}\n\nwith DAG('main_dag', default_args=default_args, schedule_interval='@daily') as dag:\n    subdag_task = SubDagOperator(\n        task_id='subdag_task',\n        subdag=subdag('main_dag', 'subdag_task', default_args),\n        dag=dag\n    )\n\nsubdag_task"
+            }
+        ],
+        "task_dependency_diagram": "subdag_task"
+    },
+    {
+        "id": 15,
+        "title": "DAG with SLA Alerts",
+        "question": "Create a DAG that raises an SLA alert if a task takes longer than 5 minutes to complete.",
+        "difficulty": "medium",
+        "max_score": 30,
+        "success_rate": 72,
+        "answers": [
+            {
+                "method": "Standard DAG Definition",
+                "code": "from airflow import DAG\nfrom airflow.operators.python import PythonOperator\nfrom datetime import datetime, timedelta\n\ndef long_running_task():\n    import time\n    time.sleep(300)  # Simulate a 5-minute task\n\ndefault_args = {\n    'start_date': datetime(2023, 1, 1),\n    'sla': timedelta(minutes=5)\n}\n\ndag = DAG('sla_alert_dag', default_args=default_args, schedule_interval='@daily')\n\nsla_task = PythonOperator(\n    task_id='sla_task',\n    python_callable=long_running_task,\n    dag=dag\n)\n\nsla_task"
+            }
+        ],
+        "task_dependency_diagram": "sla_task"
+    },
+    {
+        "id": 16,
+        "title": "DAG with External Sensor",
+        "question": "Write a DAG that waits for an external file to be available before proceeding.",
+        "difficulty": "medium",
+        "max_score": 30,
+        "success_rate": 67,
+        "answers": [
+            {
+                "method": "Standard DAG Definition",
+                "code": "from airflow import DAG\nfrom airflow.sensors.filesystem import FileSensor\nfrom airflow.operators.python import PythonOperator\nfrom datetime import datetime\n\ndef process_file():\n    print('File is available. Processing...')\n\ndefault_args = {\n    'start_date': datetime(2023, 1, 1)\n}\n\ndag = DAG('file_sensor_dag', default_args=default_args, schedule_interval='@daily')\n\nwait_for_file = FileSensor(\n    task_id='wait_for_file',\n    filepath='/path/to/file.txt',\n    poke_interval=30,\n    timeout=600,\n    dag=dag\n)\n\nprocess_task = PythonOperator(\n    task_id='process_file',\n    python_callable=process_file,\n    dag=dag\n)\n\nwait_for_file >> process_task"
+            }
+        ],
+        "task_dependency_diagram": "wait_for_file --> process_file"
+    },
+    {
+        "id": 17,
+        "title": "DAG with Dynamic Task Mapping",
+        "question": "Create a DAG that dynamically maps tasks based on a list of inputs using the TaskFlow API.",
+        "difficulty": "medium",
+        "max_score": 30,
+        "success_rate": 69,
+        "answers": [
+            {
+                "method": "Using TaskFlow API",
+                "code": "from airflow import DAG\nfrom airflow.decorators import task\nfrom datetime import datetime\n\ndefault_args = {\n    'start_date': datetime(2023, 1, 1)\n}\n\nwith DAG('dynamic_mapping_dag', default_args=default_args, schedule_interval='@daily') as dag:\n\n    @task\n    def transform_data(item):\n        return f'Transformed {item}'\n\n    @task\n    def aggregate_results(results):\n        print(f'Aggregated Results: {results}')\n\n    items = ['data1', 'data2', 'data3']\n    transformed = transform_data.expand(item=items)\n    aggregate_results(transformed)"
+            }
+        ],
+        "task_dependency_diagram": "transform_data(data1) --> aggregate_results\ntransform_data(data2) --> aggregate_results\ntransform_data(data3) --> aggregate_results"
+    },
+    {
+        "id": 18,
+        "title": "DAG with Custom Operator",
+        "question": "Write a DAG that uses a custom operator to perform a specific task.",
+        "difficulty": "medium",
+        "max_score": 30,
+        "success_rate": 66,
+        "answers": [
+            {
+                "method": "Standard DAG Definition",
+                "code": "from airflow import DAG\nfrom airflow.models.baseoperator import BaseOperator\nfrom datetime import datetime\n\nclass GreetOperator(BaseOperator):\n    def __init__(self, name, **kwargs):\n        super().__init__(**kwargs)\n        self.name = name\n\n    def execute(self, context):\n        print(f'Hello, {self.name}!')\n\ndefault_args = {\n    'start_date': datetime(2023, 1, 1)\n}\n\ndag = DAG('custom_operator_dag', default_args=default_args, schedule_interval='@daily')\n\ngreet_task = GreetOperator(task_id='greet_task', name='Airflow User', dag=dag)\n\ngreet_task"
+            }
+        ],
+        "task_dependency_diagram": "greet_task"
+    },
+    {
+        "id": 19,
+        "title": "DAG with Task Groups",
+        "question": "Create a DAG that organizes tasks into logical groups using TaskGroups.",
+        "difficulty": "medium",
+        "max_score": 30,
+        "success_rate": 71,
+        "answers": [
+            {
+                "method": "Using TaskFlow API",
+                "code": "from airflow import DAG\nfrom airflow.decorators import task\nfrom airflow.utils.task_group import TaskGroup\nfrom datetime import datetime\n\ndefault_args = {\n    'start_date': datetime(2023, 1, 1)\n}\n\nwith DAG('task_group_dag', default_args=default_args, schedule_interval='@daily') as dag:\n\n    @task\n    def start_process():\n        print('Starting Process')\n\n    @task\n    def end_process():\n        print('Ending Process')\n\n    with TaskGroup('group1') as group1:\n        @task\n        def step_one():\n            print('Step One')\n\n        @task\n        def step_two():\n            print('Step Two')\n\n        step_one() >> step_two()\n\n    start_process() >> group1 >> end_process()"
+            }
+        ],
+        "task_dependency_diagram": "start_process --> group1 --> end_process\n         group1: step_one --> step_two"
+    },
+    {
+        "id": 20,
+        "title": "DAG with Short-Circuiting",
+        "question": "Write a DAG that skips subsequent tasks if a condition is not met using the ShortCircuitOperator.",
+        "difficulty": "medium",
+        "max_score": 30,
+        "success_rate": 73,
+        "answers": [
+            {
+                "method": "Standard DAG Definition",
+                "code": "from airflow import DAG\nfrom airflow.operators.python import ShortCircuitOperator, PythonOperator\nfrom datetime import datetime\n\ndef check_condition():\n    return False  # Change to True to allow subsequent tasks\n\ndef proceed_task():\n    print('Proceeding with Task')\n\ndefault_args = {\n    'start_date': datetime(2023, 1, 1)\n}\n\ndag = DAG('short_circuit_dag', default_args=default_args, schedule_interval='@daily')\n\ncheck_task = ShortCircuitOperator(\n    task_id='check_task',\n    python_callable=check_condition,\n    dag=dag\n)\n\nproceed = PythonOperator(\n    task_id='proceed_task',\n    python_callable=proceed_task,\n    dag=dag\n)\n\ncheck_task >> proceed"
+            }
+        ],
+        "task_dependency_diagram": "check_task --> proceed_task (if condition is True)"
+    },
+    {
+        "id": 21,
+        "title": "Dynamic DAG Generation from External Data",
+        "question": "Write a script that dynamically generates multiple DAGs based on data fetched from an external API.",
+        "difficulty": "hard",
+        "max_score": 40,
+        "success_rate": 50,
+        "answers": [
+            {
+                "method": "Dynamic DAG Script",
+                "code": "from airflow import DAG\nfrom airflow.operators.python import PythonOperator\nfrom datetime import datetime\nimport requests\n\ndef fetch_dag_configs():\n    response = requests.get('https://api.example.com/dags')\n    return response.json()\n\ndef create_dag(dag_id, schedule_interval):\n    default_args = {\n        'start_date': datetime(2023, 1, 1)\n    }\n\n    dag = DAG(\n        dag_id,\n        default_args=default_args,\n        schedule_interval=schedule_interval\n    )\n\n    def run_task():\n        print(f'Running Task for DAG: {dag_id}')\n\n    task = PythonOperator(\n        task_id=f'task_for_{dag_id}',\n        python_callable=run_task,\n        dag=dag\n    )\n\n    return dag\n\nconfigs = fetch_dag_configs()\ndags = {}\n\nfor config in configs:\n    dag_id = config['dag_id']\n    schedule_interval = config['schedule_interval']\n    dags[dag_id] = create_dag(dag_id, schedule_interval)"
+            }
+        ],
+        "task_dependency_diagram": "DAGs are dynamically generated based on API response."
+    },
+    {
+        "id": 22,
+        "title": "Custom Hook for Database Integration",
+        "question": "Create a custom Airflow hook to interact with a PostgreSQL database and use it in a DAG.",
+        "difficulty": "hard",
+        "max_score": 40,
+        "success_rate": 45,
+        "answers": [
+            {
+                "method": "Custom Hook Implementation",
+                "code": "from airflow.hooks.base import BaseHook\nimport psycopg2\n\nclass CustomPostgresHook(BaseHook):\n    def __init__(self, conn_id):\n        self.conn_id = conn_id\n\n    def get_conn(self):\n        connection = self.get_connection(self.conn_id)\n        return psycopg2.connect(\n            host=connection.host,\n            user=connection.login,\n            password=connection.password,\n            dbname=connection.schema\n        )\n\n    def execute_query(self, query):\n        conn = self.get_conn()\n        cursor = conn.cursor()\n        cursor.execute(query)\n        conn.commit()\n        cursor.close()\n        conn.close()\n\nfrom airflow import DAG\nfrom airflow.operators.python import PythonOperator\nfrom datetime import datetime\n\ndef run_query():\n    hook = CustomPostgresHook(conn_id='postgres_conn')\n    hook.execute_query('SELECT * FROM my_table;')\n\nwith DAG('custom_hook_dag', start_date=datetime(2023, 1, 1), schedule_interval='@daily') as dag:\n    query_task = PythonOperator(\n        task_id='query_task',\n        python_callable=run_query\n    )\n\nquery_task"
+            }
+        ],
+        "task_dependency_diagram": "query_task"
+    },
+    {
+        "id": 23,
+        "title": "DAG with KubernetesPodOperator",
+        "question": "Write a DAG that uses the KubernetesPodOperator to run a containerized task.",
+        "difficulty": "hard",
+        "max_score": 40,
+        "success_rate": 48,
+        "answers": [
+            {
+                "method": "Using KubernetesPodOperator",
+                "code": "from airflow import DAG\nfrom airflow.providers.cncf.kubernetes.operators.kubernetes_pod import KubernetesPodOperator\nfrom datetime import datetime\n\ndefault_args = {\n    'start_date': datetime(2023, 1, 1)\n}\n\nwith DAG('kubernetes_pod_dag', default_args=default_args, schedule_interval='@daily') as dag:\n    pod_task = KubernetesPodOperator(\n        task_id='pod_task',\n        name='example-pod',\n        namespace='default',\n        image='python:3.9',\n        cmds=['python', '-c'],\n        arguments=[\"print('Hello from Kubernetes Pod!')\"]\n    )\n\npod_task"
+            }
+        ],
+        "task_dependency_diagram": "pod_task"
+    },
+    {
+        "id": 24,
+        "title": "DAG with Custom Plugin",
+        "question": "Create a custom Airflow plugin that adds a new operator and use it in a DAG.",
+        "difficulty": "hard",
+        "max_score": 40,
+        "success_rate": 42,
+        "answers": [
+            {
+                "method": "Custom Plugin Implementation",
+                "code": "# plugins/custom_plugin.py\nfrom airflow.models.baseoperator import BaseOperator\nfrom airflow.plugins_manager import AirflowPlugin\n\nclass HelloOperator(BaseOperator):\n    def __init__(self, name, **kwargs):\n        super().__init__(**kwargs)\n        self.name = name\n\n    def execute(self, context):\n        print(f'Hello, {self.name}!')\n\nclass CustomPlugin(AirflowPlugin):\n    name = 'custom_plugin'\n    operators = [HelloOperator]\n\n# DAG Definition\nfrom airflow import DAG\nfrom datetime import datetime\nfrom custom_plugin import HelloOperator\n\nwith DAG('custom_plugin_dag', start_date=datetime(2023, 1, 1), schedule_interval='@daily') as dag:\n    hello_task = HelloOperator(task_id='hello_task', name='Airflow User')\n\nhello_task"
+            }
+        ],
+        "task_dependency_diagram": "hello_task"
+    },
+    {
+        "id": 25,
+        "title": "DAG with Complex Retry and Backoff Logic",
+        "question": "Write a DAG where a task retries with exponential backoff if it fails.",
+        "difficulty": "hard",
+        "max_score": 40,
+        "success_rate": 47,
+        "answers": [
+            {
+                "method": "Standard DAG Definition",
+                "code": "from airflow import DAG\nfrom airflow.operators.python import PythonOperator\nfrom datetime import datetime\nimport time\n\ndef risky_business():\n    raise Exception('Task Failed')\n\ndefault_args = {\n    'start_date': datetime(2023, 1, 1),\n    'retries': 5,\n    'retry_delay': lambda attempt: timedelta(seconds=2 ** attempt)\n}\n\ndag = DAG('exponential_backoff_dag', default_args=default_args, schedule_interval='@daily')\n\nbusiness_task = PythonOperator(\n    task_id='risky_business_task',\n    python_callable=risky_business,\n    dag=dag\n)\n\nbusiness_task"
+            }
+        ],
+        "task_dependency_diagram": "risky_business_task"
+    },
+    {
+        "id": 26,
+        "title": "DAG with Multiple Sensors",
+        "question": "Create a DAG that waits for multiple conditions (e.g., file availability and database record) before proceeding.",
+        "difficulty": "hard",
+        "max_score": 40,
+        "success_rate": 46,
+        "answers": [
+            {
+                "method": "Standard DAG Definition",
+                "code": "from airflow import DAG\nfrom airflow.sensors.filesystem import FileSensor\nfrom airflow.sensors.sql import SqlSensor\nfrom airflow.operators.python import PythonOperator\nfrom datetime import datetime\n\ndef process_data():\n    print('All conditions met. Processing data...')\n\ndefault_args = {\n    'start_date': datetime(2023, 1, 1)\n}\n\ndag = DAG('multi_sensor_dag', default_args=default_args, schedule_interval='@daily')\n\nfile_sensor = FileSensor(\n    task_id='file_sensor',\n    filepath='/path/to/file.txt',\n    poke_interval=30,\n    timeout=600,\n    dag=dag\n)\n\ndb_sensor = SqlSensor(\n    task_id='db_sensor',\n    conn_id='my_db_conn',\n    sql='SELECT COUNT(*) FROM my_table WHERE status = \"ready\"',\n    poke_interval=30,\n    timeout=600,\n    dag=dag\n)\n\nprocess_task = PythonOperator(\n    task_id='process_data',\n    python_callable=process_data,\n    dag=dag\n)\n\n[file_sensor, db_sensor] >> process_task"
+            }
+        ],
+        "task_dependency_diagram": "file_sensor --> process_data\n         db_sensor --> process_data"
+    },
+    {
+        "id": 27,
+        "title": "DAG with External System Integration",
+        "question": "Write a DAG that integrates with an external REST API to fetch data and store it in a database.",
+        "difficulty": "hard",
+        "max_score": 40,
+        "success_rate": 44,
+        "answers": [
+            {
+                "method": "Standard DAG Definition",
+                "code": "from airflow import DAG\nfrom airflow.operators.python import PythonOperator\nfrom airflow.providers.postgres.hooks.postgres import PostgresHook\nimport requests\nfrom datetime import datetime\n\ndef fetch_data():\n    response = requests.get('https://api.example.com/data')\n    return response.json()\n\ndef store_data(data):\n    hook = PostgresHook(postgres_conn_id='postgres_conn')\n    conn = hook.get_conn()\n    cursor = conn.cursor()\n    for record in data:\n        cursor.execute(\"INSERT INTO my_table (key, value) VALUES (%s, %s)\", (record['key'], record['value']))\n    conn.commit()\n    cursor.close()\n    conn.close()\n\nwith DAG('external_api_dag', start_date=datetime(2023, 1, 1), schedule_interval='@daily') as dag:\n    fetch_task = PythonOperator(\n        task_id='fetch_data_task',\n        python_callable=fetch_data\n    )\n\n    store_task = PythonOperator(\n        task_id='store_data_task',\n        python_callable=lambda: store_data(fetch_task.output)\n    )\n\nfetch_task >> store_task"
+            }
+        ],
+        "task_dependency_diagram": "fetch_data_task --> store_data_task"
+    },
+    {
+        "id": 28,
+        "title": "DAG with Task Priority and Resource Management",
+        "question": "Write a DAG that assigns priorities to tasks and limits resource usage using pools.",
+        "difficulty": "hard",
+        "max_score": 40,
+        "success_rate": 49,
+        "answers": [
+            {
+                "method": "Standard DAG Definition",
+                "code": "from airflow import DAG\nfrom airflow.operators.python import PythonOperator\nfrom datetime import datetime\n\ndef high_priority_task():\n    print('Running High Priority Task')\n\ndef low_priority_task():\n    print('Running Low Priority Task')\n\ndefault_args = {\n    'start_date': datetime(2023, 1, 1)\n}\n\ndag = DAG('priority_pool_dag', default_args=default_args, schedule_interval='@daily')\n\nhigh_task = PythonOperator(\n    task_id='high_priority_task',\n    python_callable=high_priority_task,\n    priority_weight=10,\n    pool='limited_resources',\n    dag=dag\n)\n\nlow_task = PythonOperator(\n    task_id='low_priority_task',\n    python_callable=low_priority_task,\n    priority_weight=1,\n    pool='limited_resources',\n    dag=dag\n)\n\nhigh_task >> low_task"
+            }
+        ],
+        "task_dependency_diagram": "high_priority_task --> low_priority_task"
+    },
+    {
+        "id": 29,
+        "title": "DAG with Dynamic Task Retries Based on Input",
+        "question": "Create a DAG where the number of retries for a task is dynamically determined by input data.",
+        "difficulty": "hard",
+        "max_score": 40,
+        "success_rate": 43,
+        "answers": [
+            {
+                "method": "Using TaskFlow API",
+                "code": "from airflow import DAG\nfrom airflow.decorators import task\nfrom datetime import datetime\n\ndefault_args = {\n    'start_date': datetime(2023, 1, 1)\n}\n\nwith DAG('dynamic_retry_dag', default_args=default_args, schedule_interval='@daily') as dag:\n\n    @task\n    def determine_retries(input_data):\n        return {'retries': input_data.get('retries', 3)}\n\n    @task\n    def retry_task(retry_config):\n        retries = retry_config['retries']\n        print(f'Retrying up to {retries} times')\n        # Simulate failure\n        raise Exception('Task failed')\n\n    input_data = {'retries': 5}\n    retry_config = determine_retries(input_data)\n    retry_task(retry_config)"
+            }
+        ],
+        "task_dependency_diagram": "determine_retries --> retry_task"
+    },
+    {
+        "id": 30,
+        "title": "DAG with Cross-Cluster Communication",
+        "question": "Write a DAG that communicates between two Airflow clusters using the HTTP API.",
+        "difficulty": "hard",
+        "max_score": 40,
+        "success_rate": 41,
+        "answers": [
+            {
+                "method": "Standard DAG Definition",
+                "code": "from airflow import DAG\nfrom airflow.operators.python import PythonOperator\nfrom datetime import datetime\nimport requests\n\ndef trigger_remote_dag():\n    response = requests.post(\n        'http://remote-airflow/api/v1/dags/remote_dag/dagRuns',\n        headers={'Authorization': 'Bearer YOUR_TOKEN'},\n        json={'conf': {'key': 'value'}}\n    )\n    print(f'Remote DAG triggered: {response.status_code}')\n\ndefault_args = {\n    'start_date': datetime(2023, 1, 1)\n}\n\ndag = DAG('cross_cluster_dag', default_args=default_args, schedule_interval='@daily')\n\ntrigger_task = PythonOperator(\n    task_id='trigger_remote_dag_task',\n    python_callable=trigger_remote_dag,\n    dag=dag\n)\n\ntrigger_task"
+            }
+        ],
+        "task_dependency_diagram": "trigger_remote_dag_task"
+    }
+]

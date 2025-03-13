@@ -1,0 +1,300 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Arial', sans-serif; line-height: 1.7; background-color: #f3f4f6; color: #333; padding: 20px; overflow: hidden; }
+.header { text-align: center; margin-bottom: 5px; padding: 20px; background: linear-gradient(135deg, #6a5acd, #483d8b); border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
+.header h1 { color: white; font-size: 1.8rem; margin-bottom: 2px; }
+.header p { color: #e6e6fa; font-size: 0.8rem; }
+
+.main_container{
+    width: 100%;
+    display: flex;
+}
+
+.overview_pane{
+    background-color: rgba(194, 169, 251, 0.173);
+    width: 25%;
+    height: 100vh;
+}
+
+.content_pane{
+    width: 75%;
+    height: 81vh;
+    padding: 30px;
+    overflow-y: auto;
+}
+
+
+.course-card {
+    position: relative;
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+    width: 380px;
+    padding: 25px;
+    text-align: center;
+    overflow: hidden;
+    margin: 20px ;
+  }
+  .course-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: linear-gradient(90deg, #ff7eb3, #ff758c);
+  }
+  .course-card h2 {
+    font-size: 1.6rem;
+    color: #333;
+    margin-bottom: 10px;
+    margin-top: 30px;
+  }
+  .course-card p {
+    font-size: 0.95rem;
+    color: #666;
+    margin-bottom: 50px;
+  }
+  .level {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background-color: #ff7eb3;
+    color: #fff;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: bold;
+  }
+  .status {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background-color: #ffcccb;
+    color: #d70018;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: bold;
+  }
+  .status.inprogress {
+    background-color: #fff3cd;
+    color: #9b7e00;
+  }
+  .status.completed {
+    background-color: #d4edda;
+    color: #155724;
+  }
+  .progress-circle {
+    position: absolute;
+    bottom: 0px;
+    left: 20px;
+    width: 70px;
+    height: 70px;
+  }
+  .progress-circle svg {
+    transform: rotate(-90deg);
+  }
+  .progress-circle circle {
+    fill: none;
+    stroke: #ff7eb3;
+    stroke-width: 4;
+    stroke-dasharray: 219.91;
+    stroke-dashoffset: 219.91;
+    transition: stroke-dashoffset 0.3s ease;
+  }
+  .progress-circle .value {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #ff7eb3;
+  }
+  .start-btn {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background: linear-gradient(90deg, #ff7eb3, #ff758c);
+    color: #fff;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+  }
+  .start-btn:hover {
+    background: linear-gradient(90deg, #ff758c, #ff7eb3);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+  }
+  .start-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+
+  /* do */
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+header h1 {
+    font-size: 2rem;
+    color: #4a90e2; /* Soft blue accent */
+    margin: 0;
+}
+
+header p {
+    font-size: 0.9rem;
+    color: #555; /* Subtle gray */
+    margin-top: 5px;
+}
+
+.progress-container {
+    width: 100%;
+    background-color: #eaeaea; /* Light gray progress bar background */
+    border-radius: 5px;
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 10px;
+    background-color: #4a90e2; /* Soft blue accent */
+    width: 0%;
+    transition: width 0.3s ease;
+}
+
+.filters {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.filters-left {
+    display: flex;
+    gap: 10px;
+}
+
+.filters-left label {
+    font-size: 0.9rem;
+    color: #555; /* Subtle gray */
+    margin-right: 5px;
+}
+
+.filters-left input[type="radio"] {
+    margin-right: 5px;
+}
+
+.filters-right {
+    display: flex;
+    gap: 10px;
+}
+
+.filters button {
+    padding: 8px 15px;
+    background-color: #4a90e2; /* Soft blue accent */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease;
+}
+
+.filters button:hover {
+    background-color: #3a7bd5; /* Slightly darker blue on hover */
+}
+
+.problem-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.card {
+    position: relative;
+    background-color: #ffffff; /* White card background */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    /* display: flex;
+    flex-direction: column; */
+    /* gap: 15px; */
+}
+
+.card:hover {
+    /* transform: translateY(-5px); */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Stronger shadow on hover */
+}
+
+.card h3 {
+    font-size: 1.2rem;
+    margin: 0;
+    color: #4a90e2; /* Soft blue accent */
+    text-align: left;
+}
+
+.card .content {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    flex: 1;
+}
+
+.card p {
+    font-size: 0.9rem;
+    color: #555; /* Subtle gray */
+    margin: 0;
+    text-align: left;
+}
+
+.card span {
+    font-size: 0.85rem;
+    color: #777; /* Even subtler gray for metadata */
+    text-align: left;
+}
+
+.card button {
+    position: absolute;
+    right: 20px;
+    bottom: 10px;
+    padding: 8px 15px;
+    background-color: #4a90e2; /* Soft blue accent */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease;
+}
+
+.card button:hover {
+    background-color: #3a7bd5; /* Slightly darker blue on hover */
+}
+
+/* Badge for Completed Status */
+.completed-badge {
+    background-color: #4caf50;
+    position: absolute; /* Green for completed */
+    color: white;
+    font-size: 0.8rem;
+    right: 10px;
+    padding: 3px 8px;
+    border-radius: 15px; /* Rounded corners */
+    align-self: flex-start; /* Align badge to the top-right */
+    margin-bottom: 10px;
+}

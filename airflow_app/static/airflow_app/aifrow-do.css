@@ -6,6 +6,20 @@ body {
     font-family: Arial, sans-serif;
 }
 
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Arial', sans-serif; line-height: 1.7; background-color: #f3f4f6; color: #333;padding: 10px; overflow: hidden; }
+.header { text-align: center; margin-bottom: 5px; padding: 10px; background: linear-gradient(135deg, #6a5acd, #483d8b); border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
+.header h1 { color: white; font-size: 1.8rem;}
+.header p { color: #e6e6fa; font-size: 0.8rem; }
+
+.header_back i {
+    color: #f3f4f6;
+    position: absolute;
+    left: 70px;
+    top: 40px;
+    font-size: 25px;
+  }
+
 #question-pane {
     width: 30%;
     background-color: #f0f0f0;
@@ -21,7 +35,7 @@ body {
 }
 
 #code-editor {
-    height: 60vh;
+    height: 50vh;
     width: 100%;
 }
 
@@ -53,6 +67,6 @@ button:hover {
 
 #task-flow {
     width: 100%;
-    height: 40vh;
+    height: 32vh;
     border: 1px solid #ccc;
   }

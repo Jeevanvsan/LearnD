@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', loadEditor);
 function runCode() {
     const code = editor.getValue();
 
-    fetch('/run_code/', {
+    fetch('/run-code/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -33,6 +33,26 @@ function runCode() {
         run(data.output)
     })
     .catch(error => console.error('Error:', error));
+}
+
+function SubmitCode() {
+  const code = editor.getValue();
+
+  fetch('/submit-code/', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': getCSRFToken(),
+      },
+      body: JSON.stringify({ code })
+  })
+  .then(response => response.json())
+  .then(data => {
+      //  ('Output: ' + data.output);
+      console.log(data.output)
+      run(data.output)
+  })
+  .catch(error => console.error('Error:', error));
 }
 
 function getCSRFToken() {

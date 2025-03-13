@@ -1,12 +1,65 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Airflow</title>
+  <link rel="stylesheet" type="text/css" href="{% static 'airflow_app/aifrow-main.css' %}">
+  <script src="{% static 'airflow_app/aifrow-main.js' %}"></script>
 </head>
 <body>
-    <a href="{% url 'airflow_do' %}">Airflow code</a>
-    <a href="{% url 'airflow_study' %}">Airflow study</a>
+    <header class="header">
+        <h1>Airflow Learn</h1>
+        <p>Master Apache Airflow with step-by-step guides and test your knowledge</p>
+    </header>
+    <div class="main_container">
+      <div class="overview_pane">
+        <p>Study Overview</p>
+      </div>
+      <div class="content_pane">
+        <div class="tutorial_pane">
+          <header>
+            <h1>Airflow Study</h1>
+        </header>
+          <div class="course-card">
+              <span class="level">Basic</span>
+              <span class="status">Not Started</span>            
+            <h2>Apache Airflow Basics</h2>
+            <p>Learn the fundamentals of Apache Airflow DAG creation.</p>
+            <div class="progress-circle">
+              <svg>
+                <circle cx="35" cy="35" r="33"></circle>
+              </svg>
+              <div class="value">0%</div>
+            </div>
+            <a href="{% url 'airflow_study' %}"><button class="start-btn">Start Learning</button></a>
+          </div>
+        </div>
+        <div class="task_pane">
+          <div class="container">
+            <header>
+                <h1>DAG Creation Problems</h1>
+                <p>Practice DAG-related challenges to improve your skills.</p>
+                <div class="progress-container">
+                    <div class="progress-bar" id="progress-bar"></div>
+                </div>
+            </header>
+            <div class="filters">
+                <div class="filters-left">
+                    <label><input type="radio" name="difficulty" value="easy"> Easy</label>
+                    <label><input type="radio" name="difficulty" value="medium"> Medium</label>
+                    <label><input type="radio" name="difficulty" value="hard"> Hard</label>
+                </div>
+                <div class="filters-right">
+                    <button id="sortAsc">Sort Asc</button>
+                    <button id="sortDesc">Sort Desc</button>
+                </div>
+            </div>
+            <div class="problem-cards" id="problem-cards"></div>
+        </div>
+        </div>
+      </div>
+    </div>
 </body>
 </html>
