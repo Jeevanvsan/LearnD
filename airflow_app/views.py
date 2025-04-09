@@ -6,9 +6,12 @@ import io
 import contextlib
 
 from airflow_app.airflow_utils.airflow_code_extractor import DagExtract
+from airflow_app.airflow_utils.tutor import handson_model 
 
 question_id = 0
 code_extr = None
+
+# py manage.py runserver
 
 with open('airflow_app/static/airflow_app/problems.json', 'r') as file:
     questions_data = json.load(file)
@@ -52,20 +55,21 @@ def submit_code(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
-            print(question_id)
             code = data.get('code', '')
             problem = next((item for item in questions_data if item['id'] == question_id), None)
             # print(problem,"----")
 
             if code_extr is None:
-                print("+++++++")
                 code_extr = ob.run(code)
-            ans_extr = ob.run(problem["answers"][0]["code"])
-            print("submitted code : ",code_extr)
-            print("Ans code : ",ans_extr)
+            print(problem["question"])
+            print(handson_model.check_ans(problem["question"],code))
+            # ans_extr = ob.run(problem["answers"][0]["code"])
+            # print("submitted code : ",code_extr)
+            # print("Ans code : ",ans_extr)
             return JsonResponse({'output': code_extr})
         except Exception as e:
             print(e)
             return JsonResponse({'output': str(e)})
 
     return JsonResponse({'output': 'Invalid request'})
+
