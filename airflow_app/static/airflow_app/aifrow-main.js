@@ -144,66 +144,111 @@ fetch("/get-user-courses/")
  fetch('/static/airflow_app/json_data/problems.json')
  .then(response => response.json())
  .then(problems => {
-     let currentProblems = [...problems];
-     let solvedProblems = [2]; // Track solved problems
-     // solvedProblems.add(2)
-     function renderProblems(problems) {
-         const problemCards = document.getElementById('problem-cards');
-         problemCards.innerHTML = '';
-         problems.forEach(problem => {
-             const card = document.createElement('div');
-             card.className = 'card';
+    let currentProblems = [...problems];
+    let solvedProblems = [2]; // Track solved problems
+    // solvedProblems.add(2)
+    createLevels(problems);
 
-             // Check if the problem is solved
-             const isSolved = solvedProblems.includes(problem.id); // Assume `solvedProblems` tracks solved IDs
-
-             // Add Completed badge if solved
-             const badge = isSolved ? `<div class="completed-badge">Completed</div>` : '';
-
-            
-
-             card.innerHTML = `
-                 ${badge}
-                 <h3>${problem.title}</h3>
-                 <div class="content">
-                     <p>${problem.question}</p>
-                     <span>Difficulty: <span style="font-weight: bold;font-size:15px">${problem.difficulty}</span>, Max Score: ${problem.max_score}</span>
-                 </div>
-                 <button onclick="window.location.href='/airflow-do/${ problem.id }/'">Solve Problem</button>
-             `;
-             problemCards.appendChild(card);
-         });
-     }
-
-     window.solveProblem = function (id) {
-         // Mark the problem as solved
-        //  solvedProblems.add(id);
-
-         // Re-render the cards to reflect the updated status
-         renderProblems(currentProblems);
-     };
-
-     document.querySelectorAll('input[name="difficulty"]').forEach(radio => {
-         radio.addEventListener('change', () => {
-             const selectedDifficulty = document.querySelector('input[name="difficulty"]:checked')?.value;
-             const filteredProblems = selectedDifficulty 
-                 ? problems.filter(problem => problem.difficulty === selectedDifficulty) 
-                 : problems;
-             currentProblems = filteredProblems;
-             renderProblems(filteredProblems);
-         });
-     });
-
-     document.getElementById('sortAsc').addEventListener('click', () => {
-         currentProblems.sort((a, b) => a.difficulty.localeCompare(b.difficulty));
-         renderProblems(currentProblems);
-     });
-
-     document.getElementById('sortDesc').addEventListener('click', () => {
-         currentProblems.sort((a, b) => b.difficulty.localeCompare(a.difficulty));
-         renderProblems(currentProblems);
-     });
-
-     renderProblems(problems);
+     
  })
  .catch(error => console.error('Error loading problems:', error));
+
+
+
+let totalPoints = 0;
+
+// Create level nodes
+function createLevels(levelData) {
+    const levelsContainer = document.getElementById('levels-handson');
+    levelsContainer.innerHTML = ''; // Clear existing levels
+    // position: { top: '15%', left: '50%' },
+
+    topPos = 0
+    leftPos = 0
+
+
+    levelData.forEach((level, index) => {
+        topPos = 5 + index * 20;     // Start from 10% and increase 12% per level
+        leftPos = 20 + (index * 15) % 40; // Keep left within 0–80% range
+        
+        console.log(`level-handson ${level.id}: top=${topPos}%, left=${leftPos}%`);
+
+        const levelEl = document.createElement('div');
+        levelEl.className = `level-handson ${level.unlocked ? '' : 'locked'}`;
+
+        if(index == 0){
+            levelEl.className = `level-handson `;
+
+        }
+        levelEl.style.top = topPos+'%';
+        levelEl.style.left = leftPos+'%';
+
+        // Circle
+        const circle = document.createElement('div');
+        circle.className = 'level-circle';
+        circle.textContent = level.id;
+
+        // Tooltip
+        const tooltip = document.createElement('div');
+        tooltip.className = 'tooltip';
+        tooltip.innerHTML = `<strong>${level.title}</strong><br/>difficulty: ${level.difficulty}`;
+
+        // Stars
+        const stars = document.createElement('div');
+        stars.className = 'stars';
+        stars.innerText = level.title;
+
+        // Add click event listener to all levels
+        circle.addEventListener('click', () => {
+            window.location.href = `/airflow-do/${level.id}/`;
+
+            // if (level.unlocked) {
+            //     // If the level is unlocked, prompt the user with the question
+            //     const userAnswer = prompt(level.question);
+            //     if (userAnswer && userAnswer.toLowerCase().trim() === level.answer.toLowerCase()) {
+            //         alert('Correct!');
+            //         totalPoints += level.points;
+            //         document.querySelector('.score span').textContent = totalPoints;
+            //     } else {
+            //         alert('Incorrect!');
+            //     }
+            // } else {
+
+            //     // If the level is locked, notify the user
+            //     alert(`Level ${level.id} (${level.name}) is locked. Complete previous levels to unlock it.`);
+            // }
+        });
+
+        // Append elements
+        levelEl.appendChild(circle);
+        levelEl.appendChild(tooltip);
+        levelEl.appendChild(stars);
+        levelsContainer.appendChild(levelEl);
+    });
+}
+                
+function handleLevelClick(levelId) {
+    const level = levelData.find(l => l.id === levelId);
+    if (!level || !level.unlocked) return;
+
+    const answer = prompt(`${level.name}\n\nQuestion: ${level.question}`);
+    if (answer === null) return; // User cancelled
+
+    if (answer.toLowerCase() === level.answer.toLowerCase()) {
+    alert(`Correct! You earned ${level.points} points!`);
+    totalPoints += level.points;
+
+    level.paths.forEach(nextLevelId => {
+        const nextLevel = levelData.find(l => l.id === nextLevelId);
+        if (nextLevel) {
+        nextLevel.unlocked = true;
+        }
+    });
+
+    createLevels();
+} else {
+alert('Incorrect answer. Try again!');
+}
+}
+
+// Initialize the map
