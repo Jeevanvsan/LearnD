@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv()  # loads the .env file
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -24,6 +28,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '+r$7jb)g%ktp7zqjlskw)&4c^@$v^@)(g)6k)3ct_g)+s)7*v&'
 
 ROUTE_KEY = os.getenv('ROUTE_KEY')
+
+# settings.py
+LOGIN_URL = '/signin/'
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True

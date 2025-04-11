@@ -1,0 +1,19 @@
+{
+    "AF-T-1":{
+        "id": "AF-T-1",
+        "title": "Apache Airflow Basics",
+        "description": "Learn the fundamentals of Apache Airflow DAG creation.",
+        "level": "Basic",
+        "status": "Not Started",
+        "implemented": ""
+    },
+    "AF-T-2":{
+        "id": "AF-T-2",
+        "title": "Apache Airflow Intermediate",
+        "description": "Learn the fundamentals of Apache Airflow DAG creation.",
+        "level": "Intermediate",
+        "status": "Not Started",
+        "implemented": ""
+
+    }
+}

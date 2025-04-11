@@ -1,19 +1,47 @@
 var data = ''
 var tutorials = ''
 var quizQuestions = ''
+let currentPage = 0;
+let userAnswers = {};
+let isQuizMode = false;
+
+const urlParams = new URLSearchParams(window.location.search);
+const courseId = new URLSearchParams(window.location.search).get('course_id');
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    // Fetch course progress first
+    fetch(`/get-courses/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ course_id: courseId })
+    })
+    .then(res => res.json())
+    .then(data => { 
+        current_existing_course = data[0];
+        if (current_existing_course){
+            currentPage = current_existing_course['chapters']-1 || 0;
+            loadJSON();
+        }
+        else{
+            updateProgress(currentPage+1)
+            loadJSON();
+        }
+    });
+});
+
 async function loadJSON() {
     try {
-        const response = await fetch('/static/airflow_app/airflow_tut.json');
+        const response = await fetch(`/static/airflow_app/json_data/${courseId}.json`);
         if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
         tutorials = await response.json();
-
-        const response2 = await fetch('/static/airflow_app/airflow_quiz.json');
+        const response2 = await fetch(`/static/airflow_app/json_data/${courseId}_quiz.json`);
         if (!response2.ok) throw new Error(`HTTP error! Status: ${response2.status}`);
         quizQuestions = await response2.json();
 
         updateView();
-
-        // Now attach the event listeners after the DOM is loaded
         document.getElementById('prev-btn').addEventListener('click', () => {
             if (isQuizMode) {
                 isQuizMode = false;
@@ -29,6 +57,7 @@ async function loadJSON() {
             if (currentPage < tutorials.length - 1) {
                 currentPage++;
                 updateView();
+                updateProgress(currentPage+1);
             } else if (currentPage === tutorials.length - 1) {
                 isQuizMode = true;
                 renderQuiz();
@@ -42,11 +71,53 @@ async function loadJSON() {
     }
 }
 
-document.addEventListener("DOMContentLoaded", loadJSON);
+// document.addEventListener("DOMContentLoaded", loadJSON);
 
-let currentPage = 0;
-let userAnswers = {};
-let isQuizMode = false;
+function updateProgress(pg){
+    fetch('/update-progress/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            course_id: courseId,
+            chapter: pg  
+        })
+        })
+        .then(response => response.json())
+        .then(data => {
+        if (data.success) {
+            console.log("Progress updated successfully.");
+        } else {
+            console.error("Failed to update:", data);
+    }
+    });
+
+}
+
+function updateQuiz(score){
+    fetch('/update-quiz/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            course_id: courseId,
+            score: score  
+        })
+        })
+        .then(response => response.json())
+        .then(data => {
+        if (data.success) {
+            console.log("Progress updated successfully.");
+        } else {
+            console.error("Failed to update:", data);
+    }
+    });
+
+}
+
+
 
 function renderLevelTracker() {
     const levelTracker = document.getElementById('level-tracker');
@@ -107,6 +178,8 @@ function submitQuiz() {
             }
         }
     });
+
+    updateQuiz(score)
 
     const modalOverlay = document.getElementById('modal-overlay');
     const scoreText = document.getElementById('score-text');

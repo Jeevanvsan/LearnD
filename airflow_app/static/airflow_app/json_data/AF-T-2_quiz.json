@@ -1,0 +1,103 @@
+[
+    {
+      "question": "What does DAG stand for?",
+      "options": ["Directed Acyclic Graph", "Dynamic Automation Gateway", "Data Aggregation Grid"],
+      "answer": "Directed Acyclic Graph"
+    },
+    {
+      "question": "Which command initializes Airflow's database?",
+      "options": ["airflow db start", "airflow db init", "airflow init"],
+      "answer": "airflow db init"
+    },
+    {
+      "question": "Which operator executes Python functions?",
+      "options": ["BashOperator", "PythonOperator", "SQLOperator"],
+      "answer": "PythonOperator"
+    },
+    {
+      "question": "Which Airflow component defines workflows using Python code?",
+      "options": ["DAG", "Task", "Sensor"],
+      "answer": "DAG"
+    },
+    {
+      "question": "What does the BashOperator do?",
+      "options": ["Executes Python functions", "Sends emails", "Executes bash commands"],
+      "answer": "Executes bash commands"
+    },
+    {
+      "question": "What is the purpose of the FileSensor?",
+      "options": ["Check for files in a directory", "Monitor API responses", "Check database status"],
+      "answer": "Check for files in a directory"
+    },
+    {
+      "question": "What does catchup=False do?",
+      "options": ["Enables backfilling", "Disables backfilling", "Increases retry count"],
+      "answer": "Disables backfilling"
+    },
+    {
+      "question": "Which Airflow configuration file holds settings like parallelism and scheduler threads?",
+      "options": ["airflow.cfg", "settings.yaml", "config.ini"],
+      "answer": "airflow.cfg"
+    },
+    {
+      "question": "What is the default port for the Airflow webserver?",
+      "options": ["8000", "8080", "5000"],
+      "answer": "8080"
+    },
+    {
+      "question": "Which executor is best suited for distributed execution across multiple workers?",
+      "options": ["LocalExecutor", "CeleryExecutor", "SequentialExecutor"],
+      "answer": "CeleryExecutor"
+    },
+    {
+      "question": "What is the purpose of the retry_delay argument in task configuration?",
+      "options": ["Sets retry interval", "Defines the task owner", "Configures task dependencies"],
+      "answer": "Sets retry interval"
+    },
+    {
+      "question": "What is the primary purpose of the TaskFlow API?",
+      "options": ["Creating tasks", "Simplifying DAG creation", "Scheduling tasks"],
+      "answer": "Simplifying DAG creation"
+    },
+    {
+      "question": "What command lists all available DAGs in Airflow?",
+      "options": ["airflow list dags", "airflow dags list", "airflow show dags"],
+      "answer": "airflow dags list"
+    },
+    {
+      "question": "Which of the following operators is used for transferring data between tasks via XComs?",
+      "options": ["PythonOperator", "BashOperator", "EmailOperator"],
+      "answer": "PythonOperator"
+    },
+    {
+      "question": "What command starts the Airflow scheduler?",
+      "options": ["airflow webserver", "airflow scheduler", "airflow worker"],
+      "answer": "airflow scheduler"
+    },
+    {
+      "question": "Which package is used for interacting with AWS S3 in Airflow?",
+      "options": ["airflow.providers.amazon", "airflow.providers.gcp", "airflow.providers.azure"],
+      "answer": "airflow.providers.amazon"
+    },
+    {
+      "question": "What is a SubDAG used for?",
+      "options": ["Grouping tasks", "Running a single task", "Initializing a database"],
+      "answer": "Grouping tasks"
+    },
+    {
+      "question": "What is the purpose of the airflow.cfg file?",
+      "options": ["Setting task retries", "Configuring Airflow settings", "Creating DAGs"],
+      "answer": "Configuring Airflow settings"
+    },
+    {
+      "question": "What is the difference between LocalExecutor and CeleryExecutor?",
+      "options": ["Parallelism", "Task scheduling", "Database integration"],
+      "answer": "Parallelism"
+    },
+    {
+      "question": "What is the purpose of 'catchup' in a DAG configuration?",
+      "options": ["Enable/Disable backfilling", "Set retry intervals", "Define task dependencies"],
+      "answer": "Enable/Disable backfilling"
+    }
+  ]
+  

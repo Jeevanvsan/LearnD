@@ -1,6 +1,6 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'Arial', sans-serif; line-height: 1.7; background-color: #f3f4f6; color: #333; padding: 20px; overflow: hidden; }
-.header { text-align: center; margin-bottom: 5px; padding: 20px; background: linear-gradient(135deg, #6a5acd, #483d8b); border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
+body { font-family: 'Arial', sans-serif; line-height: 1.7; background-color: #f3f4f6; color: #333;overflow: hidden; }
+.header { margin-bottom: 5px; padding: 20px; background: linear-gradient(135deg, #6a5acd, #483d8b); border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
 .header h1 { color: white; font-size: 1.8rem; margin-bottom: 2px; }
 .header p { color: #e6e6fa; font-size: 0.8rem; }
 
@@ -10,9 +10,35 @@ body { font-family: 'Arial', sans-serif; line-height: 1.7; background-color: #f3
 }
 
 .overview_pane{
-    background-color: rgba(194, 169, 251, 0.173);
+    background-color: rgba(210, 196, 244, 0.173);
+    /* background-color: white; */
     width: 25%;
     height: 100vh;
+}
+
+.header{
+  display: flex;
+  justify-content: space-between;
+}
+#prof-name-text{
+  font-weight: bold;
+  font-size: 1.2rem;
+
+}
+
+.head{
+    display: flex;
+    align-items: center;
+    margin-left: 20px;
+}
+
+.head p{
+  padding-left: 10px;
+}
+
+#prof-name{
+    color: #ffffff; /* Soft blue accent */
+    margin: 15px 35px;
 }
 
 .content_pane{
@@ -20,6 +46,14 @@ body { font-family: 'Arial', sans-serif; line-height: 1.7; background-color: #f3
     height: 81vh;
     padding: 30px;
     overflow-y: auto;
+
+}
+
+.course-pane{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); 
+  overflow-x: auto;
+
 }
 
 
@@ -102,14 +136,24 @@ body { font-family: 'Arial', sans-serif; line-height: 1.7; background-color: #f3
     stroke-dashoffset: 219.91;
     transition: stroke-dashoffset 0.3s ease;
   }
-  .progress-circle .value {
+  .progress-circle .value-chapter {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    font-size: 0.7rem;
+    font-weight: bold;
+    color: #4caf50;
+  }
+
+  .progress-circle .value-score {
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     font-size: 0.9rem;
     font-weight: bold;
-    color: #ff7eb3;
+    color: #d70018;
   }
   .start-btn {
     position: absolute;
@@ -297,4 +341,93 @@ header p {
     border-radius: 15px; /* Rounded corners */
     align-self: flex-start; /* Align badge to the top-right */
     margin-bottom: 10px;
+}
+
+#tutorial-over{
+  height: 50vh;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+#tutorial-over p{
+  font-weight: bolder;
+}
+
+.progress-main{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.progress-main span{
+  font-size: 13px;
+}
+
+
+
+.progress-container {
+  width: 50%;
+  background-color: #c7c6c6;
+  border-radius: 25px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  margin-left: 10px;
+  margin-right: 15px;
+  margin: 10px;
+}
+
+/* Progress bar filler */
+.progress-bar {
+  width: 0%;
+  height: 10px;
+  /* background-color: #76c7c0; */
+  background: linear-gradient(to bottom, #a5e1dc, #76c7c0, #41918c);
+
+  border-radius: 25px;
+  transition: width 2s ease-in-out;
+}
+
+.progress-score-bar {
+  width: 0%;
+  height: 10px;
+  /* background-color: #ff758c; */
+  background: linear-gradient(to bottom, #ff9bab, #ff758c, #c7435b);
+
+  border-radius: 25px;
+  transition: width 2s ease-in-out;
+}
+
+.progress-bar-course-overall {
+  width: 0%;
+  height: 10px;
+  /* background-color: #ffaa75; */
+  background: linear-gradient(to bottom, #ffbb90, #ffaa75, #cc6a2d);
+
+  border-radius: 25px;
+  transition: width 2s ease-in-out; 
+}
+
+.progress-bar-course-overall-status {
+  width: 0%;
+  height: 10px;
+  /* background-color: #ffaa75; */
+  background: linear-gradient(to bottom, #ffbb90, #ffaa75, #cc6a2d);
+
+  border-radius: 25px;
+  transition: width 2s ease-in-out; 
+}
+
+.divider-h{
+  width: 100%;
+  height: 2px;
+  background-color: #ccc;
+  margin: 10px 0;
+}
+
+.divider-v{
+  width: 10px;
+  height: 100vh;
+  /* background-color: #ccc; */
+  background: linear-gradient(to right, #e6e6e6, #cccccc, #999999);
+
 }

@@ -50,7 +50,8 @@ function SubmitCode() {
   .then(data => {
       //  ('Output: ' + data.output);
       console.log(data.output)
-      run(data.output)
+      run(data.code_extr)
+      resultShow(data.output)
   })
   .catch(error => console.error('Error:', error));
 }
@@ -59,6 +60,31 @@ function getCSRFToken() {
     return document.cookie.split(';')
         .find(cookie => cookie.trim().startsWith('csrftoken='))
         .split('=')[1];
+}
+
+function resultShow(data) {
+    const resultContainer = document.getElementById('result-pane');
+    resultContainer.innerHTML = ''; // Clear previous results
+
+    const p = document.createElement('p');
+    p.className = 'result-text';
+    p.style.fontSize = '20px';
+  
+    const pre = document.createElement('pre');
+    if(data['response'] == 'Correct'){ 
+        p.textContent = `${data['response']} Answer!`;
+        p.style.color = 'green';
+        p.style.fontWeight = 'bold';
+        resultContainer.appendChild(p);
+    }
+    else if(data['response'] == 'Incorrect'){
+        p.textContent = `${data['response']} Answer!`;
+        p.style.color = 'red';
+        resultContainer.appendChild(p);
+        pre.textContent = data['Error'];
+        resultContainer.appendChild(pre);
+    }
+    
 }
 
 function run(data) {
