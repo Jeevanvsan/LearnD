@@ -2,3 +2,5 @@ __pycache__/
 test/
 db.sqlite3
 .env
+lenv
+migrations/
