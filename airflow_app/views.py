@@ -10,10 +10,6 @@ from .models import Profile, Course
 from django.core.serializers import serialize
 from django.utils import timezone
 
-
-
-
-
 from airflow_app.airflow_utils.airflow_code_extractor import DagExtract
 from airflow_app.airflow_utils.tutor import handson_model 
 
@@ -178,19 +174,46 @@ def submit_code(request):
 
     return JsonResponse({'output': 'Invalid request'})
 
+# def signup_view(request):
+#     if request.method == 'POST':
+#         username = request.POST['username']
+#         email = request.POST['email']
+#         password = request.POST['password']
+#         if User.objects.filter(username=username).exists():
+#             messages.error(request, 'Username already taken')
+#         else:
+#             user = User.objects.create_user(username=username, email=email, password=password)
+#             user.last_login = timezone.now()  
+#             user.save()
+#             messages.success(request, 'Account created successfully')
+#             Profile.objects.create(user=user,user_id = user.id)
+
+#             return redirect('signin')
+#     return render(request, 'signup.html')
+
+
 def signup_view(request):
     if request.method == 'POST':
         username = request.POST['username']
         email = request.POST['email']
         password = request.POST['password']
+
         if User.objects.filter(username=username).exists():
             messages.error(request, 'Username already taken')
         else:
-            user = User.objects.create_user(username=username, email=email, password=password)
-            messages.success(request, 'Account created successfully')
-            Profile.objects.create(user=user,user_id = user.id)
+            user = User(
+                username=username,
+                email=email,
+                last_login=timezone.now(),  # Set before saving
+                is_active=True
+            )
+            user.set_password(password)  # Hash the password
+            user.save()
 
+            Profile.objects.create(user=user, user_id=user.id)
+            messages.success(request, 'Account created successfully')
             return redirect('signin')
+
     return render(request, 'signup.html')
 
 
@@ -199,6 +222,8 @@ def signin_view(request):
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(request, username=username, password=password)
+        user.last_login = timezone.now()  
+        user.save()
         if user is not None:
             login(request, user)
             return redirect('dashboard')
