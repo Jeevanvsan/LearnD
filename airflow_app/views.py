@@ -19,6 +19,8 @@ code_extr = None
 TOOL_NAME = 'Apache Airflow'
 
 # py manage.py runserver
+# Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+# .\lenv\Scripts\Activate.ps1
 
 with open('airflow_app/static/airflow_app/json_data/problems.json', 'r') as file:
     questions_data = json.load(file)
@@ -236,14 +238,8 @@ def signin_view(request):
 def dashboard(request):
     if request.user.is_authenticated:
         user = request.user
-        print(user.username)
-        print(user.email)
-        print(user.id)
         performance_score = Profile.objects.get(user=user).score
         certificates = Profile.objects.get(user=user).certificates
-        print(performance_score,certificates)
-
-
         return render(request, 'dashboard.html', {'user': user})
     else:
         return redirect('signin')
