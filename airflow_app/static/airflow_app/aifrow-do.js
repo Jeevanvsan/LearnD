@@ -156,3 +156,46 @@ function run(data) {
     // Step 7: Initialize the Network
     const network = new vis.Network(container, dataSet, options);
   }
+
+let timerInterval;
+let startTime;
+let elapsedTime = 0; // Time in seconds
+
+// Function to start the timer
+function startTimer() {
+    startTime = Date.now() - elapsedTime * 1000; // Sync the time with previous elapsed time
+    timerInterval = setInterval(updateTimer, 1000); // Update every second
+}
+
+// Function to update the timer
+function updateTimer() {
+    elapsedTime = Math.floor((Date.now() - startTime) / 1000); // Calculate elapsed time in seconds
+
+    let hours = Math.floor(elapsedTime / 3600); // Get hours
+    let minutes = Math.floor((elapsedTime % 3600) / 60); // Get minutes
+    let seconds = elapsedTime % 60; // Get seconds
+
+    // Format hours, minutes, and seconds to always show two digits
+    hours = hours < 10 ? '0' + hours : hours;
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    seconds = seconds < 10 ? '0' + seconds : seconds;
+
+    // Display the timer
+    document.getElementById("timer").textContent = `${hours}:${minutes}:${seconds}`;
+}
+
+// Function to stop the timer when quiz ends
+function endQuiz() {
+    clearInterval(timerInterval);
+    alert(`Quiz ended! Time taken: ${formatTime(elapsedTime)}`);
+}
+
+// Function to format elapsed time
+function formatTime(seconds) {
+    let hours = Math.floor(seconds / 3600);
+    let minutes = Math.floor((seconds % 3600) / 60);
+    seconds = seconds % 60;
+    return `${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+}
+
+startTimer()

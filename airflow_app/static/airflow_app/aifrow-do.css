@@ -8,7 +8,11 @@ body {
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: 'Arial', sans-serif; line-height: 1.7; background-color: #f3f4f6; color: #333;overflow: hidden; }
-.header { text-align: center;  padding: 10px; background: black;box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
+.header {
+     text-align: center;  padding: 10px; background: black;box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+     display: flex;
+     justify-content: space-between;
+    }
 .header h1 { color: rgb(133, 134, 133); font-size: 0.8rem;}
 .header p { color: #e6e6fa; font-size: 0.8rem; }
 
@@ -19,6 +23,13 @@ body { font-family: 'Arial', sans-serif; line-height: 1.7; background-color: #f3
     top: 15px;
     font-size: 15px;
   }
+
+  #timer {
+    font-size: 15px;
+    font-weight: bold;
+    color: #ffffff;
+    margin-right: 15px;
+}
 
 #question-pane {
     width: 50%;

@@ -140,13 +140,11 @@ fetch("/get-user-courses/")
 
 
 
-// Fetch JSON data from file
  fetch('/static/airflow_app/json_data/problems.json')
  .then(response => response.json())
  .then(problems => {
     let currentProblems = [...problems];
-    let solvedProblems = [2]; // Track solved problems
-    // solvedProblems.add(2)
+    let solvedProblems = [2];
     createLevels(problems);
 
      
@@ -157,21 +155,19 @@ fetch("/get-user-courses/")
 
 let totalPoints = 0;
 
-// Create level nodes
 function createLevels(levelData) {
     const levelsContainer = document.getElementById('levels-handson');
-    levelsContainer.innerHTML = ''; // Clear existing levels
-    // position: { top: '15%', left: '50%' },
+    levelsContainer.innerHTML = '';
+
 
     topPos = 0
     leftPos = 0
 
 
     levelData.forEach((level, index) => {
-        topPos = 5 + index * 20;     // Start from 10% and increase 12% per level
-        leftPos = 20 + (index * 15) % 40; // Keep left within 0–80% range
+        topPos = 5 + index * 20;    
+        leftPos = 20 + (index * 15) % 40; 
         
-        console.log(`level-handson ${level.id}: top=${topPos}%, left=${leftPos}%`);
 
         const levelEl = document.createElement('div');
         levelEl.className = `level-handson ${level.unlocked ? '' : 'locked'}`;
@@ -194,15 +190,37 @@ function createLevels(levelData) {
         tooltip.innerHTML = `<strong>${level.title}</strong><br/>difficulty: ${level.difficulty}`;
 
         // Stars
-        const stars = document.createElement('div');
-        stars.className = 'stars';
-        stars.innerText = level.title;
+        // const title = document.createElement('div');
+        // title.className = 'level-title';
+        // title.innerText = level.title;
+
+        // Stars container
+        const starsContainer = document.createElement('div');
+        starsContainer.className = 'stars-container';
+
+        star_count = 0
+        if (index == 0) {
+            star_count = 2
+        }
+        for (let i = 1; i <= 3; i++) {
+            const star = document.createElement('span');
+            star.className = 'star';
+            star.textContent = i <= (star_count || 0) ? '★' : '☆';
+            starsContainer.appendChild(star);
+        }
+
+        // Title
+        const title = document.createElement('div');
+        title.className = 'level-title';
+        title.innerText = level.title;
+
 
         // Add click event listener to all levels
         circle.addEventListener('click', () => {
-            window.location.href = `/airflow-do/${level.id}/`;
+                window.location.href = `/airflow-do/${level.id}/`;
 
             // if (level.unlocked) {
+
             //     // If the level is unlocked, prompt the user with the question
             //     const userAnswer = prompt(level.question);
             //     if (userAnswer && userAnswer.toLowerCase().trim() === level.answer.toLowerCase()) {
@@ -222,7 +240,8 @@ function createLevels(levelData) {
         // Append elements
         levelEl.appendChild(circle);
         levelEl.appendChild(tooltip);
-        levelEl.appendChild(stars);
+        levelEl.appendChild(title);
+        levelEl.appendChild(starsContainer); // <--- insert before title
         levelsContainer.appendChild(levelEl);
     });
 }
@@ -250,5 +269,3 @@ function handleLevelClick(levelId) {
 alert('Incorrect answer. Try again!');
 }
 }
-
-// Initialize the map

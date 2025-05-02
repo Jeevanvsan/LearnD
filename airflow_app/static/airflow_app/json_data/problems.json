@@ -5,6 +5,8 @@
         "question": "Write a basic Airflow DAG that prints 'Hello, World!' using the PythonOperator.",
         "difficulty": "easy",
         "max_score": 20,
+        "max_time": "00:06:00",
+        "min_time": "00:03:00",
         "success_rate": 90,
         "answers": [
             {
@@ -24,6 +26,8 @@
         "question": "Create a DAG with two tasks: one prints 'Task 1' and the other prints 'Task 2'. Use the PythonOperator.",
         "difficulty": "easy",
         "max_score": 20,
+        "min_time": "00:04:00",
+        "max_time": "00:08:00",
         "success_rate": 85,
         "answers": [
             {
@@ -43,6 +47,8 @@
         "question": "Create a DAG with three tasks where each task depends on the previous one. Use the TaskFlow API.",
         "difficulty": "easy",
         "max_score": 20,
+        "min_time": "00:05:00",
+        "max_time": "00:09:00",
         "success_rate": 80,
         "answers": [
             {
@@ -58,6 +64,8 @@
         "question": "Write a DAG that uses the BashOperator to run the command `echo 'Hello from Bash!'`.",
         "difficulty": "easy",
         "max_score": 20,
+        "min_time": "00:03:00",
+        "max_time": "00:06:00",
         "success_rate": 88,
         "answers": [
             {
@@ -73,6 +81,8 @@
         "question": "Create a DAG that runs every Monday at 8 AM using the schedule_interval parameter.",
         "difficulty": "easy",
         "max_score": 20,
+        "min_time": "00:04:00",
+        "max_time": "00:07:00",
         "success_rate": 87,
         "answers": [
             {
@@ -88,6 +98,8 @@
         "question": "Write a DAG where a task retries 3 times if it fails.",
         "difficulty": "easy",
         "max_score": 20,
+        "min_time": "00:05:00",
+        "max_time": "00:09:00",
         "success_rate": 82,
         "answers": [
             {
@@ -103,6 +115,8 @@
         "question": "Create a DAG where Task A and Task B run in parallel, and both must complete before Task C runs.",
         "difficulty": "easy",
         "max_score": 20,
+        "min_time": "00:06:00",
+        "max_time": "00:10:00",
         "success_rate": 78,
         "answers": [
             {
@@ -119,6 +133,8 @@
         "difficulty": "easy",
         "max_score": 20,
         "success_rate": 83,
+        "min_time": "00:06:00",
+        "max_time": "00:10:00",
         "answers": [
             {
                 "method": "Standard DAG Definition",
@@ -134,6 +150,8 @@
         "difficulty": "easy",
         "max_score": 20,
         "success_rate": 75,
+        "min_time": "00:07:00",
+        "max_time": "00:12:00",
         "answers": [
             {
                 "method": "Using TaskFlow API",
@@ -149,6 +167,8 @@
         "difficulty": "easy",
         "max_score": 20,
         "success_rate": 81,
+        "min_time": "00:03:00",
+        "max_time": "00:06:00",
         "answers": [
             {
                 "method": "Standard DAG Definition",
@@ -164,6 +184,8 @@
         "difficulty": "medium",
         "max_score": 30,
         "success_rate": 75,
+        "min_time": "00:08:00",
+        "max_time": "00:12:00",
         "answers": [
             {
                 "method": "Standard DAG Definition",
@@ -179,6 +201,8 @@
         "difficulty": "medium",
         "max_score": 30,
         "success_rate": 70,
+        "min_time": "00:09:00",
+        "max_time": "00:14:00",
         "answers": [
             {
                 "method": "Standard DAG Definition",
@@ -194,6 +218,8 @@
         "difficulty": "medium",
         "max_score": 30,
         "success_rate": 68,
+        "min_time": "00:10:00",
+        "max_time": "00:15:00",
         "answers": [
             {
                 "method": "Using TaskFlow API",
@@ -209,6 +235,8 @@
         "difficulty": "medium",
         "max_score": 30,
         "success_rate": 65,
+        "min_time": "00:12:00",
+        "max_time": "00:18:00",
         "answers": [
             {
                 "method": "Standard DAG Definition",
@@ -224,6 +252,8 @@
         "difficulty": "medium",
         "max_score": 30,
         "success_rate": 72,
+        "min_time": "00:08:00",
+        "max_time": "00:13:00",
         "answers": [
             {
                 "method": "Standard DAG Definition",
@@ -239,6 +269,8 @@
         "difficulty": "medium",
         "max_score": 30,
         "success_rate": 67,
+        "min_time": "00:10:00",
+        "max_time": "00:15:00",
         "answers": [
             {
                 "method": "Standard DAG Definition",
@@ -254,6 +286,8 @@
         "difficulty": "medium",
         "max_score": 30,
         "success_rate": 69,
+        "min_time": "00:12:00",
+        "max_time": "00:18:00",
         "answers": [
             {
                 "method": "Using TaskFlow API",
@@ -269,6 +303,8 @@
         "difficulty": "medium",
         "max_score": 30,
         "success_rate": 66,
+        "min_time": "00:14:00",
+        "max_time": "00:20:00",
         "answers": [
             {
                 "method": "Standard DAG Definition",
@@ -284,6 +320,8 @@
         "difficulty": "medium",
         "max_score": 30,
         "success_rate": 71,
+        "min_time": "00:11:00",
+        "max_time": "00:16:00",
         "answers": [
             {
                 "method": "Using TaskFlow API",
@@ -299,6 +337,8 @@
         "difficulty": "medium",
         "max_score": 30,
         "success_rate": 73,
+        "min_time": "00:09:00",
+        "max_time": "00:14:00",
         "answers": [
             {
                 "method": "Standard DAG Definition",
@@ -314,6 +354,8 @@
         "difficulty": "hard",
         "max_score": 40,
         "success_rate": 50,
+        "min_time": "00:20:00",
+        "max_time": "00:30:00",
         "answers": [
             {
                 "method": "Dynamic DAG Script",
@@ -329,6 +371,8 @@
         "difficulty": "hard",
         "max_score": 40,
         "success_rate": 45,
+        "min_time": "00:25:00",
+        "max_time": "00:40:00",
         "answers": [
             {
                 "method": "Custom Hook Implementation",
@@ -344,6 +388,8 @@
         "difficulty": "hard",
         "max_score": 40,
         "success_rate": 48,
+        "min_time": "00:20:00",
+        "max_time": "00:35:00",
         "answers": [
             {
                 "method": "Using KubernetesPodOperator",
@@ -359,6 +405,8 @@
         "difficulty": "hard",
         "max_score": 40,
         "success_rate": 42,
+        "min_time": "00:30:00",
+        "max_time": "00:45:00",
         "answers": [
             {
                 "method": "Custom Plugin Implementation",
@@ -374,6 +422,8 @@
         "difficulty": "hard",
         "max_score": 40,
         "success_rate": 47,
+        "min_time": "00:20:00",
+        "max_time": "00:35:00",
         "answers": [
             {
                 "method": "Standard DAG Definition",
@@ -389,6 +439,8 @@
         "difficulty": "hard",
         "max_score": 40,
         "success_rate": 46,
+        "min_time": "00:20:00",
+        "max_time": "00:35:00",
         "answers": [
             {
                 "method": "Standard DAG Definition",
@@ -404,6 +456,8 @@
         "difficulty": "hard",
         "max_score": 40,
         "success_rate": 44,
+        "min_time": "00:25:00",
+        "max_time": "00:40:00",
         "answers": [
             {
                 "method": "Standard DAG Definition",
@@ -419,6 +473,8 @@
         "difficulty": "hard",
         "max_score": 40,
         "success_rate": 49,
+        "min_time": "00:18:00",
+        "max_time": "00:30:00",
         "answers": [
             {
                 "method": "Standard DAG Definition",
@@ -434,6 +490,8 @@
         "difficulty": "hard",
         "max_score": 40,
         "success_rate": 43,
+        "min_time": "00:22:00",
+        "max_time": "00:35:00",
         "answers": [
             {
                 "method": "Using TaskFlow API",
@@ -449,6 +507,8 @@
         "difficulty": "hard",
         "max_score": 40,
         "success_rate": 41,
+        "min_time": "00:25:00",
+        "max_time": "00:40:00",
         "answers": [
             {
                 "method": "Standard DAG Definition",
