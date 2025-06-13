@@ -16,20 +16,45 @@ from airflow_app.airflow_utils.tutor import handson_model
 question_id = 0
 code_extr = None
 
-TOOL_NAME = 'Apache Airflow'
+# TOOL_NAME = 'Apache Airflow'
+TOOL_NAME_MAIN = {"AF": "Apache Airflow", "PY": "Python"}
+
+
 
 # py manage.py runserver
 # Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 # .\lenv\Scripts\Activate.ps1
 
-with open('airflow_app/static/airflow_app/json_data/problems.json', 'r') as file:
-    questions_data = json.load(file)
 
 with open('airflow_app/static/airflow_app/json_data/airflow_courses.json', 'r') as file:
-    courses_data = json.load(file)
+    airflow_courses_data = json.load(file)
+    
+def get_courses_data(tool_name):
+    if tool_name == 'AF':
+        with open('airflow_app/static/airflow_app/json_data/airflow_courses.json', 'r') as file:
+            return json.load(file)
+    if tool_name == 'PY':
+        with open('airflow_app/static/python_app/json_data/python_courses.json', 'r') as file:
+            return json.load(file)
+        
+def get_tut_data(id):
+    if id == 'AF':
+        with open(f'airflow_app/static/airflow_app/json_data/{id}.json', 'r') as file:
+            return json.load(file)
+    if id == 'PY':
+        with open(f'python_app/static/python_app/json_data/{id}.json', 'r') as file:
+            return json.load(file)
 
 @login_required
 def index(request):
+    if request.user.is_authenticated:
+        user = request.user
+        return render(request, 'index.html',{'user': user})
+    else:
+        return redirect('signin')
+    
+@login_required
+def airflow_index(request):
     if request.user.is_authenticated:
         user = request.user
         return render(request, 'airflow_app/airflow-main.html',{'user': user})
@@ -45,11 +70,11 @@ def get_user_courses(request):
 
 
 def serialize_course(course,id):
-    with open(f'airflow_app/static/airflow_app/json_data/{id}.json', 'r') as file:
-        courses_data = json.load(file)
+        
+    tut_data = get_tut_data(id)
     return {
         **course,
-        'total_chapters': len(courses_data),
+        'total_chapters': len(airflow_courses_data),
         'start_time': course['start_time'].strftime('%Y-%m-%d %H:%M:%S') if course['start_time'] else None,
         'updated_time': course['updated_time'].strftime('%Y-%m-%d %H:%M:%S') if course['updated_time'] else None,
         'end_time': course['end_time'].strftime('%Y-%m-%d %H:%M:%S') if course['end_time'] else None,
@@ -61,8 +86,11 @@ def get_courses(request):
     if request.method == 'POST':
         user = request.user
         data = json.loads(request.body)
+        print(f"Data received: {data}")
         course_id = data.get('course_id')
-        existing_course = Course.objects.filter(user=user.id,course_id=course_id,tool_name=TOOL_NAME).values()
+        tool_req = data.get('tool')
+        print(f"Tool requested: {tool_req}")
+        existing_course = Course.objects.filter(user=user.id,course_id=course_id,tool_name=TOOL_NAME_MAIN[tool_req]).values()
         readable_courses = [serialize_course(course,course_id) for course in existing_course]
     
     return JsonResponse(list(readable_courses), safe=False)
@@ -76,13 +104,15 @@ def update_progress(request):
     if request.method == 'POST':
         user = request.user
         data = json.loads(request.body)
-        course_id = data.get('course_id')
-        course_name = courses_data.get(course_id).get('title')
+        course_id = data.get('course_id')        
+        tool_req = data.get('tool')  
+        course_data = get_courses_data(tool_req) 
+        course_name = course_data.get(course_id).get('title')
         status = 'In Progress'
         chapter = data.get('chapter') 
         Course.objects.update_or_create(user=user.id,course_id=course_id,
                     defaults={
-                    'tool_name': TOOL_NAME,
+                    'tool_name': TOOL_NAME_MAIN[tool_req],
                     'course_name': course_name,
                     'status': status,
                     'chapters': chapter                             
@@ -131,7 +161,7 @@ def update_quiz(request):
 def airflow_do(request,problem_id):
     global question_id
     question_id = problem_id
-    problem = next((item for item in questions_data if item['id'] == problem_id), None)
+    problem = next((item for item in airflow_questions_data if item['id'] == problem_id), None)
     return render(request, 'airflow_app/airflow-do.html',{'problem': problem})
 
 @csrf_exempt
@@ -162,7 +192,7 @@ def submit_code(request):
         try:
             data = json.loads(request.body)
             code = data.get('code', '')
-            problem = next((item for item in questions_data if item['id'] == question_id), None)
+            problem = next((item for item in airflow_questions_data if item['id'] == question_id), None)
             # if code_extr is None:
             code_extr = ob.run(code)
             print(problem["question"])
@@ -175,23 +205,6 @@ def submit_code(request):
             return JsonResponse({'output': str(e)})
 
     return JsonResponse({'output': 'Invalid request'})
-
-# def signup_view(request):
-#     if request.method == 'POST':
-#         username = request.POST['username']
-#         email = request.POST['email']
-#         password = request.POST['password']
-#         if User.objects.filter(username=username).exists():
-#             messages.error(request, 'Username already taken')
-#         else:
-#             user = User.objects.create_user(username=username, email=email, password=password)
-#             user.last_login = timezone.now()  
-#             user.save()
-#             messages.success(request, 'Account created successfully')
-#             Profile.objects.create(user=user,user_id = user.id)
-
-#             return redirect('signin')
-#     return render(request, 'signup.html')
 
 
 def signup_view(request):
@@ -240,7 +253,7 @@ def dashboard(request):
         user = request.user
         performance_score = Profile.objects.get(user=user).score
         certificates = Profile.objects.get(user=user).certificates
-        return render(request, 'dashboard.html', {'user': user})
+        return render(request, 'index.html', {'user': user})
     else:
         return redirect('signin')
 
@@ -248,3 +261,28 @@ def logout_view(request):
     logout(request)
     return redirect('signin')
 
+
+# Python 
+
+with open('airflow_app/static/python_app/json_data/problems.json', 'r') as file:
+    python_questions_data = json.load(file)
+
+with open('airflow_app/static/python_app/json_data/python_courses.json', 'r') as file:
+    python_courses_data = json.load(file)
+
+@login_required
+def python_index(request):
+    if request.user.is_authenticated:
+        user = request.user
+        return render(request, 'python_app/python-main.html',{'user': user})
+    else:
+        return redirect('signin')
+
+def python_do(request,problem_id):
+    global question_id
+    question_id = problem_id
+    problem = next((item for item in airflow_questions_data if item['id'] == problem_id), None)
+    return render(request, 'python_app/python-do.html',{'problem': problem})
+
+def python_study(request):
+    return render(request, 'python_app/python-study.html')

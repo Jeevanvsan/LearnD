@@ -1,0 +1,74 @@
+[
+  {
+    "title": "Introduction to Python",
+    "content": "<h3>What is Python?</h3><p>Python is a versatile, beginner-friendly programming language used in web development, data science, automation, AI, and more.</p><h3>Key Features</h3><ul><li>Easy to learn syntax</li><li>Open-source with vast libraries</li><li>Interpreted and dynamically typed</li></ul><h3>References</h3><ul><li><a href='https://www.python.org/'>Official Python Website</a></li></ul>"
+  },
+  {
+    "title": "Installing Python",
+    "content": "<h3>How to Install Python</h3><ul><li>Go to <a href='https://www.python.org/downloads/'>python.org/downloads</a></li><li>Download the installer for your OS</li><li>During install, check <code>Add Python to PATH</code></li></ul><h3>Verify Installation</h3><pre><code class='language-bash'>python --version</code></pre>"
+  },
+  {
+    "title": "Your First Python Program",
+    "content": "<h3>Hello World</h3><pre><code class='language-python'>print(\"Hello, World!\")</code></pre><p>This prints a message to the screen.</p>"
+  },
+  {
+    "title": "Variables and Data Types",
+    "content": "<h3>Variables</h3><pre><code class='language-python'>name = \"Alice\"\nage = 30\nheight = 5.6\nis_student = True</code></pre><h3>Common Data Types</h3><ul><li>int – Integers</li><li>float – Decimal numbers</li><li>str – Strings (text)</li><li>bool – True or False</li></ul>"
+  },
+  {
+    "title": "User Input and Type Casting",
+    "content": "<h3>Getting Input</h3><pre><code class='language-python'>name = input(\"Enter your name: \")\nprint(\"Hello, \" + name)</code></pre><h3>Type Conversion</h3><pre><code class='language-python'>age = int(input(\"Enter your age: \"))</code></pre>"
+  },
+  {
+    "title": "Operators",
+    "content": "<h3>Arithmetic Operators</h3><pre><code class='language-python'>x = 5\ny = 2\nprint(x + y, x - y, x * y, x / y, x % y)</code></pre><h3>Comparison & Logical Operators</h3><pre><code class='language-python'>print(x > y and y < 10)</code></pre>"
+  },
+  {
+    "title": "Control Flow",
+    "content": "<h3>if-elif-else</h3><pre><code class='language-python'>score = 75\nif score >= 90:\n    print(\"A\")\nelif score >= 60:\n    print(\"B\")\nelse:\n    print(\"Fail\")</code></pre>"
+  },
+  {
+    "title": "Loops",
+    "content": "<h3>For Loop</h3><pre><code class='language-python'>for i in range(5):\n    print(i)</code></pre><h3>While Loop</h3><pre><code class='language-python'>count = 0\nwhile count < 3:\n    print(count)\n    count += 1</code></pre>"
+  },
+  {
+    "title": "Functions",
+    "content": "<h3>Defining Functions</h3><pre><code class='language-python'>def greet(name):\n    print(\"Hello, \" + name)\n\ngreet(\"Alice\")</code></pre><h3>Return Values</h3><pre><code class='language-python'>def square(x):\n    return x * x</code></pre>"
+  },
+  {
+    "title": "Lists and Tuples",
+    "content": "<h3>Lists</h3><pre><code class='language-python'>fruits = [\"apple\", \"banana\", \"cherry\"]\nprint(fruits[1])</code></pre><h3>Tuples</h3><pre><code class='language-python'>dimensions = (1920, 1080)</code></pre>"
+  },
+  {
+    "title": "Dictionaries and Sets",
+    "content": "<h3>Dictionaries</h3><pre><code class='language-python'>person = {\"name\": \"Alice\", \"age\": 25}\nprint(person[\"name\"])</code></pre><h3>Sets</h3><pre><code class='language-python'>unique_numbers = {1, 2, 3, 2}</code></pre>"
+  },
+  {
+    "title": "String Manipulation",
+    "content": "<h3>String Methods</h3><pre><code class='language-python'>s = \"python\"\nprint(s.upper(), s.capitalize(), s.replace(\"p\", \"j\"))</code></pre><h3>F-Strings</h3><pre><code class='language-python'>name = \"Alice\"\nprint(f\"Hello, {name}!\")</code></pre>"
+  },
+  {
+    "title": "File Handling",
+    "content": "<h3>Read and Write Files</h3><pre><code class='language-python'>with open(\"file.txt\", \"w\") as f:\n    f.write(\"Hello File\")\n\nwith open(\"file.txt\") as f:\n    print(f.read())</code></pre>"
+  },
+  {
+    "title": "Error Handling",
+    "content": "<h3>Try Except Block</h3><pre><code class='language-python'>try:\n    x = int(\"hello\")\nexcept ValueError:\n    print(\"Conversion failed\")</code></pre>"
+  },
+  {
+    "title": "Classes and Objects",
+    "content": "<h3>OOP Basics</h3><pre><code class='language-python'>class Person:\n    def __init__(self, name):\n        self.name = name\n\n    def greet(self):\n        print(f\"Hello, I'm {self.name}\")\n\np = Person(\"Alice\")\np.greet()</code></pre>"
+  },
+  {
+    "title": "Modules and Packages",
+    "content": "<h3>Importing</h3><pre><code class='language-python'>import math\nprint(math.sqrt(16))</code></pre><h3>Custom Modules</h3><pre><code class='language-python'># save as mymodule.py\ndef add(x, y):\n    return x + y\n\n# another file\nfrom mymodule import add</code></pre>"
+  },
+  {
+    "title": "Useful Built-in Functions",
+    "content": "<ul><li><code>len()</code> – Length of sequence</li><li><code>range()</code> – Sequence of numbers</li><li><code>type()</code> – Data type of object</li><li><code>int(), str(), list()</code> – Type casting</li></ul>"
+  },
+  {
+    "title": "Next Steps After Basics",
+    "content": "<ul><li>Practice on <a href='https://leetcode.com'>LeetCode</a>, <a href='https://hackerrank.com'>HackerRank</a></li><li>Explore libraries like NumPy, Pandas</li><li>Build small projects like calculators, to-do apps, or file organizers</li></ul>"
+  }
+]

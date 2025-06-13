@@ -1,0 +1,302 @@
+[
+  {
+    "id": 1,
+    "title": "Print Hello",
+    "question": "Write a Python program that prints 'Hello, World!'",
+    "difficulty": "easy",
+    "max_score": 10,
+    "max_time": "00:02:00",
+    "min_time": "00:01:00",
+    "sample_output": "Hello, World!"
+  },
+  {
+    "id": 2,
+    "title": "Add Two Numbers",
+    "question": "Write a Python program to add two numbers 5 and 7 and print the result.",
+    "difficulty": "easy",
+    "max_score": 10,
+    "max_time": "00:02:00",
+    "min_time": "00:01:00",
+    "sample_output": "12"
+  },
+  {
+    "id": 3,
+    "title": "Input and Output",
+    "question": "Take user's name as input and print 'Hello, <name>!'",
+    "difficulty": "easy",
+    "max_score": 15,
+    "max_time": "00:03:00",
+    "min_time": "00:01:30",
+    "sample_output": "Hello, Alice!"
+  },
+  {
+    "id": 4,
+    "title": "Check Even or Odd",
+    "question": "Write a program to check if a number (input from user) is even or odd.",
+    "difficulty": "easy",
+    "max_score": 20,
+    "max_time": "00:04:00",
+    "min_time": "00:02:00",
+    "sample_output": "7 is odd"
+  },
+  {
+    "id": 5,
+    "title": "Sum of List",
+    "question": "Write a program that calculates the sum of numbers in a list [1, 2, 3, 4, 5].",
+    "difficulty": "easy",
+    "max_score": 15,
+    "max_time": "00:03:00",
+    "min_time": "00:02:00",
+    "sample_output": "15"
+  },
+  {
+    "id": 6,
+    "title": "Reverse a String",
+    "question": "Write a program that takes a string input and prints it in reverse.",
+    "difficulty": "easy",
+    "max_score": 20,
+    "max_time": "00:04:00",
+    "min_time": "00:02:00",
+    "sample_output": "dlroW olleH"
+  },
+  {
+    "id": 7,
+    "title": "Factorial of a Number",
+    "question": "Write a program that takes a number as input and prints its factorial.",
+    "difficulty": "easy",
+    "max_score": 20,
+    "max_time": "00:05:00",
+    "min_time": "00:03:00",
+    "sample_output": "120"
+  },
+  {
+    "id": 8,
+    "title": "Fibonacci Sequence",
+    "question": "Print the first 5 numbers of the Fibonacci sequence starting from 0.",
+    "difficulty": "easy",
+    "max_score": 20,
+    "max_time": "00:05:00",
+    "min_time": "00:03:00",
+    "sample_output": "0 1 1 2 3"
+  },
+  {
+    "id": 9,
+    "title": "List Comprehension",
+    "question": "Use list comprehension to create a list of squares from 1 to 5.",
+    "difficulty": "easy",
+    "max_score": 15,
+    "max_time": "00:03:00",
+    "min_time": "00:02:00",
+    "sample_output": "[1, 4, 9, 16, 25]"
+  },
+  {
+    "id": 10,
+    "title": "Count Vowels",
+    "question": "Write a program to count the number of vowels in the input string.",
+    "difficulty": "easy",
+    "max_score": 20,
+    "max_time": "00:05:00",
+    "min_time": "00:03:00",
+    "sample_output": "Number of vowels: 3"
+  },
+  {
+    "id": 11,
+    "title": "Swap Variables",
+    "question": "Write a program to swap two variables a and b with values 3 and 5.",
+    "difficulty": "easy",
+    "max_score": 10,
+    "max_time": "00:02:00",
+    "min_time": "00:01:00",
+    "sample_output": "a = 5, b = 3"
+  },
+  {
+    "id": 12,
+    "title": "Check Palindrome",
+    "question": "Write a Python program to check if a given string is a palindrome.",
+    "difficulty": "easy",
+    "max_score": 20,
+    "max_time": "00:05:00",
+    "min_time": "00:03:00",
+    "sample_output": "The string is a palindrome"
+  },
+  {
+    "id": 13,
+    "title": "Simple Calculator",
+    "question": "Write a program to perform addition, subtraction, multiplication, and division on two numbers input by the user.",
+    "difficulty": "easy",
+    "max_score": 25,
+    "max_time": "00:06:00",
+    "min_time": "00:04:00",
+    "sample_output": "Sum: 8, Difference: 2, Product: 15, Quotient: 1.6667"
+  },
+  {
+    "id": 14,
+    "title": "Check Prime",
+    "question": "Write a program to check if a number is prime.",
+    "difficulty": "easy",
+    "max_score": 20,
+    "max_time": "00:05:00",
+    "min_time": "00:03:00",
+    "sample_output": "13 is a prime number"
+  },
+  {
+    "id": 15,
+    "title": "Find Largest Number",
+    "question": "Write a program to find the largest number in a list [10, 25, 3, 56, 14].",
+    "difficulty": "easy",
+    "max_score": 15,
+    "max_time": "00:03:00",
+    "min_time": "00:02:00",
+    "sample_output": "Largest number is 56"
+  },
+  {
+    "id": 16,
+    "title": "List to Dictionary",
+    "question": "Convert two lists ['a', 'b', 'c'] and [1, 2, 3] into a dictionary using a loop.",
+    "difficulty": "intermediate",
+    "max_score": 20,
+    "max_time": "00:05:00",
+    "min_time": "00:03:00",
+    "sample_output": "{'a': 1, 'b': 2, 'c': 3}"
+  },
+  {
+    "id": 17,
+    "title": "Read File and Count Words",
+    "question": "Write a Python program that reads a text file and counts the total number of words.",
+    "difficulty": "intermediate",
+    "max_score": 30,
+    "max_time": "00:07:00",
+    "min_time": "00:04:00",
+    "sample_output": "Total words: 125"
+  },
+  {
+    "id": 18,
+    "title": "Class: Circle Area",
+    "question": "Create a class `Circle` with a method that returns the area given the radius.",
+    "difficulty": "intermediate",
+    "max_score": 30,
+    "max_time": "00:06:00",
+    "min_time": "00:03:00",
+    "sample_output": "Area: 78.5398"
+  },
+  {
+    "id": 19,
+    "title": "Count Character Frequency",
+    "question": "Write a Python program to count the frequency of each character in a string.",
+    "difficulty": "intermediate",
+    "max_score": 30,
+    "max_time": "00:07:00",
+    "min_time": "00:04:00",
+    "sample_output": "{'a': 2, 'b': 1, 'c': 1}"
+  },
+  {
+    "id": 20,
+    "title": "Sort Dictionary by Value",
+    "question": "Write a program to sort a dictionary by its values in descending order.",
+    "difficulty": "intermediate",
+    "max_score": 25,
+    "max_time": "00:06:00",
+    "min_time": "00:03:00",
+    "sample_output": "{'c': 30, 'a': 20, 'b': 10}"
+  },
+  {
+    "id": 21,
+    "title": "Decorator: Timing Function",
+    "question": "Write a decorator to measure the execution time of a function.",
+    "difficulty": "intermediate",
+    "max_score": 35,
+    "max_time": "00:07:00",
+    "min_time": "00:04:00",
+    "sample_output": "Execution time: 0.0021 seconds"
+  },
+  {
+    "id": 22,
+    "title": "Lambda with Filter",
+    "question": "Use lambda and filter to get even numbers from a list [1, 2, 3, 4, 5, 6].",
+    "difficulty": "intermediate",
+    "max_score": 20,
+    "max_time": "00:04:00",
+    "min_time": "00:02:00",
+    "sample_output": "[2, 4, 6]"
+  },
+  {
+    "id": 23,
+    "title": "File Line Reverser",
+    "question": "Write a program to reverse the lines of a text file and save it into a new file.",
+    "difficulty": "intermediate",
+    "max_score": 30,
+    "max_time": "00:07:00",
+    "min_time": "00:04:00",
+    "sample_output": "Lines reversed and written to output.txt"
+  },
+  {
+    "id": 24,
+    "title": "Recursive Sum",
+    "question": "Write a recursive function that returns the sum of numbers from 1 to n.",
+    "difficulty": "intermediate",
+    "max_score": 30,
+    "max_time": "00:06:00",
+    "min_time": "00:03:00",
+    "sample_output": "Sum is 15"
+  },
+  {
+    "id": 25,
+    "title": "Check Anagram",
+    "question": "Write a function to check if two strings are anagrams of each other.",
+    "difficulty": "intermediate",
+    "max_score": 30,
+    "max_time": "00:06:00",
+    "min_time": "00:03:00",
+    "sample_output": "True"
+  },
+  {
+    "id": 26,
+    "title": "Custom Iterator Class",
+    "question": "Create a custom iterator class `EvenNumbers` that yields even numbers up to a given limit.",
+    "difficulty": "advanced",
+    "max_score": 35,
+    "max_time": "00:08:00",
+    "min_time": "00:05:00",
+    "sample_output": "2 4 6 8 10"
+  },
+  {
+    "id": 27,
+    "title": "Multithreading Example",
+    "question": "Write a Python program that creates two threads to print numbers from 1 to 10 and A to J concurrently.",
+    "difficulty": "advanced",
+    "max_score": 40,
+    "max_time": "00:10:00",
+    "min_time": "00:05:00",
+    "sample_output": "1 A 2 B 3 C ..."
+  },
+  {
+    "id": 28,
+    "title": "Context Manager for File Timer",
+    "question": "Write a custom context manager using a class that logs the execution time of a code block to a file.",
+    "difficulty": "advanced",
+    "max_score": 40,
+    "max_time": "00:09:00",
+    "min_time": "00:05:00",
+    "sample_output": "Execution Time Logged: 0.0024 seconds"
+  },
+  {
+    "id": 29,
+    "title": "API Data Fetch and Parse",
+    "question": "Write a program that fetches JSON data from a public API (e.g., https://jsonplaceholder.typicode.com/users) and prints the names and emails.",
+    "difficulty": "advanced",
+    "max_score": 35,
+    "max_time": "00:08:00",
+    "min_time": "00:05:00",
+    "sample_output": "Leanne Graham - Sincere@april.biz"
+  },
+  {
+    "id": 30,
+    "title": "Metaclass to Track Class Creation",
+    "question": "Create a metaclass that prints a message every time a new class is created using it.",
+    "difficulty": "advanced",
+    "max_score": 45,
+    "max_time": "00:10:00",
+    "min_time": "00:06:00",
+    "sample_output": "Class TrackedClass was created using MetaLogger"
+  }
+]

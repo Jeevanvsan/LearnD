@@ -1,0 +1,74 @@
+[
+  {
+    "title": "Advanced OOP Concepts",
+    "content": "<h3>Dunder (Magic) Methods</h3><pre><code class='language-python'>class Book:\n    def __init__(self, title):\n        self.title = title\n\n    def __str__(self):\n        return f\"Book: {self.title}\"\n\n    def __eq__(self, other):\n        return self.title == other.title</code></pre><h3>Multiple Inheritance & MRO</h3><pre><code class='language-python'>class A: pass\nclass B: pass\nclass C(A, B): pass\nprint(C.__mro__)</code></pre>"
+  },
+  {
+    "title": "Design Patterns in Python",
+    "content": "<h3>Singleton</h3><pre><code class='language-python'>class Singleton:\n    _instance = None\n\n    def __new__(cls):\n        if cls._instance is None:\n            cls._instance = super().__new__(cls)\n        return cls._instance</code></pre><h3>Factory</h3><pre><code class='language-python'>class Dog:\n    def speak(self): return \"Woof\"\n\nclass Cat:\n    def speak(self): return \"Meow\"\n\ndef get_pet(pet=\"dog\"):\n    return Dog() if pet == \"dog\" else Cat()</code></pre>"
+  },
+  {
+    "title": "Metaclasses",
+    "content": "<h3>What is a Metaclass?</h3><p>A class of a class. Used to modify class creation.</p><pre><code class='language-python'>class Meta(type):\n    def __new__(cls, name, bases, dct):\n        print(f\"Creating class {name}\")\n        return super().__new__(cls, name, bases, dct)\n\nclass MyClass(metaclass=Meta):\n    pass</code></pre>"
+  },
+  {
+    "title": "Decorators with Arguments",
+    "content": "<h3>Parameterized Decorators</h3><pre><code class='language-python'>def repeat(n):\n    def decorator(func):\n        def wrapper(*args):\n            for _ in range(n):\n                func(*args)\n        return wrapper\n    return decorator\n\n@repeat(3)\ndef greet(name):\n    print(f\"Hi {name}\")</code></pre>"
+  },
+  {
+    "title": "Asyncio and Asynchronous Programming",
+    "content": "<h3>Async/Await</h3><pre><code class='language-python'>import asyncio\n\nasync def say_hello():\n    await asyncio.sleep(1)\n    print(\"Hello\")\n\nasyncio.run(say_hello())</code></pre>"
+  },
+  {
+    "title": "Multithreading vs Multiprocessing",
+    "content": "<h3>Multithreading</h3><pre><code class='language-python'>from threading import Thread\n\ndef task():\n    print(\"Running in thread\")\n\nThread(target=task).start()</code></pre><h3>Multiprocessing</h3><pre><code class='language-python'>from multiprocessing import Process\n\ndef task():\n    print(\"Running in process\")\n\nProcess(target=task).start()</code></pre>"
+  },
+  {
+    "title": "Generators and Coroutines",
+    "content": "<h3>Sending Values</h3><pre><code class='language-python'>def gen():\n    value = yield \"Start\"\n    yield f\"Received: {value}\"\n\nit = gen()\nprint(next(it))\nprint(it.send(\"Hi\"))</code></pre>"
+  },
+  {
+    "title": "Contextlib Utilities",
+    "content": "<h3>contextlib.contextmanager</h3><pre><code class='language-python'>from contextlib import contextmanager\n\n@contextmanager\ndef open_file(name):\n    f = open(name, 'r')\n    yield f\n    f.close()</code></pre>"
+  },
+  {
+    "title": "Typing and Type Hints",
+    "content": "<h3>Basic Typing</h3><pre><code class='language-python'>def greet(name: str) -> str:\n    return f\"Hello {name}\"</code></pre><h3>Advanced Typing</h3><pre><code class='language-python'>from typing import List, Dict, Optional\n\ndef get_scores() -> Dict[str, List[int]]:\n    return {\"Alice\": [90, 95]}</code></pre>"
+  },
+  {
+    "title": "Creating Python Packages",
+    "content": "<h3>Package Structure</h3><pre><code>mypackage/\n│── __init__.py\n│── module1.py\n│── module2.py</code></pre><h3>Installing Locally</h3><pre><code class='language-bash'>pip install -e .</code></pre>"
+  },
+  {
+    "title": "Publishing to PyPI",
+    "content": "<h3>Required Files</h3><pre><code>setup.py\npyproject.toml\nREADME.md</code></pre><h3>Upload</h3><pre><code class='language-bash'>python -m build\npython -m twine upload dist/*</code></pre>"
+  },
+  {
+    "title": "Working with SQLAlchemy",
+    "content": "<h3>Basic ORM</h3><pre><code class='language-python'>from sqlalchemy import create_engine, Column, Integer, String\nfrom sqlalchemy.orm import declarative_base, sessionmaker\n\nBase = declarative_base()\n\nclass User(Base):\n    __tablename__ = 'users'\n    id = Column(Integer, primary_key=True)\n    name = Column(String)\n\nengine = create_engine('sqlite:///test.db')\nBase.metadata.create_all(engine)</code></pre>"
+  },
+  {
+    "title": "Building REST APIs with FastAPI",
+    "content": "<h3>FastAPI Example</h3><pre><code class='language-python'>from fastapi import FastAPI\n\napp = FastAPI()\n\n@app.get(\"/\")\ndef read_root():\n    return {\"Hello\": \"World\"}</code></pre><p>Run using <code>uvicorn filename:app --reload</code></p>"
+  },
+  {
+    "title": "Advanced Logging",
+    "content": "<h3>Custom Logger</h3><pre><code class='language-python'>import logging\n\nlogger = logging.getLogger(\"myapp\")\nlogger.setLevel(logging.DEBUG)\n\nhandler = logging.FileHandler(\"app.log\")\nformatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')\nhandler.setFormatter(formatter)\nlogger.addHandler(handler)\n\nlogger.info(\"App started\")</code></pre>"
+  },
+  {
+    "title": "Memory Management and Profiling",
+    "content": "<h3>Track Memory Usage</h3><pre><code class='language-python'>import tracemalloc\n\ntracemalloc.start()\n# Your code\nprint(tracemalloc.get_traced_memory())</code></pre>"
+  },
+  {
+    "title": "C Extensions with Cython",
+    "content": "<h3>Why Cython?</h3><p>Boost Python performance by compiling parts to C.</p><pre><code class='language-python'># example.pyx\ndef square(int x):\n    return x * x</code></pre><p>Compile with <code>cythonize</code></p>"
+  },
+  {
+    "title": "Working with Memoryview and Bytearrays",
+    "content": "<h3>Memoryview</h3><pre><code class='language-python'>data = bytearray(b\"Hello\")\nmv = memoryview(data)\nmv[0] = 97\nprint(data)</code></pre>"
+  },
+  {
+    "title": "Next Steps",
+    "content": "<ul><li>Learn <strong>concurrent.futures</strong> and <strong>joblib</strong></li><li>Explore <strong>network programming</strong> and <strong>async websockets</strong></li><li>Build <strong>command-line apps</strong> with <strong>Click</strong></li><li>Learn <strong>advanced pytest</strong> fixtures and mocking</li></ul>"
+  }
+]

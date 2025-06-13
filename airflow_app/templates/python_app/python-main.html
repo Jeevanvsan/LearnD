@@ -1,0 +1,55 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python</title>
+  <link rel="stylesheet" type="text/css" href="{% static 'python_app/python-main.css' %}">
+</head>
+<body>
+    <header class="header">
+      <div class="head">
+        <h1>Python Learn</h1>
+        <p>Master python with step-by-step guides and test your knowledge</p>
+      </div>
+      <div class="profile">
+        <p id="prof-name">Welcome,  <span id="prof-name-text"> {{ user.username }}</span>  !</p>
+      </div>
+    </header>
+    <div class="main_container">
+      <div class="overview_pane">
+        <p id="course-score"></p>  
+        <p id="course-status"></p>  
+        <div class="divider-h"></div>
+        <div class="tutorial-over" id="tutorial-over"></div>
+      </div>
+      <div class="divider-v"></div>
+      <div class="content_pane">
+        <div class="tutorial_pane">
+          <header>
+            <h1>python Study</h1>
+        </header>
+
+        <div class="course-pane" id="course-pane">
+        </div>
+        <div class="task_pane">
+          <div class="container">
+            <header>
+                <h1>Python Problems</h1>
+                <p>Practice Python challenges to improve your skills.</p>
+            </header>
+            <!-- <div class="problem-cards" id="problem-cards"></div> -->
+            <div id="levels-handson" class="levels-handson"></div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      const pythonStudyUrl = "{% url 'python_study' %}";
+  </script>
+  <script src="{% static 'python_app/python-main.js' %}"></script>
+
+</body>
+</html>

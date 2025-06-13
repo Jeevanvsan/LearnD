@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Airflow | Hands-on</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'airflow_app/aifrow-do.css' %}">
+    <script src="{% static 'airflow_app/aifrow-do.js' %}"></script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.33.0/min/vs/editor/editor.main.css">
+    <!-- Add monaco-editor-python -->
+    
+    <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+ 
+</head>
+<body>
+    <header class="header">
+        <a href="{% url 'index' %}" class="header_back">
+          <i class="fas fa-arrow-left"></i>
+        </a>
+      <h1>Airflow Hands-On</h1>
+      <div id="timer">00:00:00</div>
+    </header>
+    <div id="upper-pane">
+        <div id="question-pane">
+            <h1>{{problem.title}}</h1>
+            <p>{{problem.question}}</p>
+            <pre>difficulty : {{problem.difficulty}}</pre>
+            <pre>points : {{problem.max_score}}</pre>
+            <pre>output : {{problem.task_dependency_diagram}}</pre>
+            
+            <button onclick="runCode()">Run Code</button>
+            <button onclick="SubmitCode()">Submit Code</button>
+
+            <div id="result-pane">
+            </div>
+        </div>
+        
+    
+        <div id="editor-pane">
+            <div id="code-editor"></div>
+        </div>
+    </div>
+    
+
+    <div id= "dag-pane">
+        <div id="task-flow"></div>
+    </div>
+
+    <!-- Add Monaco Editor -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.34.0/min/vs/loader.js"></script>
+
+    <!-- Add monaco-editor-python -->
+    <script src="https://cdn.jsdelivr.net/npm/monaco-editor-python@latest/dist/monaco-editor-python.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.23.0/full/pyodide.js"></script>
+
+
+    
+</body>
+</html>

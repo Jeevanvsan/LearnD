@@ -1,0 +1,102 @@
+[
+  {
+    "question": "What is the correct file extension for Python files?",
+    "options": [".py", ".pt", ".python"],
+    "answer": ".py"
+  },
+  {
+    "question": "Which keyword is used to define a function in Python?",
+    "options": ["func", "define", "def"],
+    "answer": "def"
+  },
+  {
+    "question": "How do you insert comments in Python?",
+    "options": ["# comment", "// comment", "/* comment */"],
+    "answer": "# comment"
+  },
+  {
+    "question": "What data type is the result of: type(10)?",
+    "options": ["<class 'int'>", "<type 'integer'>", "<data 'int'>"],
+    "answer": "<class 'int'>"
+  },
+  {
+    "question": "Which of the following is used to get user input?",
+    "options": ["scan()", "read()", "input()"],
+    "answer": "input()"
+  },
+  {
+    "question": "Which of the following is a valid variable name?",
+    "options": ["1variable", "my-var", "my_variable"],
+    "answer": "my_variable"
+  },
+  {
+    "question": "What is the output of: len(\"Hello\")?",
+    "options": ["5", "4", "6"],
+    "answer": "5"
+  },
+  {
+    "question": "Which operator is used for exponentiation in Python?",
+    "options": ["^", "**", "exp"],
+    "answer": "**"
+  },
+  {
+    "question": "How do you start a for loop in Python?",
+    "options": ["for i in range(5):", "foreach i in range(5)", "loop i = 1 to 5"],
+    "answer": "for i in range(5):"
+  },
+  {
+    "question": "Which data type is immutable?",
+    "options": ["List", "Tuple", "Dictionary"],
+    "answer": "Tuple"
+  },
+  {
+    "question": "What keyword is used to exit a loop?",
+    "options": ["exit", "stop", "break"],
+    "answer": "break"
+  },
+  {
+    "question": "What is the result of: 10 // 3?",
+    "options": ["3.33", "3", "4"],
+    "answer": "3"
+  },
+  {
+    "question": "Which function is used to determine length?",
+    "options": ["size()", "length()", "len()"],
+    "answer": "len()"
+  },
+  {
+    "question": "How is a list defined in Python?",
+    "options": ["(1,2,3)", "[1,2,3]", "{1,2,3}"],
+    "answer": "[1,2,3]"
+  },
+  {
+    "question": "What is the correct way to create a dictionary?",
+    "options": ["[ 'a' => 1 ]", "{ 'a': 1 }", "( 'a', 1 )"],
+    "answer": "{ 'a': 1 }"
+  },
+  {
+    "question": "What is the keyword to create a class in Python?",
+    "options": ["class", "define", "type"],
+    "answer": "class"
+  },
+  {
+    "question": "What is the purpose of the pass statement?",
+    "options": ["To skip code", "To exit loop", "To define an empty block"],
+    "answer": "To define an empty block"
+  },
+  {
+    "question": "Which of the following is a Python boolean value?",
+    "options": ["Yes", "True", "Okay"],
+    "answer": "True"
+  },
+  {
+    "question": "How do you raise an exception in Python?",
+    "options": ["throw Error", "raise Exception", "raiseError"],
+    "answer": "raise Exception"
+  },
+  {
+    "question": "Which function is used to convert a string to an integer?",
+    "options": ["str()", "int()", "float()"],
+    "answer": "int()"
+  }
+]

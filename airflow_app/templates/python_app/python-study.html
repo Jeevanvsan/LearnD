@@ -1,0 +1,53 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python Tutorials & Quiz</title>
+  <link rel="stylesheet" type="text/css" href="{% static 'python_app/python-study.css' %}">
+  <script src="{% static 'python_app/python-study.js' %}"></script>
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+</head>
+<body>
+  <header class="header">
+      <a href="{% url 'python_index' %}" class="header_back">
+        <i class="fas fa-arrow-left"></i>
+    </a>
+    <h1>Python Study</h1>
+    <p>Master python with step-by-step guides and test your knowledge</p>
+  </header>
+
+  <div class="level-tracker" id="level-tracker"></div>
+  <div class="pagination-top">
+    <button class="btn" id="prev-btn">Previous</button>
+    <button class="btn" id="next-btn">Next</button>
+  </div>
+
+  <main>
+    <div class="content tutorial-content" id="tutorial-container"></div>
+    <div class="content quiz-container" id="quiz-container" style="display: none;"></div>
+  </main>
+
+  <!-- Modal Overlay -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal-content" id="score-modal">
+      <h2>Quiz Completed!</h2>
+      <p id="score-text"></p>
+      <button class="modal-close" onclick="closeModal()">Close</button>
+    </div>
+  </div>
+
+  <script>
+    Prism.highlightAll();
+  </script>
+</body>
+</html>

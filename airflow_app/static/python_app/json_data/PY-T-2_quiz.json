@@ -1,0 +1,102 @@
+[
+  {
+    "question": "What is the output of: [x for x in range(5) if x % 2 == 0]?",
+    "options": ["[1, 3, 5]", "[0, 1, 2, 3, 4]", "[0, 2, 4]"],
+    "answer": "[0, 2, 4]"
+  },
+  {
+    "question": "Which method is used to add an item to the end of a list?",
+    "options": ["add()", "append()", "push()"],
+    "answer": "append()"
+  },
+  {
+    "question": "What is the purpose of *args in a function definition?",
+    "options": ["To return multiple values", "To accept arbitrary keyword arguments", "To accept a variable number of positional arguments"],
+    "answer": "To accept a variable number of positional arguments"
+  },
+  {
+    "question": "Which statement is used to handle exceptions in Python?",
+    "options": ["try-catch", "try-except", "do-catch"],
+    "answer": "try-except"
+  },
+  {
+    "question": "What is a lambda function?",
+    "options": ["A function with no return", "An anonymous function", "A recursive function"],
+    "answer": "An anonymous function"
+  },
+  {
+    "question": "What is the output of: set([1,2,2,3])?",
+    "options": ["[1, 2, 2, 3]", "{1, 2, 3}", "(1, 2, 3)"],
+    "answer": "{1, 2, 3}"
+  },
+  {
+    "question": "Which method is used to get the keys of a dictionary?",
+    "options": ["keys()", "get_keys()", "dict_keys()"],
+    "answer": "keys()"
+  },
+  {
+    "question": "What is the result of: 'hello'.capitalize()?",
+    "options": ["Hello", "HELLO", "hello"],
+    "answer": "Hello"
+  },
+  {
+    "question": "What is a Python generator?",
+    "options": ["A function that returns an iterator using yield", "A function that executes forever", "A class that stores values"],
+    "answer": "A function that returns an iterator using yield"
+  },
+  {
+    "question": "How do you define a property in a class?",
+    "options": ["With @getter", "With @property", "With @prop"],
+    "answer": "@property"
+  },
+  {
+    "question": "Which of the following opens a file for reading?",
+    "options": ["open('file.txt', 'r')", "read('file.txt')", "file('file.txt', 'r')"],
+    "answer": "open('file.txt', 'r')"
+  },
+  {
+    "question": "What will the following return: list(map(lambda x: x*2, [1, 2, 3]))?",
+    "options": ["[2, 4, 6]", "[1, 2, 3, 1, 2, 3]", "[1, 4, 9]"],
+    "answer": "[2, 4, 6]"
+  },
+  {
+    "question": "What is the output of: bool('False')?",
+    "options": ["False", "True", "None"],
+    "answer": "True"
+  },
+  {
+    "question": "What is the difference between 'is' and '=='?",
+    "options": ["'is' compares values, '==' compares references", "'==' compares values, 'is' compares identity", "They are the same"],
+    "answer": "'==' compares values, 'is' compares identity"
+  },
+  {
+    "question": "Which module in Python is used for regular expressions?",
+    "options": ["re", "regex", "expression"],
+    "answer": "re"
+  },
+  {
+    "question": "How do you handle exceptions in a try block?",
+    "options": ["catch Exception", "except Exception", "handle Exception"],
+    "answer": "except Exception"
+  },
+  {
+    "question": "What does the zip() function do?",
+    "options": ["Compress files", "Combine iterables into tuples", "Loop through strings"],
+    "answer": "Combine iterables into tuples"
+  },
+  {
+    "question": "What is the purpose of __init__ method?",
+    "options": ["It is a destructor", "It initializes class objects", "It defines static methods"],
+    "answer": "It initializes class objects"
+  },
+  {
+    "question": "Which built-in function returns the number of items in an object?",
+    "options": ["items()", "count()", "len()"],
+    "answer": "len()"
+  },
+  {
+    "question": "What does the enumerate() function return?",
+    "options": ["Only indexes", "Tuple of index and value", "List of values"],
+    "answer": "Tuple of index and value"
+  }
+]

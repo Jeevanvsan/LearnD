@@ -1,0 +1,70 @@
+[
+  {
+    "title": "List Comprehensions",
+    "content": "<h3>What is a List Comprehension?</h3><p>List comprehensions offer a concise way to create lists.</p><pre><code class='language-python'>squares = [x * x for x in range(10)]\nprint(squares)</code></pre><h3>With Conditions</h3><pre><code class='language-python'>evens = [x for x in range(20) if x % 2 == 0]</code></pre>"
+  },
+  {
+    "title": "Dictionary and Set Comprehensions",
+    "content": "<h3>Dictionary Comprehension</h3><pre><code class='language-python'>squares = {x: x * x for x in range(5)}</code></pre><h3>Set Comprehension</h3><pre><code class='language-python'>unique = {x for x in [1, 2, 2, 3, 3]}</code></pre>"
+  },
+  {
+    "title": "Lambda Functions",
+    "content": "<h3>Lambda (Anonymous Functions)</h3><pre><code class='language-python'>square = lambda x: x * x\nprint(square(5))</code></pre><h3>Useful with map(), filter(), reduce()</h3><pre><code class='language-python'>nums = [1, 2, 3, 4]\nprint(list(map(lambda x: x * 2, nums)))</code></pre>"
+  },
+  {
+    "title": "Map, Filter, Reduce",
+    "content": "<h3>map()</h3><pre><code class='language-python'>list(map(lambda x: x * 2, [1, 2, 3]))</code></pre><h3>filter()</h3><pre><code class='language-python'>list(filter(lambda x: x > 1, [0, 1, 2]))</code></pre><h3>reduce()</h3><pre><code class='language-python'>from functools import reduce\nreduce(lambda x, y: x + y, [1, 2, 3])</code></pre>"
+  },
+  {
+    "title": "Enumerate and Zip",
+    "content": "<h3>enumerate()</h3><pre><code class='language-python'>for idx, val in enumerate(['a', 'b', 'c']):\n    print(idx, val)</code></pre><h3>zip()</h3><pre><code class='language-python'>names = ['Alice', 'Bob']\nscores = [90, 80]\nfor name, score in zip(names, scores):\n    print(name, score)</code></pre>"
+  },
+  {
+    "title": "Unpacking and *args/**kwargs",
+    "content": "<h3>Multiple Assignment</h3><pre><code class='language-python'>a, b = [1, 2]</code></pre><h3>*args</h3><pre><code class='language-python'>def add(*args):\n    return sum(args)</code></pre><h3>**kwargs</h3><pre><code class='language-python'>def greet(**kwargs):\n    print(kwargs[\"name\"])</code></pre>"
+  },
+  {
+    "title": "Decorators",
+    "content": "<h3>Function Decorators</h3><pre><code class='language-python'>def decorator(func):\n    def wrapper():\n        print(\"Before\")\n        func()\n        print(\"After\")\n    return wrapper\n\n@decorator\ndef say_hello():\n    print(\"Hello\")</code></pre>"
+  },
+  {
+    "title": "Generators",
+    "content": "<h3>Generator Functions</h3><pre><code class='language-python'>def count_up_to(n):\n    i = 1\n    while i <= n:\n        yield i\n        i += 1\n\nfor number in count_up_to(3):\n    print(number)</code></pre>"
+  },
+  {
+    "title": "Working with JSON",
+    "content": "<h3>JSON Parsing</h3><pre><code class='language-python'>import json\ndata = '{\"name\": \"Alice\", \"age\": 25}'\nobj = json.loads(data)\nprint(obj[\"name\"])</code></pre><h3>To JSON</h3><pre><code class='language-python'>json_str = json.dumps({\"a\": 1})</code></pre>"
+  },
+  {
+    "title": "Working with Dates and Time",
+    "content": "<h3>datetime Module</h3><pre><code class='language-python'>from datetime import datetime\nnow = datetime.now()\nprint(now.strftime('%Y-%m-%d'))</code></pre>"
+  },
+  {
+    "title": "Advanced File Handling",
+    "content": "<h3>Read Lines</h3><pre><code class='language-python'>with open(\"file.txt\") as f:\n    for line in f:\n        print(line.strip())</code></pre><h3>Append to File</h3><pre><code class='language-python'>with open(\"file.txt\", \"a\") as f:\n    f.write(\"More content\\n\")</code></pre>"
+  },
+  {
+    "title": "Python Virtual Environments",
+    "content": "<h3>Using venv</h3><pre><code class='language-bash'>python -m venv env\nsource env/bin/activate  # On Windows: env\\Scripts\\activate</code></pre><p>Use <code>pip install</code> inside it to keep dependencies isolated.</p>"
+  },
+  {
+    "title": "Unit Testing with unittest",
+    "content": "<h3>Basic Test</h3><pre><code class='language-python'>import unittest\n\nclass TestMath(unittest.TestCase):\n    def test_add(self):\n        self.assertEqual(2 + 3, 5)\n\nif __name__ == '__main__':\n    unittest.main()</code></pre>"
+  },
+  {
+    "title": "Exception Hierarchy and Custom Exceptions",
+    "content": "<h3>Define Custom Exceptions</h3><pre><code class='language-python'>class MyError(Exception):\n    pass\n\nraise MyError(\"Something went wrong\")</code></pre>"
+  },
+  {
+    "title": "Context Managers",
+    "content": "<h3>Using <code>with</code> Statement</h3><pre><code class='language-python'>with open(\"file.txt\") as f:\n    data = f.read()</code></pre><h3>Custom Context Manager</h3><pre><code class='language-python'>class Managed:\n    def __enter__(self): print(\"Enter\")\n    def __exit__(self, *args): print(\"Exit\")\n\nwith Managed(): pass</code></pre>"
+  },
+  {
+    "title": "The Pythonic Way (Best Practices)",
+    "content": "<ul><li>Use list comprehensions instead of loops</li><li>Use meaningful variable names</li><li>Use unpacking, `zip`, `enumerate`, and context managers</li><li>Follow PEP8 (style guide)</li></ul>"
+  },
+  {
+    "title": "What's Next?",
+    "content": "<ul><li>Explore <strong>NumPy</strong>, <strong>Pandas</strong>, <strong>Requests</strong></li><li>Dive into <strong>object-oriented programming</strong> deeply</li><li>Learn <strong>APIs</strong> and <strong>web scraping</strong></li><li>Build <strong>automation scripts</strong> and <strong>small web apps</strong></li></ul>"
+  }
+]

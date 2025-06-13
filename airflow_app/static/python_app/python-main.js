@@ -36,22 +36,23 @@ fetch("/get-user-courses/")
   .then(data => { 
     existing_courses = data;
     // ------------------------------------------------------------ //
-    fetch('/static/airflow_app/json_data/airflow_courses.json?v=' + new Date().getTime())
+    fetch('/static/python_app/json_data/python_courses.json?v=' + new Date().getTime())
         .then(response => response.json())
-        .then(airflow_courses => {
+        .then(python_courses => {
+            console.log(python_courses);
             let html = '';
             let btn_text = "Start Learning";
             let chapters = 0;
             let score = 0;
             let overview_html = '';
-            let totalCourses = Object.keys(airflow_courses).length;            ; 
+            let totalCourses = Object.keys(python_courses).length;            ; 
             let scores = [];
             let chapters_list = [];
             const course_overview_div = document.getElementById("tutorial-over");
             const course_score = document.getElementById("course-score");
             const course_status = document.getElementById("course-status");
 
-        for (const key in airflow_courses) 
+        for (const key in python_courses) 
             {
                     fetch(`/get-courses/`,{
                         method: 'POST',
@@ -60,6 +61,7 @@ fetch("/get-user-courses/")
                         },
                         body: JSON.stringify({
                             course_id: key,
+                            tool: "PY"
                         })
                         })
                     .then(res => res.json())
@@ -78,11 +80,11 @@ fetch("/get-user-courses/")
                         }
 
                         if( existing_courses.includes(key)) {
-                            airflow_courses[key]["status"] = current_existing_course['status']
+                            python_courses[key]["status"] = current_existing_course['status']
                             btn_text = "Continue Learning"
                             score = current_existing_course['score']
 
-                            overview_html += courseOverview(current_existing_course,airflow_courses,key,chapters,score)
+                            overview_html += courseOverview(current_existing_course,python_courses,key,chapters,score)
                             
                         }
                         scores.push(score);
@@ -90,15 +92,15 @@ fetch("/get-user-courses/")
                         course_overview_div.innerHTML = overview_html;                        
                         html += `
                             <div class="course-card">
-                                <span class="level">${airflow_courses[key]["level"]}</span>
-                                <span class="status">${airflow_courses[key]["status"]}</span>            
-                                <h2>${airflow_courses[key]["title"]}</h2>
-                                <p>${airflow_courses[key]["description"]}</p>
+                                <span class="level">${python_courses[key]["level"]}</span>
+                                <span class="status">${python_courses[key]["status"]}</span>            
+                                <h2>${python_courses[key]["title"]}</h2>
+                                <p>${python_courses[key]["description"]}</p>
                                 <div class="progress-circle">
                                 <div class="value-chapter">Chapters:${chapters}%</div>
                                 <div class="value-score">Score:${score}</div>
                                 </div>
-                                <a href="${airflowStudyUrl}?course_id=${key}"><button class="start-btn" id="AF-T-1-start-btn" ${airflow_courses[key]["implemented"]}>${btn_text}</button></a>
+                                <a href="${pythonStudyUrl}?course_id=${key}"><button class="start-btn" id="AF-T-1-start-btn" ${python_courses[key]["implemented"]}>${btn_text}</button></a>
                             </div>
                             </div>
                             `
@@ -140,7 +142,7 @@ fetch("/get-user-courses/")
 
 
 
- fetch('/static/airflow_app/json_data/problems.json')
+ fetch('/static/python_app/json_data/problems.json')
  .then(response => response.json())
  .then(problems => {
     let currentProblems = [...problems];
@@ -217,7 +219,7 @@ function createLevels(levelData) {
 
         // Add click event listener to all levels
         circle.addEventListener('click', () => {
-                window.location.href = `/airflow-do/${level.id}/`;
+                window.location.href = `/python-do/${level.id}/`;
 
             // if (level.unlocked) {
 

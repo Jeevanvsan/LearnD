@@ -1,0 +1,28 @@
+{
+    "PY-T-1":{
+        "id": "PY-T-1",
+        "title": "Python Basics",
+        "description": "Learn the fundamentals of Python.",
+        "level": "Basic",
+        "status": "Not Started",
+        "implemented": ""
+    },
+    "PY-T-2":{
+        "id": "PY-T-2",
+        "title": "Python Intermediate",
+        "description": "Learn the intermediate of Python.",
+        "level": "Intermediate",
+        "status": "Not Started",
+        "implemented": ""
+
+    },
+    "PY-T-3":{
+        "id": "PY-T-3",
+        "title": "Python Advance",
+        "description": "Learn the advanced of Python.",
+        "level": "Advanced",
+        "status": "Not Started",
+        "implemented": ""
+
+    }
+}

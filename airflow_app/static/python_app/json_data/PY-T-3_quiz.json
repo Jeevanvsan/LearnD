@@ -1,0 +1,102 @@
+[
+  {
+    "question": "What will be the output of: ' '.join(reversed('abc'))?",
+    "options": ["'c b a'", "'abc'", "'a b c'"],
+    "answer": "c b a"
+  },
+  {
+    "question": "What is the output of: list({1, 2, 3}.intersection({2, 3, 4}))?",
+    "options": ["[2, 3]", "[1, 2, 3, 4]", "[2, 3, 4]"],
+    "answer": "[2, 3]"
+  },
+  {
+    "question": "Which of the following is not a valid way to declare a set?",
+    "options": ["set()", "{1, 2, 3}", "{}"],
+    "answer": "{}"
+  },
+  {
+    "question": "What does the @staticmethod decorator do?",
+    "options": ["Defines a method that doesn't receive self", "Defines an abstract method", "Creates a private method"],
+    "answer": "Defines a method that doesn't receive self"
+  },
+  {
+    "question": "What does the 'nonlocal' keyword do?",
+    "options": ["Declares a global variable", "Declares a constant", "Refers to a variable in the nearest enclosing scope that is not global"],
+    "answer": "Refers to a variable in the nearest enclosing scope that is not global"
+  },
+  {
+    "question": "What is the result of: any([False, 0, [], {}, ''])?",
+    "options": ["True", "False", "None"],
+    "answer": "False"
+  },
+  {
+    "question": "Which module provides introspection capabilities in Python?",
+    "options": ["inspect", "introspect", "reflection"],
+    "answer": "inspect"
+  },
+  {
+    "question": "What does the walrus operator (:=) do?",
+    "options": ["Defines a lambda", "Assigns and returns a value in an expression", "Compares identity"],
+    "answer": "Assigns and returns a value in an expression"
+  },
+  {
+    "question": "Which method is called when an object is used with the 'with' statement?",
+    "options": ["__init__", "__enter__", "__call__"],
+    "answer": "__enter__"
+  },
+  {
+    "question": "What is a metaclass in Python?",
+    "options": ["A template for objects", "A class of a class", "A function for class attributes"],
+    "answer": "A class of a class"
+  },
+  {
+    "question": "Which of the following is **not** true about Python memory management?",
+    "options": ["Python uses reference counting", "Garbage collection is done using generational GC", "Python uses manual memory allocation"],
+    "answer": "Python uses manual memory allocation"
+  },
+  {
+    "question": "What is the result of: {i: i*i for i in range(3)}?",
+    "options": ["{1:1, 2:4, 3:9}", "{0:0, 1:1, 2:4}", "[0, 1, 2]"],
+    "answer": "{0:0, 1:1, 2:4}"
+  },
+  {
+    "question": "What is monkey patching?",
+    "options": ["Changing code during compilation", "Dynamically modifying a class or module at runtime", "Replacing a function with an object"],
+    "answer": "Dynamically modifying a class or module at runtime"
+  },
+  {
+    "question": "How do you make a Python class iterable?",
+    "options": ["Implement __next__", "Implement __iter__ and __next__", "Implement __getitem__ only"],
+    "answer": "Implement __iter__ and __next__"
+  },
+  {
+    "question": "What does functools.lru_cache do?",
+    "options": ["Caches results of function calls", "Logs function calls", "Runs function in background"],
+    "answer": "Caches results of function calls"
+  },
+  {
+    "question": "What is the result of: (lambda x=5: x * 2)()?",
+    "options": ["10", "5", "None"],
+    "answer": "10"
+  },
+  {
+    "question": "What is the difference between deepcopy() and copy()?",
+    "options": ["They are identical", "copy() copies references, deepcopy() copies objects recursively", "copy() is for files"],
+    "answer": "copy() copies references, deepcopy() copies objects recursively"
+  },
+  {
+    "question": "Which built-in function can dynamically execute a string as Python code?",
+    "options": ["exec()", "run()", "str_exec()"],
+    "answer": "exec()"
+  },
+  {
+    "question": "Which module supports multi-threading in Python?",
+    "options": ["multiprocessing", "threading", "asyncio"],
+    "answer": "threading"
+  },
+  {
+    "question": "What will be the output of: isinstance(True, int)?",
+    "options": ["False", "True", "Error"],
+    "answer": "True"
+  }
+]
