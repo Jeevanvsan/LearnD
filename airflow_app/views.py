@@ -1,3 +1,4 @@
+import importlib
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
@@ -37,12 +38,20 @@ def get_courses_data(tool_name):
         with open('airflow_app/static/python_app/json_data/python_courses.json', 'r') as file:
             return json.load(file)
         
-def get_tut_data(id):
-    if id == 'AF':
+def get_tut_data(id,tool_req):
+    if tool_req == 'AF':
         with open(f'airflow_app/static/airflow_app/json_data/{id}.json', 'r') as file:
             return json.load(file)
-    if id == 'PY':
-        with open(f'python_app/static/python_app/json_data/{id}.json', 'r') as file:
+    if tool_req == 'PY':
+        with open(f'airflow_app/static/python_app/json_data/{id}.json', 'r') as file:
+            return json.load(file)
+        
+def get_problems_data(tool_req):
+    if tool_req == 'AF':
+        with open(f'airflow_app/static/airflow_app/json_data/problems.json', 'r') as file:
+            return json.load(file)
+    if tool_req == 'PY':
+        with open(f'airflow_app/static/python_app/json_data/problems.json', 'r') as file:
             return json.load(file)
 
 @login_required
@@ -69,12 +78,11 @@ def get_user_courses(request):
     return JsonResponse(existing_courses_json, safe=False)
 
 
-def serialize_course(course,id):
-        
-    tut_data = get_tut_data(id)
+def serialize_course(course,id,tool_req):
+    tut_data = get_tut_data(id,tool_req)
     return {
         **course,
-        'total_chapters': len(airflow_courses_data),
+        'total_chapters': len(tut_data),
         'start_time': course['start_time'].strftime('%Y-%m-%d %H:%M:%S') if course['start_time'] else None,
         'updated_time': course['updated_time'].strftime('%Y-%m-%d %H:%M:%S') if course['updated_time'] else None,
         'end_time': course['end_time'].strftime('%Y-%m-%d %H:%M:%S') if course['end_time'] else None,
@@ -86,12 +94,10 @@ def get_courses(request):
     if request.method == 'POST':
         user = request.user
         data = json.loads(request.body)
-        print(f"Data received: {data}")
         course_id = data.get('course_id')
         tool_req = data.get('tool')
-        print(f"Tool requested: {tool_req}")
         existing_course = Course.objects.filter(user=user.id,course_id=course_id,tool_name=TOOL_NAME_MAIN[tool_req]).values()
-        readable_courses = [serialize_course(course,course_id) for course in existing_course]
+        readable_courses = [serialize_course(course,course_id,tool_req) for course in existing_course]
     
     return JsonResponse(list(readable_courses), safe=False)
 
@@ -158,10 +164,11 @@ def update_quiz(request):
 
     return JsonResponse({'error': 'Invalid request method'}, status=400)
 
-def airflow_do(request,problem_id):
+def airflow_do(request,tool_id,problem_id):
     global question_id
     question_id = problem_id
-    problem = next((item for item in airflow_questions_data if item['id'] == problem_id), None)
+    questions_data = get_problems_data(tool_id)
+    problem = next((item for item in questions_data if item['id'] == problem_id), None)
     return render(request, 'airflow_app/airflow-do.html',{'problem': problem})
 
 @csrf_exempt
@@ -172,11 +179,13 @@ def run_code(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
-            
             code = data.get('code', '')
-            ob = DagExtract()
-            code_extr = ob.run(code)
-            return JsonResponse({'output': code_extr})
+            tool_id = data.get('tool', '')
+            module_name = f"airflow_app.executer.{tool_id}_executer"  
+            module = importlib.import_module(module_name)
+            func = getattr(module, tool_id + "_executer")
+            out = func(code)
+            return JsonResponse({'output': out})
         except Exception as e:
             print(e)
             return JsonResponse({'output': str(e)})
@@ -192,19 +201,21 @@ def submit_code(request):
         try:
             data = json.loads(request.body)
             code = data.get('code', '')
-            problem = next((item for item in airflow_questions_data if item['id'] == question_id), None)
+            tool_id = data.get('tool', '')
+            questions_data = get_problems_data(tool_id)
+            problem = next((item for item in questions_data if item['id'] == question_id), None)
+            module_name = f"airflow_app.executer.{tool_id}_executer"  
+            module = importlib.import_module(module_name)
+            func = getattr(module, tool_id + "_executer")
+            out = func(code)
+            #TODO: Add code extraction logic
             # if code_extr is None:
-            code_extr = ob.run(code)
-            print(problem["question"])
             # test_output = handson_model.check_ans(problem["question"],code)
             test_output = {"response": "Correct", "Error": "Incorrect answer, try again or check your code. "}
-            print(test_output)
-            return JsonResponse({'output': test_output, 'code_extr': code_extr})
+            return JsonResponse({'output': out, 'code_extr': ""})
         except Exception as e:
             print(e)
             return JsonResponse({'output': str(e)})
-
-    return JsonResponse({'output': 'Invalid request'})
 
 
 def signup_view(request):
@@ -241,7 +252,7 @@ def signin_view(request):
         user.save()
         if user is not None:
             login(request, user)
-            return redirect('dashboard')
+            return redirect('index')
         else:
             messages.error(request, 'Invalid username or password')
     return render(request, 'signin.html')
@@ -278,11 +289,16 @@ def python_index(request):
     else:
         return redirect('signin')
 
-def python_do(request,problem_id):
+def python_do(request, tool_id, problem_id):
     global question_id
     question_id = problem_id
-    problem = next((item for item in airflow_questions_data if item['id'] == problem_id), None)
+    questions_data = get_problems_data(tool_id)
+    problem = next((item for item in questions_data if item['id'] == problem_id), None)
     return render(request, 'python_app/python-do.html',{'problem': problem})
+
+
+
+    return JsonResponse({'output': 'Invalid request'})
 
 def python_study(request):
     return render(request, 'python_app/python-study.html')
