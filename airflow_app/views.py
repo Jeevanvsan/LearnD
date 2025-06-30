@@ -1,4 +1,5 @@
 import importlib
+from datetime import datetime
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
@@ -7,7 +8,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .models import Profile, Course
+from .models import Profile, Course, tools_handson
 from django.core.serializers import serialize
 from django.utils import timezone
 
@@ -77,6 +78,12 @@ def get_user_courses(request):
     existing_courses_json = json.dumps(list(existing_courses))
     return JsonResponse(existing_courses_json, safe=False)
 
+@login_required
+def get_user_handson(request,tool_id):
+    user = request.user
+    existing_tools_handson = tools_handson.objects.filter(user=user.id,tool_name = TOOL_NAME_MAIN[tool_id]).values().first()
+    return JsonResponse(existing_tools_handson, safe=False)
+
 
 def serialize_course(course,id,tool_req):
     tut_data = get_tut_data(id,tool_req)
@@ -136,13 +143,13 @@ def calculate_final_score(quiz_score, retries, max_quiz_score=20):
 
 @csrf_exempt
 @login_required
-def update_quiz(request):
+def update_quiz(request,tool_id):
     if request.method == 'POST':
         user = request.user
         data = json.loads(request.body)
         course_id = data.get('course_id')
         score = data.get('score')
-        existing_course_data = Course.objects.filter(user=user.id,course_id=course_id,tool_name=TOOL_NAME).values()
+        existing_course_data = Course.objects.filter(user=user.id,course_id=course_id,tool_name=TOOL_NAME_MAIN[tool_id]).values()
         readable_courses = list([serialize_course(course,course_id) for course in existing_course_data])[0]
 
         is_completed = readable_courses['quiz']
@@ -155,10 +162,10 @@ def update_quiz(request):
                 normalized_score = (score / 20) * 100
                 penalty = 3 * retries
                 final_score = round(max(0, normalized_score - penalty))
-                Course.objects.filter(user=user.id,course_id=course_id,tool_name=TOOL_NAME).update(quiz=quiz,score=final_score,status=status,end_time=timezone.now())
+                Course.objects.filter(user=user.id,course_id=course_id,tool_name=TOOL_NAME_MAIN[tool_id]).update(quiz=quiz,score=final_score,status=status,end_time=timezone.now())
 
             else:
-                Course.objects.filter(user=user.id,course_id=course_id,tool_name=TOOL_NAME).update(quiz_retries=retries+1)
+                Course.objects.filter(user=user.id,course_id=course_id,tool_name=TOOL_NAME_MAIN[tool_id]).update(quiz_retries=retries+1)
 
         return JsonResponse({'success': True})
 
@@ -192,30 +199,117 @@ def run_code(request):
 
     return JsonResponse({'output': 'Invalid request'})
 
+def hms_to_seconds(hms):
+    return sum(int(x) * 60 ** i for i, x in enumerate(reversed(hms.split(":"))))
+
+def evaluate_dynamic_performance(time_taken_sec, min_time_str, max_time_str):
+    min_time_sec = hms_to_seconds(min_time_str)
+    max_time_sec = hms_to_seconds(max_time_str)
+
+    if time_taken_sec <= min_time_sec:
+        points = 100
+    elif time_taken_sec >= max_time_sec:
+        points = 25
+    else:
+        # Linear interpolation of points between min_time and max_time
+        range_time = max_time_sec - min_time_sec
+        time_diff = time_taken_sec - min_time_sec
+        points = 100 - ((time_diff / range_time) * 75)
+        points = round(points)
+
+    # Determine stars
+    if points >= 80:
+        stars = 3
+    elif points >= 50:
+        stars = 2
+    elif points >= 30:
+        stars = 1
+    else:
+        stars = 0
+
+    return {
+        "points": points,
+        "stars": stars
+    }
+    
+def normalize_quotes(text):
+    return text.replace('"', "'")
+
 @csrf_exempt
 def submit_code(request):
     global code_extr
-    ob = DagExtract()
+    test_output = {}
 
     if request.method == 'POST':
         try:
+            user = request.user
+            task_metadata = {}
+            handson_data = tools_handson.objects.filter(user=user.id).values().first()
+            if handson_data is not None:
+                task_metadata = handson_data.get('task_metadata', {})
+
             data = json.loads(request.body)
             code = data.get('code', '')
             tool_id = data.get('tool', '')
+            time_taken = data.get('time', '')
+
             questions_data = get_problems_data(tool_id)
             problem = next((item for item in questions_data if item['id'] == question_id), None)
-            module_name = f"airflow_app.executer.{tool_id}_executer"  
+
+            if not problem:
+                return JsonResponse({"response": "Error", "Error": "Invalid question ID"})
+
+            module_name = f"airflow_app.executer.{tool_id}_executer"
             module = importlib.import_module(module_name)
             func = getattr(module, tool_id + "_executer")
             out = func(code)
-            #TODO: Add code extraction logic
-            # if code_extr is None:
-            # test_output = handson_model.check_ans(problem["question"],code)
-            test_output = {"response": "Correct", "Error": "Incorrect answer, try again or check your code. "}
-            return JsonResponse({'output': out, 'code_extr': ""})
+
+            # Compare output
+            sample_output = problem.get("sample_output", "").strip()
+            output_matches = sample_output == out.strip()
+
+            # Check keyword presence (optional)
+            required_keywords = problem.get("keywords", [])
+            code_normalized = normalize_quotes(code.lower())
+            missing_keywords = []
+
+            for keyword in required_keywords:
+                keyword_normalized = normalize_quotes(keyword.lower())
+                if keyword_normalized not in code_normalized:
+                    missing_keywords.append(keyword)
+
+
+            # Final decision
+            error_message = out
+            if missing_keywords:
+                error_message += "\n\nMissing keywords: " + ", ".join(missing_keywords)
+
+            test_output = {
+                "response": "Correct" if output_matches and not missing_keywords else "Incorrect",
+                "Error": error_message
+            }
+            
+
+            result = evaluate_dynamic_performance(time_taken, problem.get("min_time"), problem.get("max_time"))
+            status = ''
+            if test_output["response"] == "Correct":                
+                task_metadata[question_id] = {
+                    "status": "Correct",
+                    "time_taken": time_taken,
+                    "point": result["points"],
+                    "statrs": result["stars"]
+                }
+                tools_handson.objects.update_or_create(user=user.id,tool_name=TOOL_NAME_MAIN[tool_id],
+                    defaults={
+                    'tool_name': TOOL_NAME_MAIN[tool_id],
+                    'status': status,
+                    'task_metadata': task_metadata                             
+                 })
+            return JsonResponse({'output': test_output, 'code_extr': ""})
         except Exception as e:
             print(e)
             return JsonResponse({'output': str(e)})
+
 
 
 def signup_view(request):
@@ -296,9 +390,6 @@ def python_do(request, tool_id, problem_id):
     problem = next((item for item in questions_data if item['id'] == problem_id), None)
     return render(request, 'python_app/python-do.html',{'problem': problem})
 
-
-
-    return JsonResponse({'output': 'Invalid request'})
 
 def python_study(request):
     return render(request, 'python_app/python-study.html')

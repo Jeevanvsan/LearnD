@@ -18,7 +18,7 @@
 </head>
 <body>
     <header class="header">
-        <a href="{% url 'index' %}" class="header_back">
+        <a href="{% url 'python_index' %}" class="header_back">
           <i class="fas fa-arrow-left"></i>
         </a>
       <h1>python Hands-On</h1>
@@ -30,7 +30,7 @@
             <p>{{problem.question}}</p>
             <pre>difficulty : {{problem.difficulty}}</pre>
             <pre>points : {{problem.max_score}}</pre>
-            <pre>output : {{problem.task_dependency_diagram}}</pre>
+            <pre>Expected output : {{problem.sample_output}}</pre>
             
             <button onclick="runCode()">Run Code</button>
             <button onclick="SubmitCode()">Submit Code</button>

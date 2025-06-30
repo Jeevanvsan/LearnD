@@ -101,7 +101,7 @@ function updateProgress(pg){
 }
 
 function updateQuiz(score){
-    fetch('/update-quiz/', {
+    fetch('/update-quiz/PY', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

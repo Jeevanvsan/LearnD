@@ -1,276 +1,197 @@
-    var existing_courses = [];
 
-    function courseOverview(user_course_data,courses,key,chapters,score){
-        html= `
-            <p>${courses[key]['title']}</p>
-            
-            <div class="progress-main">
-                <span>chapters </span>
-                <div class="progress-container">
-                    <div class="progress-bar" id="progressBar-${key}" style="width:${chapters}%"></div> 
-                </div>
-                <span>${chapters}% </span>
+  // LOADING SCREEN HIDE FUNCTION
+  function hideLoader() {
+    const loader = document.getElementById('loading-screen');
+    loader.style.transition = 'opacity 0.5s ease';
+    loader.style.opacity = 0;
+    setTimeout(() => {
+      loader.style.display = 'none';
+    }, 500);
+  }
 
-            </div>
+//   const pythonStudyUrl = "{% url 'python_study' %}";
+  var existing_courses = [];
+  let totalPoints = 0;
 
-            <div class="progress-main">
-                <span>score </span>
-                <div class="progress-container">
-                    <div class="progress-score-bar" id="progressBar-score-${key}" style="width:${score}%"></div>
-                </div>
-                <span>${score} / 100 </span>
+  // UTIL FUNCTIONS
+  function courseOverview(user_course_data, courses, key, chapters, score) {
+    return `
+      <p>${courses[key]['title']}</p>
+      <div class="progress-main">
+        <span>chapters </span>
+        <div class="progress-container">
+          <div class="progress-bar" id="progressBar-${key}" style="width:${chapters}%"></div> 
+        </div>
+        <span>${chapters}% </span>
+      </div>
+      <div class="progress-main">
+        <span>score </span>
+        <div class="progress-container">
+          <div class="progress-score-bar" id="progressBar-score-${key}" style="width:${score}%"></div>
+        </div>
+        <span>${score} / 100 </span>
+      </div>
+    `;
+  }
 
-            </div>
-        `
-        return html
-    }
+  function calculateOverallScore(totalCourses, scores) {
+    const totalScore = scores.reduce((sum, score) => sum + score, 0);
+    return totalScore / totalCourses;
+  }
 
-    function calculateOverallScore(totalCourses, scores) {
-        const totalScore = scores.reduce((sum, score) => sum + score, 0);
-        const average = totalScore / totalCourses;
-        return average;
-    }
+  function createLevels(levelData, getUserHandson) {
+    console.log("Creating levels with data:", getUserHandson);
+    let completed_levels =  Object.keys(getUserHandson.task_metadata).length;
+    let task_metadata =  getUserHandson.task_metadata
 
-    fetch("/get-user-courses/")
-    .then(res => res.json())
-    .then(data => { 
-        existing_courses = data;
-        // ------------------------------------------------------------ //
-        fetch('/static/python_app/json_data/python_courses.json?v=' + new Date().getTime())
-            .then(response => response.json())
-            .then(python_courses => {
-                let html = '';
-                let btn_text = "Start Learning";
-                let chapters = 0;
-                let score = 0;
-                let overview_html = '';
-                let totalCourses = Object.keys(python_courses).length;            ; 
-                let scores = [];
-                let chapters_list = [];
-                const course_overview_div = document.getElementById("tutorial-over");
-                const course_score = document.getElementById("course-score");
-                const course_status = document.getElementById("course-status");
+    const levelsContainer = document.getElementById('levels-handson');
+    levelsContainer.innerHTML = '';
+    let topPos = 0, leftPos = 0;
 
-            for (const key in python_courses) 
-                {
-                        fetch(`/get-courses/`,{
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({
-                                course_id: key,
-                                tool: "PY"
-                            })
-                            })
-                        .then(res => res.json())
-                        .then(data => { 
-                            current_existing_course = data[0]
-                            if (current_existing_course){
-                                if (current_existing_course['course_id'] == key){
+    levelData.forEach((level, index) => {
+      topPos = 5 + index * 20;    
+      leftPos = 20 + (index * 15) % 40; 
 
-                                    const totalChapters = current_existing_course['total_chapters'];
-                                    const completedChapters = current_existing_course['chapters'];
+      if (completed_levels > 0 && index < completed_levels+1) {
+        level.unlocked = true;
+      }
 
-                                    const percentComplete = (completedChapters / totalChapters) * 100;
-                                    const roundedPercent = Math.round(percentComplete);
-                                    chapters = roundedPercent;
-                                }
-                               
-                                
-                            }
-                             else{
-                                    chapters = 0;
-                                    score = 0;
-                                }
+      const levelEl = document.createElement('div');
+      levelEl.className = `level-handson ${level.unlocked ? '' : 'locked'}`;
+      levelEl.style.top = topPos + '%';
+      levelEl.style.left = leftPos + '%';
 
-                            if( existing_courses.includes(key)) {
-                                python_courses[key]["status"] = current_existing_course['status']
-                                btn_text = "Continue Learning"
-                                score = current_existing_course['score']
-                                overview_html += courseOverview(current_existing_course,python_courses,key,chapters,score)
-                                
-                            }
-                            scores.push(score);
-                            chapters_list.push(chapters);
-                            course_overview_div.innerHTML = overview_html;                        
-                            html += `
-                                <div class="course-card">
-                                    <span class="level">${python_courses[key]["level"]}</span>
-                                    <span class="status">${python_courses[key]["status"]}</span>            
-                                    <h2>${python_courses[key]["title"]}</h2>
-                                    <p>${python_courses[key]["description"]}</p>
-                                    <div class="progress-circle">
-                                    <div class="value-chapter">Chapters:${chapters}%</div>
-                                    <div class="value-score">Score:${score}</div>
-                                    </div>
-                                    <a href="${pythonStudyUrl}?course_id=${key}"><button class="start-btn" id="AF-T-1-start-btn" ${python_courses[key]["implemented"]}>${btn_text}</button></a>
-                                </div>
-                                </div>
-                                `
+      const circle = document.createElement('div');
+      circle.className = 'level-circle';
+      circle.textContent = level.id;
 
-                            document.getElementById('course-pane').innerHTML = html;
-                            const overall_status = calculateOverallScore(totalCourses, chapters_list);
+      const tooltip = document.createElement('div');
+      tooltip.className = 'tooltip';
+      tooltip.innerHTML = `<strong>${level.title}</strong><br/>difficulty: ${level.difficulty}`;
 
-                            const overall_score = calculateOverallScore(totalCourses, scores);
-                            
+      const starsContainer = document.createElement('div');
+      starsContainer.className = 'stars-container';
+      let star_count = task_metadata[level.id] ? task_metadata[level.id].statrs : 0;
+      for (let i = 1; i <= 3; i++) {
+        const star = document.createElement('span');
+        star.className = 'star';
+        star.textContent = i <= star_count ? '★' : '☆';
+        starsContainer.appendChild(star);
+      }
 
-                            course_status.innerHTML = `<div class="progress-main">
-                                <span>Course status </span>
-                                <div class="progress-container">
-                                    <div class="progress-bar-course-overall-status" id="progressBar-course-overall" style="width:${overall_status}%"></div> 
-                                </div>
-                                <span>${Math.round(overall_status)}% </span>
+      const title = document.createElement('div');
+      title.className = 'level-title';
+      title.innerText = level.title;
 
-                            </div>`;
+      circle.addEventListener('click', () => {
+        window.location.href = `/python-do/PY/${level.id}/`;
+      });
 
-                            course_score.innerHTML = `<div class="progress-main">
-                                                    <span>Course score </span>
-                                                    <div class="progress-container">
-                                                        <div class="progress-bar-course-overall" id="progressBar-course-overall" style="width:${overall_score}%"></div> 
-                                                    </div>
-                                                    <span>${Math.round(overall_score)}% </span>
-
-                                                </div>`;
-
-                        });
-                    
-                    
-            }
-            
-            
-            
-        });
+      levelEl.appendChild(circle);
+      levelEl.appendChild(tooltip);
+      levelEl.appendChild(title);
+      levelEl.appendChild(starsContainer);
+      levelsContainer.appendChild(levelEl);
     });
+  }
 
+  // MAIN LOADING
+  Promise.all([
+    fetch("/get-user-courses/").then(res => res.json()),
+    fetch("/get-user-handson/PY").then(res => res.json()),
+    fetch("/static/python_app/json_data/python_courses.json?v=" + new Date().getTime()).then(res => res.json()),
+    fetch("/static/python_app/json_data/problems.json").then(res => res.json())
+  ])
+  .then(([userCourses, userHandson, pythonCourses, problems]) => {
+    existing_courses = userCourses;
+    const course_overview_div = document.getElementById("tutorial-over");
+    const course_score = document.getElementById("course-score");
+    const course_status = document.getElementById("course-status");
+    const totalCourses = Object.keys(pythonCourses).length;
 
+    let html = '';
+    let overview_html = '';
+    let chapters_list = [];
+    let scores = [];
 
-    fetch('/static/python_app/json_data/problems.json')
-    .then(response => response.json())
-    .then(problems => {
-        let currentProblems = [...problems];
-        let solvedProblems = [2];
-        createLevels(problems);
+    const courseFetches = Object.keys(pythonCourses).map(key =>
+      fetch(`/get-courses/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ course_id: key, tool: "PY" })
+      })
+      .then(res => res.json())
+      .then(data => {
+        let chapters = 0;
+        let score = 0;
+        let btn_text = "Start Learning";
+        const current_course = data[0];
 
-        
-    })
-    .catch(error => console.error('Error loading problems:', error));
+        if (current_course && current_course['course_id'] === key) {
+          const percentComplete = (current_course['chapters'] / current_course['total_chapters']) * 100;
+          chapters = Math.round(percentComplete);
+          score = current_course['score'];
+        }
 
+        if (existing_courses.includes(key)) {
+          pythonCourses[key]["status"] = current_course['status'];
+          btn_text = "Continue Learning";
+          overview_html += courseOverview(current_course, pythonCourses, key, chapters, score);
+        }
 
+        scores.push(score);
+        chapters_list.push(chapters);
 
-    let totalPoints = 0;
+        html += `
+          <div class="course-card">
+            <span class="level">${pythonCourses[key]["level"]}</span>
+            <span class="status">${pythonCourses[key]["status"]}</span>
+            <h2>${pythonCourses[key]["title"]}</h2>
+            <p>${pythonCourses[key]["description"]}</p>
+            <div class="progress-circle">
+              <div class="value-chapter">Chapters:${chapters}%</div>
+              <div class="value-score">Score:${score}</div>
+            </div>
+            <a href="${pythonStudyUrl}?course_id=${key}">
+              <button class="start-btn" ${pythonCourses[key]["implemented"]}>${btn_text}</button>
+            </a>
+          </div>
+        `;
+      })
+    );
 
-    function createLevels(levelData) {
-        const levelsContainer = document.getElementById('levels-handson');
-        levelsContainer.innerHTML = '';
+    // Wait for all course POST fetches
+    Promise.all(courseFetches).then(() => {
+      course_overview_div.innerHTML = overview_html;
+      document.getElementById('course-pane').innerHTML = html;
 
+      const overall_status = calculateOverallScore(totalCourses, chapters_list);
+      const overall_score = calculateOverallScore(totalCourses, scores);
 
-        topPos = 0
-        leftPos = 0
+      course_status.innerHTML = `
+        <div class="progress-main">
+          <span>Course status </span>
+          <div class="progress-container">
+            <div class="progress-bar-course-overall-status" style="width:${overall_status}%"></div> 
+          </div>
+          <span>${Math.round(overall_status)}% </span>
+        </div>`;
 
+      course_score.innerHTML = `
+        <div class="progress-main">
+          <span>Course score </span>
+          <div class="progress-container">
+            <div class="progress-bar-course-overall" style="width:${overall_score}%"></div> 
+          </div>
+          <span>${Math.round(overall_score)}% </span>
+        </div>`;
 
-        levelData.forEach((level, index) => {
-            topPos = 5 + index * 20;    
-            leftPos = 20 + (index * 15) % 40; 
-            
+      createLevels(problems, userHandson);
+      hideLoader(); // ✅ All done
+    });
+  })
+  .catch(error => {
+    console.error("Loading error:", error);
+    hideLoader();
+  });
 
-            const levelEl = document.createElement('div');
-            levelEl.className = `level-handson ${level.unlocked ? '' : 'locked'}`;
-
-            if(index == 0){
-                levelEl.className = `level-handson `;
-
-            }
-            levelEl.style.top = topPos+'%';
-            levelEl.style.left = leftPos+'%';
-
-            // Circle
-            const circle = document.createElement('div');
-            circle.className = 'level-circle';
-            circle.textContent = level.id;
-
-            // Tooltip
-            const tooltip = document.createElement('div');
-            tooltip.className = 'tooltip';
-            tooltip.innerHTML = `<strong>${level.title}</strong><br/>difficulty: ${level.difficulty}`;
-
-            // Stars
-            // const title = document.createElement('div');
-            // title.className = 'level-title';
-            // title.innerText = level.title;
-
-            // Stars container
-            const starsContainer = document.createElement('div');
-            starsContainer.className = 'stars-container';
-
-            star_count = 0
-            if (index == 0) {
-                star_count = 2
-            }
-            for (let i = 1; i <= 3; i++) {
-                const star = document.createElement('span');
-                star.className = 'star';
-                star.textContent = i <= (star_count || 0) ? '★' : '☆';
-                starsContainer.appendChild(star);
-            }
-
-            // Title
-            const title = document.createElement('div');
-            title.className = 'level-title';
-            title.innerText = level.title;
-
-
-            // Add click event listener to all levels
-            circle.addEventListener('click', () => {
-                    window.location.href = `/python-do/PY/${level.id}/`;
-
-                // if (level.unlocked) {
-
-                //     // If the level is unlocked, prompt the user with the question
-                //     const userAnswer = prompt(level.question);
-                //     if (userAnswer && userAnswer.toLowerCase().trim() === level.answer.toLowerCase()) {
-                //         alert('Correct!');
-                //         totalPoints += level.points;
-                //         document.querySelector('.score span').textContent = totalPoints;
-                //     } else {
-                //         alert('Incorrect!');
-                //     }
-                // } else {
-
-                //     // If the level is locked, notify the user
-                //     alert(`Level ${level.id} (${level.name}) is locked. Complete previous levels to unlock it.`);
-                // }
-            });
-
-            // Append elements
-            levelEl.appendChild(circle);
-            levelEl.appendChild(tooltip);
-            levelEl.appendChild(title);
-            levelEl.appendChild(starsContainer); // <--- insert before title
-            levelsContainer.appendChild(levelEl);
-        });
-    }
-                    
-    function handleLevelClick(levelId) {
-        const level = levelData.find(l => l.id === levelId);
-        if (!level || !level.unlocked) return;
-
-        const answer = prompt(`${level.name}\n\nQuestion: ${level.question}`);
-        if (answer === null) return; // User cancelled
-
-        if (answer.toLowerCase() === level.answer.toLowerCase()) {
-        alert(`Correct! You earned ${level.points} points!`);
-        totalPoints += level.points;
-
-        level.paths.forEach(nextLevelId => {
-            const nextLevel = levelData.find(l => l.id === nextLevelId);
-            if (nextLevel) {
-            nextLevel.unlocked = true;
-            }
-        });
-
-        createLevels();
-    } else {
-    alert('Incorrect answer. Try again!');
-    }
-    }

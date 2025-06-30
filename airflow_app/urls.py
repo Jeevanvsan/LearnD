@@ -29,9 +29,10 @@ urlpatterns = [
     path('python-do/<str:tool_id>/<int:problem_id>/', views.python_do, name='python_do'),
     path('python-study/', views.python_study, name='python_study'),
     path('get-user-courses/', views.get_user_courses, name='get_user_courses'),
+    path('get-user-handson/<str:tool_id>', views.get_user_handson, name='get_user_handson'),
     path('get-courses/', views.get_courses, name='get_courses'),
     path('update-progress/', views.update_progress, name='update_progress'),
-    path('update-quiz/', views.update_quiz, name='update_progress'),
+    path('update-quiz/<str:tool_id>', views.update_quiz, name='update_progress'),
 
 
     
