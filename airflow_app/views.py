@@ -150,7 +150,7 @@ def update_quiz(request,tool_id):
         course_id = data.get('course_id')
         score = data.get('score')
         existing_course_data = Course.objects.filter(user=user.id,course_id=course_id,tool_name=TOOL_NAME_MAIN[tool_id]).values()
-        readable_courses = list([serialize_course(course,course_id) for course in existing_course_data])[0]
+        readable_courses = list([serialize_course(course,course_id,tool_id) for course in existing_course_data])[0]
 
         is_completed = readable_courses['quiz']
         if not is_completed:
@@ -258,12 +258,10 @@ def submit_code(request):
 
             if not problem:
                 return JsonResponse({"response": "Error", "Error": "Invalid question ID"})
-
             module_name = f"airflow_app.executer.{tool_id}_executer"
             module = importlib.import_module(module_name)
             func = getattr(module, tool_id + "_executer")
             out = func(code)
-
             # Compare output
             sample_output = problem.get("sample_output", "").strip()
             output_matches = sample_output == out.strip()
@@ -292,19 +290,42 @@ def submit_code(request):
 
             result = evaluate_dynamic_performance(time_taken, problem.get("min_time"), problem.get("max_time"))
             status = ''
-            if test_output["response"] == "Correct":                
-                task_metadata[question_id] = {
-                    "status": "Correct",
-                    "time_taken": time_taken,
-                    "point": result["points"],
-                    "statrs": result["stars"]
-                }
-                tools_handson.objects.update_or_create(user=user.id,tool_name=TOOL_NAME_MAIN[tool_id],
-                    defaults={
-                    'tool_name': TOOL_NAME_MAIN[tool_id],
-                    'status': status,
-                    'task_metadata': task_metadata                             
-                 })
+            if test_output["response"] == "Correct":   
+                             
+                existing_entry = task_metadata.get(str(question_id))  # Ensure key is a string
+                should_update = False
+
+                if not existing_entry:
+                    should_update = True
+                else:
+                    existing_points = existing_entry.get("point", 0)
+                    existing_time = existing_entry.get("time_taken", float('inf'))
+
+                    if result["points"] > existing_points:
+                        should_update = True
+                    elif result["points"] == existing_points:
+                        if time_taken < existing_time:
+                            should_update = True
+
+                if should_update:
+                    task_metadata[str(question_id)] = {
+                        "status": "Correct",
+                        "time_taken": time_taken,
+                        "point": result["points"],
+                        "statrs": result["stars"]
+                    }
+
+                    tools_handson.objects.update_or_create(
+                        user=user.id,
+                        tool_name=TOOL_NAME_MAIN[tool_id],
+                        defaults={
+                            'tool_name': TOOL_NAME_MAIN[tool_id],
+                            'status': status,
+                            'task_metadata': task_metadata
+                        }
+                    )
+
+
             return JsonResponse({'output': test_output, 'code_extr': ""})
         except Exception as e:
             print(e)

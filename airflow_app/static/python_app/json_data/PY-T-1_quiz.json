@@ -16,8 +16,8 @@
   },
   {
     "question": "What data type is the result of: type(10)?",
-    "options": ["<class 'int'>", "<type 'integer'>", "<data 'int'>"],
-    "answer": "<class 'int'>"
+    "options": ["class int", "type integer", "data int"],
+    "answer": "class int"
   },
   {
     "question": "Which of the following is used to get user input?",

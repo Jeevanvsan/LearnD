@@ -38,10 +38,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function loadJSON() {
     try {
-        const response = await fetch(`/static/python_app/json_data/${courseId}.json`);
+        const response = await fetch(`/static/python_app/json_data/${courseId}.json?v=${Date.now()}`);
         if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
         tutorials = await response.json();
-        const response2 = await fetch(`/static/python_app/json_data/${courseId}_quiz.json`);
+        const response2 = await fetch(`/static/python_app/json_data/${courseId}_quiz.json?v=${Date.now()}`);
         if (!response2.ok) throw new Error(`HTTP error! Status: ${response2.status}`);
         quizQuestions = await response2.json();
 
@@ -154,18 +154,31 @@ function renderQuiz() {
     const quizContainer = document.getElementById("quiz-container");
     quizContainer.innerHTML = quizQuestions.map((q, index) => `
         <div class="quiz-question">
-          <h3>${index + 1}. ${q.question}</h3>
-          <div class="quiz-options">
-            ${q.options.map(option => `
-              <div class="quiz-option" onclick="selectAnswer(${index}, this, '${option}')">${option}</div>
-            `).join('')}
-          </div>
+            <h3>${index + 1}. ${q.question}</h3>
+            <div class="quiz-options">
+                ${q.options.map(option => `
+                    <div class="quiz-option" data-question-index="${index}" data-option="${encodeURIComponent(option)}">${option}</div>
+                `).join('')}
+            </div>
         </div>
     `).join('') + `<button class="btn" id="submit-quiz">Submit Answers</button>`;
-    
+
     quizContainer.style.display = 'block';
+
+    // ✅ Attach event listeners separately
+    document.querySelectorAll('.quiz-option').forEach(el => {
+        el.addEventListener('click', function () {
+            const index = parseInt(this.getAttribute('data-question-index'));
+            const option = decodeURIComponent(this.getAttribute('data-option'));
+            selectAnswer(index, this, option);
+        });
+    });
+
     document.getElementById("submit-quiz").addEventListener("click", submitQuiz);
 }
+
+
+
 
 function submitQuiz() {
     let score = 0;
